@@ -1,1 +1,50 @@
-<p>menu works!</p>
+<div class="mat-elevation-z8">
+    <div style="display:flex; padding: 8px 16px 0px 16px">
+        <span class="mat-display-1" style="margin:0px; color:#321937">Sistema In-teriores</span>
+        <span class="ms-fill"></span>
+        <button mat-button class="mat-subheading-1" style="margin:0px; border:1px solid #321937; border-radius:10px"
+                [matMenuTriggerFor]="accountMenu">
+            <mat-icon class="ms-icons-color" style="vertical-align:middle">account_circle</mat-icon>
+            Nombre, Apellido
+            <mat-icon class="ms-icons-color" style="vertical-align:middle">keyboard_arrow_down</mat-icon>
+        </button>
+        <mat-menu #accountMenu="matMenu">
+            <button mat-menu-item><mat-icon>settings</mat-icon> Configuración</button>
+            <button mat-menu-item><mat-icon>vpn_key</mat-icon> Cambiar clave</button>
+            <button mat-menu-item><mat-icon>info</mat-icon> Ayuda</button>
+            <button mat-menu-item disabled>version 1.0a</button>
+        </mat-menu>
+    </div>
+    <mat-tab-group dynamicHeight>
+        <mat-tab label="Ventas">
+            <div class="w3-padding w3-border-bottom w3-border-lightgray">
+                <div style="display:flex">
+                    <div class="w3-margin-right">
+                        <button mat-button class="w3-small">
+                            <mat-icon class="ms-icons-color">assignment</mat-icon> Requerimientos
+                        </button><br>
+                        <button mat-button class="w3-small">
+                            <mat-icon class="ms-icons-color">assignment</mat-icon> Pedidos
+                        </button><br>
+                    </div>
+                    <div class="w3-border-left w3-border-lightgray">
+                        <button mat-button class="w3-small" disabled>
+                            <mat-icon class="ms-icons-color">shopping_cart</mat-icon> Ventas
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Producción">
+            <div class="w3-padding  w3-border-bottom w3-border-lightgray">
+                <div style="display:flex">
+                    <div>
+                        <button mat-button>
+                            <mat-icon class="ms-icons-color">build</mat-icon> OR/OP
+                        </button><br>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
