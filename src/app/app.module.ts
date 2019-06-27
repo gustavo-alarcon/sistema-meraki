@@ -13,8 +13,7 @@ import { MainModule } from './main/main.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
-    MainModule
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
