@@ -6,3 +6,24 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.ms-fill {
+    flex: auto 1 1;
+}
+
+.ms-icons-color {
+    color: #321937 !important;
+}
+
+.mat-expansion-panel-body{
+    padding: 0px 0px !important;
+}
+
+.ms-expansion-panel-menu{
+    background: #321937;
+}
+
+.ms-expansion-panel-title{
+    color: white;
+}
