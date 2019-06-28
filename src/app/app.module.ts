@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MainModule } from './main/main.module';
+import { DatabaseService } from './core/database.service';
 
 @NgModule({
   declarations: [
@@ -15,7 +15,9 @@ import { MainModule } from './main/main.module';
     AppRoutingModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+    DatabaseService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -20,3 +20,12 @@ export interface Product {
     serialNumbers?: Array<SerialNumber>;
     regDate: number;
 }
+
+export interface Requirement {
+    id: string;
+    correlative: number;
+    product: Product;
+    color: Color;
+    description: string;
+    
+}
