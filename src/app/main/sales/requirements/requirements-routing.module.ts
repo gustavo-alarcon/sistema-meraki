@@ -9,10 +9,6 @@ const routes: Routes = [
     component: RequirementsComponent,
     children: [
       {
-        path: '',
-        loadChildren: () => import('./requirements-form/requirements-form.module').then(mod => mod.RequirementsFormModule)
-      },
-      {
         path: 'form',
         loadChildren: () => import('./requirements-form/requirements-form.module').then(mod => mod.RequirementsFormModule)
       },

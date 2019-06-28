@@ -12,7 +12,7 @@ export interface Link {
 export class RequirementsComponent implements OnInit {
 
   navLinks: Array<Link> = [
-    {path: 'form', label: 'Formulario'},
+    {path: 'form', label: 'Solicitar'},
     {path: 'list', label: 'Lista'}
   ];
 
