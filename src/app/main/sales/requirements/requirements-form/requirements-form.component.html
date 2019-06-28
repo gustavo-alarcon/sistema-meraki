@@ -1,1 +1,42 @@
-<p>requirements-form works!</p>
+<div class="w3-round-large mat-elevation-z8 w3-padding-large" style="background:lavender; max-width:320px; margin:auto">
+
+    <div class="ms-font-montserrat mat-title">
+        <mat-icon class="ms-icons-color" style="vertical-align:middle">assignment</mat-icon> Solicitar
+    </div>
+
+    <form [formGroup]="dataFormGroup">
+        <mat-form-field class="w3-margin-right w3-block" appearance="outline">
+            <mat-label>Seleccione un <b>producto</b></mat-label>
+            <input matInput type="text" [matAutocomplete]="productAuto" placeholder="Escriba..."
+                formControlName="product">
+            <mat-autocomplete #productAuto="matAutocomplete" [displayWith]="showProduct">
+                <mat-option *ngFor="let product of productList | async" [value]="product">
+                    {{product.name}}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-hint>requerido *</mat-hint>
+            <mat-error *ngIf="!dataFormGroup.valid">Seleccione un producto *</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w3-margin-right w3-block" appearance="outline">
+            <mat-label>Seleccione un <b>color</b></mat-label>
+            <input matInput type="text" [matAutocomplete]="colorAuto" placeholder="Escriba..."
+                formControlName="color">
+            <mat-autocomplete #colorAuto="matAutocomplete" [displayWith]="showColor">
+                <mat-option *ngFor="let color of colorList | async" [value]="color">
+                    {{color.name}}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-hint>requerido *</mat-hint>
+            <mat-error *ngIf="!dataFormGroup.valid">Seleccione un color *</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w3-margin-right w3-block" appearance="outline">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput placeholder="Describa el requerimiento ..." cols="10" rows="5"></textarea>
+        </mat-form-field>
+
+
+        
+    </form>
+</div>

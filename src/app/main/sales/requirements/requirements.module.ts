@@ -1,10 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 import { RequirementsRoutingModule } from './requirements-routing.module';
 import { RequirementsComponent } from './requirements.component';
-import { RequirementsListComponent } from './requirements-list/requirements-list.component';
-import { RequirementsFormComponent } from './requirements-form/requirements-form.component';
+
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatIconModule} from '@angular/material/icon';
+
 
 @NgModule({
   declarations: [
@@ -13,6 +17,10 @@ import { RequirementsFormComponent } from './requirements-form/requirements-form
   imports: [
     CommonModule,
     RequirementsRoutingModule,
+    RouterModule,
+    MatTabsModule,
+    MatGridListModule,
+    MatIconModule
   ],
   exports: [
     RequirementsComponent

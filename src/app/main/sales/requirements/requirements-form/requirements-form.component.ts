@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Product, Color } from 'src/app/core/types';
+import { of, Observable } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-requirements-form',
@@ -7,9 +10,44 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RequirementsFormComponent implements OnInit {
 
-  constructor() { }
+  dataFormGroup: FormGroup;
+
+  products: Array<Product> = [
+    {id: 'aaa', name: 'Antare', code: '1010100', regDate: 0},
+    {id: 'bbb', name: 'Aleman', code: '1010200', regDate: 0},
+    {id: 'ccc', name: 'Egipto', code: '1010300', regDate: 0}
+  ]
+
+  colors: Array<Color> = [
+    {id: 'aaa', name: 'Wengue', regDate: 0},
+    {id: 'aaa', name: 'Caramelo', regDate: 0},
+    {id: 'aaa', name: 'Nogal', regDate: 0},
+  ]
+
+  productList: Observable<Product[]> = of(this.products);
+  colorList: Observable<Color[]> = of(this.colors);
+
+  constructor(
+    private fb: FormBuilder
+  ) { }
 
   ngOnInit() {
+    this.createForm();
+  }
+
+  createForm(): void {
+    this.dataFormGroup = this.fb.group({
+      product: ['', [Validators.required]],
+      color: ['', [Validators.required]],
+    })
+  }
+
+  showProduct(product: Product): string | null {
+    return product ? product.name : null;
+  }
+
+  showColor(color: Color): string | null {
+    return color ? color.name : null;
   }
 
 }

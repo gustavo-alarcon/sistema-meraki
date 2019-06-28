@@ -1,7 +1,42 @@
-<div class="w3-container" style="height:100vh">
-    <div class="animated fadeInUpBig">
-        <p>requirements works!</p>
+<div style="height:100vh">
+    <div class="animated fadeInUpBig w3-margin-top w3-margin-bottom">
 
-        <router-outlet></router-outlet>
+        <div class="w3-row">
+            <div class="w3-col s0 m2 l2">
+                <p></p>
+            </div>
+            <div class="w3-col s12 m8 l8">
+                <div style="margin-top: 32px">
+                    <span class="mat-title ms-font-montserrat" style="font-weight: 900">
+                        <mat-icon class="ms-icons-color" style="vertical-align:middle">assignment</mat-icon>
+                        Requerimientos
+                    </span>
+                </div>
+
+                <nav mat-tab-nav-bar>
+                    <a mat-tab-link *ngFor="let link of navLinks" [routerLink]="link.path" routerLinkActive
+                        #rla="routerLinkActive" [active]="rla.isActive">
+                        {{link.label}}
+                    </a>
+                </nav>
+            </div>
+            <div class="w3-col s0 m2 l2">
+                <p></p>
+            </div>
+        </div>
+
+        <div class="w3-row">
+            <div class="w3-col s0 m2 l2">
+                <p></p>
+            </div>
+            <div class="w3-col s12 m8 l8">
+                <div class="w3-margin-top">
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+            <div class="w3-col s0 m2 l2">
+                <p></p>
+            </div>
+        </div>
     </div>
 </div>
