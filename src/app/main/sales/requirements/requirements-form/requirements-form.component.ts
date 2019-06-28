@@ -12,6 +12,12 @@ export class RequirementsFormComponent implements OnInit {
 
   dataFormGroup: FormGroup;
 
+  selectedFile1 = null;
+  imageSrc1: string | ArrayBuffer;
+
+  selectedFile2 = null;
+  imageSrc2: string | ArrayBuffer;
+
   products: Array<Product> = [
     {id: 'aaa', name: 'Antare', code: '1010100', regDate: 0},
     {id: 'bbb', name: 'Aleman', code: '1010200', regDate: 0},
@@ -39,6 +45,7 @@ export class RequirementsFormComponent implements OnInit {
     this.dataFormGroup = this.fb.group({
       product: ['', [Validators.required]],
       color: ['', [Validators.required]],
+      details: ''
     })
   }
 
@@ -48,6 +55,36 @@ export class RequirementsFormComponent implements OnInit {
 
   showColor(color: Color): string | null {
     return color ? color.name : null;
+  }
+
+  clean(): void {
+    this.createForm();
+  }
+
+  onFileSelected1(event): void {
+    this.selectedFile1 = event.target.files[0];
+
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+
+      const reader = new FileReader();
+      reader.onload = e => this.imageSrc1 = reader.result;
+
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onFileSelected2(event): void {
+    this.selectedFile2 = event.target.files[0];
+
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+
+      const reader = new FileReader();
+      reader.onload = e => this.imageSrc2 = reader.result;
+
+      reader.readAsDataURL(file);
+    }
   }
 
 }
