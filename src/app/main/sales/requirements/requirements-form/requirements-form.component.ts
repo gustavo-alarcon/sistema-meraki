@@ -3,6 +3,8 @@ import { Product, Color } from 'src/app/core/types';
 import { of, Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { RequirementFormSaveDialogComponent } from './requirement-form-save-dialog/requirement-form-save-dialog.component';
 
 @Component({
   selector: 'app-requirements-form',
@@ -39,7 +41,8 @@ export class RequirementsFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -68,7 +71,31 @@ export class RequirementsFormComponent implements OnInit {
   }
 
   save(): void {
-    
+    if (this.dataFormGroup.valid) {
+      this.dialog.open(RequirementFormSaveDialogComponent, { 
+        data: {
+          form: this.dataFormGroup.value,
+          image1: this.selectedFile1,
+          image2: this.selectedFile2,
+          file1: this.selectedFile3,
+          file2: this.selectedFile4
+        }
+      }).afterClosed().subscribe(res => {
+        if (res) {
+          this.createForm();
+          this.selectedFile1 = null;
+          this.selectedFile2 = null;
+          this.selectedFile3 = null;
+          this.selectedFile4 = null;
+          this.imageSrc1 = null;
+          this.imageSrc2 = null;
+        }
+      })
+    } else {
+      this.snackbar.open('Revisar campos requeridos', 'Cerrar', {
+        duration: 6000
+      });
+    }
   }
 
   onFileSelected1(event): void {
@@ -113,7 +140,6 @@ export class RequirementsFormComponent implements OnInit {
   onFileSelected3(event): void{
     if(event.target.files[0].type === 'application/pdf'){
       this.selectedFile3 = event.target.files[0];
-      console.log(this.selectedFile3);
     }else{
       this.snackbar.open("Seleccione un archivo PDF","Cerrar", {
         duration: 6000

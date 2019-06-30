@@ -24,8 +24,21 @@ export interface Product {
 export interface Requirement {
     id: string;
     correlative: number;
+    status: string;
     product: Product;
     color: Color;
+    quantity: number;
     description: string;
-    
+    image1: string;
+    image2: string;
+    file1: string;
+    file2: string;
+    regDate: number;
+    requestedBy: string;
+}
+
+export interface Correlative {
+    id: string;
+    correlative: number;
+    regDate: number;
 }

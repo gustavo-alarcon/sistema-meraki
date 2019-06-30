@@ -1,11 +1,11 @@
-<div class="w3-round-large mat-elevation-z8 w3-padding-large" style="background:lavender; max-width:320px; margin:auto">
+<div class="w3-round-large w3-margin-top mat-elevation-z8 w3-padding-large" style="background:white; max-width:350px; margin:auto">
 
     <div class="ms-font-montserrat mat-title">
         <mat-icon class="ms-icons-color" style="vertical-align:middle">assignment</mat-icon> Solicitar
     </div>
 
     <form [formGroup]="dataFormGroup">
-        <mat-form-field class="w3-margin-right w3-block" appearance="outline">
+        <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
             <mat-label>Seleccione un <b>producto</b></mat-label>
             <input matInput type="text" [matAutocomplete]="productAuto" placeholder="Escriba..."
                 formControlName="product">
@@ -18,7 +18,7 @@
             <mat-error *ngIf="!dataFormGroup.valid">Seleccione un producto *</mat-error>
         </mat-form-field>
 
-        <mat-form-field class="w3-margin-right w3-block" appearance="outline">
+        <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
             <mat-label>Seleccione un <b>color</b></mat-label>
             <input matInput type="text" [matAutocomplete]="colorAuto" placeholder="Escriba..." formControlName="color">
             <mat-autocomplete #colorAuto="matAutocomplete" [displayWith]="showColor">
@@ -30,9 +30,10 @@
             <mat-error *ngIf="!dataFormGroup.valid">Seleccione un color *</mat-error>
         </mat-form-field>
 
-        <mat-form-field class="w3-margin-right w3-block" appearance="outline">
+        <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
             <mat-label>Cantidad</mat-label>
             <input matInput type="number" min="0" step="1" formControlName="quantity" placeholder="Escriba...">
+            <mat-hint>requerido *</mat-hint>
         </mat-form-field>
 
         <mat-form-field class="w3-margin-right w3-block" appearance="outline">
@@ -59,11 +60,11 @@
         <input #fileInput3 style="display: none" type="file" (change)="onFileSelected3($event)">
         <button class="ms-icons-color w3-margin-right w3-margin-bottom" mat-stroked-button
             (click)="fileInput3.click()">Adjuntar PDF
-            <mat-icon *ngIf="selectedFile3">check_circle</mat-icon></button><br>
+            <mat-icon *ngIf="selectedFile3">check_circle</mat-icon> <span class="w3-small">{{selectedFile3 ? selectedFile3.name.substring(0,25) : '' }}</span></button><br>
         <input #fileInput4 style="display: none" type="file" (change)="onFileSelected4($event)">
         <button class="ms-icons-color w3-margin-right w3-margin-bottom" mat-stroked-button
             (click)="fileInput4.click()">Adjuntar PDF
-            <mat-icon *ngIf="selectedFile4">check_circle</mat-icon></button><br>
+            <mat-icon *ngIf="selectedFile4">check_circle</mat-icon> <span class="w3-small">{{selectedFile4 ? selectedFile4.name.substring(0,25) : '' }}</span></button><br>
 
         <mat-divider></mat-divider>
 
