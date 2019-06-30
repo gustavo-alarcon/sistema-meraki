@@ -19,6 +19,21 @@ export class DatabaseService {
   public dataRequirementCorrelative = new BehaviorSubject<Correlative>(null);
   public currentDataRequirementCorrelative = this.dataRequirementCorrelative.asObservable();
 
+  orderCorrelativeDocument: AngularFirestoreDocument<Correlative>;
+  orderCorrelative: Correlative;
+
+  public dataOrderCorrelative = new BehaviorSubject<Correlative>(null);
+  public currentDataOrderCorrelative = this.dataOrderCorrelative.asObservable();
+
+  /**
+   * ORDERS
+   */
+  ordersCollection: AngularFirestoreCollection<Requirement>;
+  orders: Array<Requirement>;
+
+  public dataOrders = new BehaviorSubject<Requirement[]>([]);
+  public currentDataOrders = this.dataOrders.asObservable();
+
   /**
    * REQUIREMENTS
    */
@@ -51,6 +66,8 @@ export class DatabaseService {
   ) { 
     this.getRequirements(true);
     this.getRequirementsCorrelative();
+    this.getOrders(true);
+    this.getOrdersCorrelative();
   }
 
   /**
@@ -73,6 +90,20 @@ export class DatabaseService {
       })
   }
 
+  getOrders(all: boolean, from?: number, to?: number): void {
+    if (all) {
+      this.ordersCollection = this.af.collection(`db/dbs_interiores/orders`);
+    } else {
+      this.ordersCollection = this.af.collection(`db/dbs_interiores/orders`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
+    }
+
+    this.ordersCollection.valueChanges()
+      .subscribe(res => {
+        this.orders = res;
+        this.dataOrders.next(res);
+      })
+  }
+
   getRequirementsCorrelative(): void {
     this.requirementCorrelativeDocument = this.af.doc(`db/dbs_interiores/correlatives/OR`);
     this.requirementCorrelativeDocument.valueChanges()
@@ -81,4 +112,14 @@ export class DatabaseService {
         this.dataRequirementCorrelative.next(res);
       })
   }
+
+  getOrdersCorrelative(): void {
+    this.orderCorrelativeDocument = this.af.doc(`db/dbs_interiores/correlatives/OPe`);
+    this.orderCorrelativeDocument.valueChanges()
+      .subscribe(res => {
+        this.orderCorrelative = res;
+        this.dataOrderCorrelative.next(res);
+      })
+  }
+
 }
