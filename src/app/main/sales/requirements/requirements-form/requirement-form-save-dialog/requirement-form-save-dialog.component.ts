@@ -39,7 +39,6 @@ export class RequirementFormSaveDialogComponent implements OnInit, OnDestroy {
     upload4: false
   }
 
-  correlative$: Correlative;
   currentCorrelative: number = null;
 
   storageUploading = new BehaviorSubject<boolean>(false);
@@ -66,20 +65,13 @@ export class RequirementFormSaveDialogComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.checkNumberOfFiles();
 
-    const corr_$ =
-      this.dbs.currentDataRequirementCorrelative.subscribe(res => {
-        this.correlative$ = res;
-      });
-
-    this.subscriptions.push(corr_$);
-
     const storage$ =
       this.currentStorageUploading.subscribe(res => {
         if (res) {
           this.filesCount++;
           if (this.filesCount === this.totalFiles) {
             this.uploading = false;
-            this.snackbar.open(`Requerimiento #${this.currentCorrelative} creado`, 'Cerrar', {
+            this.snackbar.open(`Order de Requerimiento #${this.currentCorrelative} creada`, 'Cerrar', {
               duration: 10000
             });
             this.dialogRef.close(true);

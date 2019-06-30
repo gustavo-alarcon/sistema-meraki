@@ -42,3 +42,29 @@ export interface Correlative {
     correlative: number;
     regDate: number;
 }
+
+export interface Document {
+    id: string;
+    name: string;
+    serie: number;
+    correlative: number;
+    regDate: number;
+}
+
+export interface Order {
+    id: string;
+    correlative: number;
+    document: string;
+    documentCorrelative: string;
+    deliveryDate: number;
+    status: string;
+    color?: Array<Color>;
+    quantity: number;
+    description: string;
+    image1: string;
+    image2: string;
+    file1: string;
+    file2: string;
+    regDate: number;
+    requestedBy: string;
+}
