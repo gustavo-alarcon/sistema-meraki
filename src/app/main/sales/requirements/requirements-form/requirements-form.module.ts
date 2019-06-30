@@ -1,20 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { RequirementsFormRoutingModule } from './requirements-form-routing.module';
 import { RequirementsFormComponent } from './requirements-form.component';
+import { RequirementFormSaveDialogComponent } from './requirement-form-save-dialog/requirement-form-save-dialog.component';
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
-    RequirementsFormComponent
+    RequirementsFormComponent,
+    RequirementFormSaveDialogComponent
   ],
   imports: [
     CommonModule,
@@ -24,10 +29,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatAutocompleteModule,
     MatFormFieldModule,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule,
+    MatDividerModule,
+    MatSnackBarModule,
+    MatDialogModule,
+    MatProgressBarModule
   ],
   exports: [
     RequirementsFormComponent
+  ],
+  entryComponents: [
+    RequirementFormSaveDialogComponent
   ]
 })
 export class RequirementsFormModule { }

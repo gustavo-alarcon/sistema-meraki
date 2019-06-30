@@ -4,7 +4,16 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MainModule } from './main/main.module';
+
+import { environment } from 'src/environments/environment';
+
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+
+import { DatabaseService } from './core/database.service';
+import { AuthService } from './core/auth.service';
 
 @NgModule({
   declarations: [
@@ -13,9 +22,16 @@ import { MainModule } from './main/main.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AngularFireModule.initializeApp(environment.firebase, 'Sistema interiores'),
+    AngularFirestoreModule.enablePersistence(),
+    AngularFireAuthModule,
+    AngularFireStorageModule,
   ],
-  providers: [],
+  providers: [
+    DatabaseService,
+    AuthService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
