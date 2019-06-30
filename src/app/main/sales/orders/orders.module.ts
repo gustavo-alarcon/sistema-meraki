@@ -1,16 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 import { OrdersRoutingModule } from './orders-routing.module';
 import { OrdersComponent } from './orders.component';
-import { OrdersFormComponent } from './orders-form/orders-form.component';
-import { OrdersListComponent } from './orders-list/orders-list.component';
+
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
-  declarations: [OrdersComponent, OrdersFormComponent, OrdersListComponent],
+  declarations: [
+    OrdersComponent
+  ],
   imports: [
     CommonModule,
-    OrdersRoutingModule
+    OrdersRoutingModule,
+    RouterModule,
+    MatTabsModule,
+    MatGridListModule,
+    MatIconModule
   ]
 })
 export class OrdersModule { }
