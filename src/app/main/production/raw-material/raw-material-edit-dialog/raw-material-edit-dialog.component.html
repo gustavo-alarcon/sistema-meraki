@@ -1,1 +1,85 @@
-<p>raw-material-edit-dialog works!</p>
+<div class="ms-font-montserrat mat-title ms-color-11">
+    <mat-icon class="ms-icons-color" style="vertical-align:middle">edit</mat-icon> Editar materia prima
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+<mat-dialog-content>
+    <form [formGroup]="dataFormGroup">
+        <div class="w3-row">
+            <div class="w3-half">
+                <div class="w3-margin">
+                    <span class="ms-color-11 mat-subheading-1 w3-margin-bottom"><b>Información</b></span>
+                    <mat-divider class="w3-margin-bottom"></mat-divider>
+                    <mat-form-field class="w3-margin-bottom" appearance="outline">
+                        <mat-label>Nombre</mat-label>
+                        <input matInput type="text" formControlName="name" placeholder="Escriba..." autocomplete="off">
+                        <mat-progress-bar mode="indeterminate" *ngIf="duplicate.nameLoading">
+                        </mat-progress-bar>
+
+                        <mat-hint *ngIf="!duplicate.name">Requerido *</mat-hint>
+                        <mat-hint *ngIf="duplicate.name">Este nombre ya existe <b>!!!</b></mat-hint>
+                        <mat-error *ngIf="!dataFormGroup.valid">Nombre requerido *</mat-error>
+                    </mat-form-field><br>
+                    <mat-form-field class="w3-margin-bottom" appearance="outline">
+                        <mat-label>Código</mat-label>
+                        <input matInput type="text" formControlName="code" placeholder="Escriba..." autocomplete="off">
+                        <mat-hint *ngIf="!duplicate.code">Requerido *</mat-hint>
+                        <mat-hint *ngIf="duplicate.code">Este código ya existe <b>!!!</b></mat-hint>
+                        <mat-error *ngIf="!dataFormGroup.valid">Código requerido *</mat-error>
+                    </mat-form-field><br>
+                    <mat-form-field class="w3-margin-bottom" appearance="outline">
+                        <mat-label>Categoría</mat-label>
+                        <input matInput type="text" formControlName="category" [matAutocomplete]="categoryAuto"
+                            placeholder="Escriba...">
+                        <mat-autocomplete #categoryAuto="matAutocomplete">
+                            <mat-option *ngFor="let cat of filteredCategories | async" [value]="cat.name">
+                                {{cat.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint>Requerido *</mat-hint>
+                        <mat-error *ngIf="!dataFormGroup.valid">Seleccione una categoría *</mat-error>
+                    </mat-form-field><br>
+                </div>
+            </div>
+            <div class="w3-half">
+                <div class="w3-margin">
+                    <span class="ms-color-11 mat-subheading-1 w3-margin-bottom"><b>Propiedades</b></span>
+                    <mat-divider class="w3-margin-bottom"></mat-divider>
+                    <mat-form-field class="w3-margin-bottom" appearance="outline">
+                        <mat-label>Unidad</mat-label>
+                        <input matInput type="text" formControlName="unit" [matAutocomplete]="unitAuto"
+                            placeholder="Escriba...">
+                        <mat-autocomplete #unitAuto="matAutocomplete">
+                            <mat-option *ngFor="let unit of filteredUnits | async" [value]="unit.name">
+                                {{unit.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint>Requerido *</mat-hint>
+                        <mat-error *ngIf="!dataFormGroup.valid">Seleccione una unidad *</mat-error>
+                    </mat-form-field><br>
+                    <mat-form-field class="w3-margin-bottom" appearance="outline">
+                        <mat-label>Precio de compra</mat-label>
+                        <input matInput type="number" min="0" step="0.1" formControlName="purchase"
+                            placeholder="Escriba..." autocomplete="off">
+                        <mat-hint>Requerido *</mat-hint>
+                        <mat-error *ngIf="!dataFormGroup.valid">Precio requerido *</mat-error>
+                    </mat-form-field><br>
+                    <mat-form-field class="w3-margin-bottom" appearance="outline">
+                        <mat-label>Precio de venta</mat-label>
+                        <input matInput type="number" min="0" step="0.1" formControlName="sale"
+                            placeholder="Escriba..." autocomplete="off">
+                        <mat-hint>Requerido *</mat-hint>
+                        <mat-error *ngIf="!dataFormGroup.valid">Precio requerido *</mat-error>
+                    </mat-form-field><br>
+                </div>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+<mat-dialog-actions align="end">
+    <button mat-stroked-button class="w3-margin-right" color="warn" mat-dialog-close>Cancelar</button>
+    <button mat-raised-button class="w3-margin-right" color="primary" (click)="edit()"
+        [disabled]="!dataFormGroup.valid || duplicate.name || duplicate.code">Editar</button>
+</mat-dialog-actions>

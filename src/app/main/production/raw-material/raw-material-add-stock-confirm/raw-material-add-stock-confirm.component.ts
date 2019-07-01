@@ -21,13 +21,9 @@ export class RawMaterialAddStockConfirmComponent implements OnInit {
     created: false,
   }
 
-
-  subscriptions: Array<Subscription> = [];
-
   constructor(
     public dbs: DatabaseService,
     public auth: AuthService,
-    private storage: AngularFireStorage,
     private af: AngularFirestore,
     private dialogRef: MatDialogRef<RequirementFormSaveDialogComponent>,
     private snackbar: MatSnackBar,
