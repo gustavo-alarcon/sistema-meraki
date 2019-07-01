@@ -53,55 +53,61 @@ export class RawMaterialCreateDialogComponent implements OnInit, OnDestroy {
         map(name => name ? this.dbs.units.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.units)
       );
 
-    this.dataFormGroup.get('name').valueChanges
-      .pipe(
-        tap(() => {
-          this.duplicate.nameLoading = true;
-        }),
-        debounceTime(500),
-        tap(res => {
+    const name$ =
+      this.dataFormGroup.get('name').valueChanges
+        .pipe(
+          tap(() => {
+            this.duplicate.nameLoading = true;
+          }),
+          debounceTime(500),
+          tap(res => {
 
-          this.duplicate.name = false;
-          const find = this.dbs.rawMaterials.filter(option => option.name === res);
+            this.duplicate.name = false;
+            const find = this.dbs.rawMaterials.filter(option => option.name === res);
 
-          if (find.length > 0) {
-            this.duplicate.nameLoading = false;
-            this.duplicate.name = true;
-            this.snackbar.open('Nombre duplicado', 'Cerrar', {
-              duration: 4000
-            });
-          } else {
-            this.duplicate.nameLoading = false;
-          }
-        })
-      ).subscribe()
+            if (find.length > 0) {
+              this.duplicate.nameLoading = false;
+              this.duplicate.name = true;
+              this.snackbar.open('Nombre duplicado', 'Cerrar', {
+                duration: 4000
+              });
+            } else {
+              this.duplicate.nameLoading = false;
+            }
+          })
+        ).subscribe()
 
-    this.dataFormGroup.get('code').valueChanges
-      .pipe(
-        tap(() => {
-          this.duplicate.codeLoading = true;
-        }),
-        debounceTime(500),
-        tap(res => {
+    this.subscriptions.push(name$);
 
-          this.duplicate.code = false;
-          const find = this.dbs.rawMaterials.filter(option => option.code === res);
+    const code$ =
+      this.dataFormGroup.get('code').valueChanges
+        .pipe(
+          tap(() => {
+            this.duplicate.codeLoading = true;
+          }),
+          debounceTime(500),
+          tap(res => {
 
-          if (find.length > 0) {
-            this.duplicate.codeLoading = false;
-            this.duplicate.code = true;
-            this.snackbar.open('Código duplicado', 'Cerrar', {
-              duration: 4000
-            });
-          } else {
-            this.duplicate.codeLoading = false;
-          }
-        })
-      ).subscribe()
+            this.duplicate.code = false;
+            const find = this.dbs.rawMaterials.filter(option => option.code === res);
+
+            if (find.length > 0) {
+              this.duplicate.codeLoading = false;
+              this.duplicate.code = true;
+              this.snackbar.open('Código duplicado', 'Cerrar', {
+                duration: 4000
+              });
+            } else {
+              this.duplicate.codeLoading = false;
+            }
+          })
+        ).subscribe()
+
+    this.subscriptions.push(code$);
   }
 
   ngOnDestroy() {
-
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   createForm(): void {
@@ -114,14 +120,6 @@ export class RawMaterialCreateDialogComponent implements OnInit, OnDestroy {
       purchase: [null, [Validators.required]],
       sale: [null, [Validators.required]],
     })
-  }
-
-  showCategory(category: Category): string | null {
-    return category ? category.name : null;
-  }
-
-  showUnit(unit: Unit): string | null {
-    return unit ? unit.name : null;
   }
 
   create(): void {
@@ -141,21 +139,21 @@ export class RawMaterialCreateDialogComponent implements OnInit, OnDestroy {
 
       this.dbs.rawMaterialsCollection
         .add(finalData)
-          .then(ref => {
-            ref.update({id: ref.id});
-            this.loading = false;
-            this.snackbar.open('Nuevo material creado!', 'Cerrar', {
-              duration: 6000
-            });
-            this.dialogRef.close(true);
-          })
-          .catch(err => {
-            this.loading = false;
-            this.snackbar.open('Hubo un error grabando el documento', 'Cerrar', {
-              duration: 6000
-            });
-            console.log(err);
-          })
+        .then(ref => {
+          ref.update({ id: ref.id });
+          this.loading = false;
+          this.snackbar.open('Nuevo material creado!', 'Cerrar', {
+            duration: 6000
+          });
+          this.dialogRef.close(true);
+        })
+        .catch(err => {
+          this.loading = false;
+          this.snackbar.open('Hubo un error grabando el documento', 'Cerrar', {
+            duration: 6000
+          });
+          console.log(err);
+        })
     }
   }
 
@@ -170,18 +168,18 @@ export class RawMaterialCreateDialogComponent implements OnInit, OnDestroy {
 
       this.dbs.categoriesCollection
         .add(data)
-          .then(ref => {
-            ref.update({id: ref.id});
-            this.snackbar.open('Nueva categoría agregada!', 'Cerrar', {
-              duration: 4000
-            });
-          })
-          .catch(err => {
-            this.snackbar.open('Error creando nueva categoría', 'Cerrar', {
-              duration: 4000
-            });
-            console.log(err);
-          })
+        .then(ref => {
+          ref.update({ id: ref.id });
+          this.snackbar.open('Nueva categoría agregada!', 'Cerrar', {
+            duration: 4000
+          });
+        })
+        .catch(err => {
+          this.snackbar.open('Error creando nueva categoría', 'Cerrar', {
+            duration: 4000
+          });
+          console.log(err);
+        })
     }
   }
 
@@ -196,18 +194,18 @@ export class RawMaterialCreateDialogComponent implements OnInit, OnDestroy {
 
       this.dbs.unitsCollection
         .add(data)
-          .then(ref => {
-            ref.update({id: ref.id});
-            this.snackbar.open('Nueva unidad agregada!', 'Cerrar', {
-              duration: 4000
-            });
-          })
-          .catch(err => {
-            this.snackbar.open('Error creando nueva unidad', 'Cerrar', {
-              duration: 4000
-            });
-            console.log(err);
-          })
+        .then(ref => {
+          ref.update({ id: ref.id });
+          this.snackbar.open('Nueva unidad agregada!', 'Cerrar', {
+            duration: 4000
+          });
+        })
+        .catch(err => {
+          this.snackbar.open('Error creando nueva unidad', 'Cerrar', {
+            duration: 4000
+          });
+          console.log(err);
+        })
     }
   }
 

@@ -6,6 +6,7 @@ import { RawMaterial } from 'src/app/core/types';
 import { RawMaterialCreateDialogComponent } from './raw-material-create-dialog/raw-material-create-dialog.component';
 import { Subscription } from 'rxjs';
 import { FormControl } from '@angular/forms';
+import { RawMaterialEditDialogComponent } from './raw-material-edit-dialog/raw-material-edit-dialog.component';
 
 @Component({
   selector: 'app-raw-material',
@@ -71,7 +72,11 @@ export class RawMaterialComponent implements OnInit {
   }
 
   editRawMaterial(raw: RawMaterial): void {
-
+    this.dialog.open(RawMaterialEditDialogComponent, {
+      data: {
+        raw: raw
+      }
+    });
   }
 
   deleteRawMaterial(raw: RawMaterial): void {
@@ -83,7 +88,7 @@ export class RawMaterialComponent implements OnInit {
       data: {
         raw: raw,
       }
-    })
+    });
   }
 
 }

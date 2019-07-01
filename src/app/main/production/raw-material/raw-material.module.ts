@@ -25,6 +25,7 @@ import {  MatInputModule,
           MatProgressSpinnerModule,
           MatProgressBarModule,
           MatMenuModule} from '@angular/material';
+import { RawMaterialEditConfirmComponent } from './raw-material-edit-confirm/raw-material-edit-confirm.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import {  MatInputModule,
     RawMaterialCreateDialogComponent,
     RawMaterialAddStockDialogComponent,
     RawMaterialAddStockConfirmComponent,
-    RawMaterialEditDialogComponent
+    RawMaterialEditDialogComponent,
+    RawMaterialEditConfirmComponent
   ],
   imports: [
     CommonModule,
@@ -61,7 +63,8 @@ import {  MatInputModule,
     RawMaterialCreateDialogComponent,
     RawMaterialAddStockDialogComponent,
     RawMaterialAddStockConfirmComponent,
-    RawMaterialEditDialogComponent
+    RawMaterialEditDialogComponent,
+    RawMaterialEditConfirmComponent
   ]
 })
 export class RawMaterialModule { }
