@@ -7,6 +7,7 @@ import { RawMaterialCreateDialogComponent } from './raw-material-create-dialog/r
 import { Subscription } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { RawMaterialEditDialogComponent } from './raw-material-edit-dialog/raw-material-edit-dialog.component';
+import { RawMaterialDeleteConfirmComponent } from './raw-material-delete-confirm/raw-material-delete-confirm.component';
 
 @Component({
   selector: 'app-raw-material',
@@ -80,7 +81,11 @@ export class RawMaterialComponent implements OnInit {
   }
 
   deleteRawMaterial(raw: RawMaterial): void {
-
+    this.dialog.open(RawMaterialDeleteConfirmComponent, {
+      data: {
+        raw: raw
+      }
+    })
   }
 
   addStock(raw: RawMaterial): void {

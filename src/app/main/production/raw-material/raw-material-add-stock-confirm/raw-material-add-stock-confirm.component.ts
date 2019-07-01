@@ -25,7 +25,7 @@ export class RawMaterialAddStockConfirmComponent implements OnInit {
     public dbs: DatabaseService,
     public auth: AuthService,
     private af: AngularFirestore,
-    private dialogRef: MatDialogRef<RequirementFormSaveDialogComponent>,
+    private dialogRef: MatDialogRef<RawMaterialAddStockConfirmComponent>,
     private snackbar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: {raw: RawMaterial, quantity: number}
   ) { }
