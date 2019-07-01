@@ -68,3 +68,33 @@ export interface Order {
     regDate: number;
     requestedBy: string;
 }
+
+export interface RawMaterial {
+    id: string;
+    category: Category;
+    warehouse: Warehouse;
+    code: string;
+    name: string;
+    unit: Unit;
+    stock: number;
+    purchase: number;
+    sale: number;
+}
+
+export interface Category {
+    id: string;
+    name: string;
+    regDate: number;
+}
+
+export interface Warehouse {
+    id: string;
+    name: string;
+    regDate: number;
+}
+
+export interface Unit {
+    id: string;
+    name: string;
+    regDate: number;
+}
