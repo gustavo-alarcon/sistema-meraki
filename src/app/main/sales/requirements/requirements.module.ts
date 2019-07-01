@@ -9,7 +9,6 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatIconModule} from '@angular/material/icon';
 
-
 @NgModule({
   declarations: [
     RequirementsComponent
