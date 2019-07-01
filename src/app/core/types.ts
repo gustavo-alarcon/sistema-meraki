@@ -71,11 +71,11 @@ export interface Order {
 
 export interface RawMaterial {
     id: string;
-    category: Category;
+    category: string;
     warehouse?: Warehouse;
     code: string;
     name: string;
-    unit: Unit;
+    unit: string;
     stock: number;
     purchase: number;
     sale: number;

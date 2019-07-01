@@ -1,8 +1,11 @@
+import { RawMaterialAddStockDialogComponent } from './raw-material-add-stock-dialog/raw-material-add-stock-dialog.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DatabaseService } from 'src/app/core/database.service';
-import { MatDialog, MatSnackBar, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { MatDialog, MatSnackBar, MatTableDataSource, MatPaginator, MatSort, MAT_DIALOG_DATA } from '@angular/material';
 import { RawMaterial } from 'src/app/core/types';
 import { RawMaterialCreateDialogComponent } from './raw-material-create-dialog/raw-material-create-dialog.component';
+import { Subscription } from 'rxjs';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-raw-material',
@@ -11,15 +14,19 @@ import { RawMaterialCreateDialogComponent } from './raw-material-create-dialog/r
 })
 export class RawMaterialComponent implements OnInit {
 
+  disableTooltips = new FormControl(false);
+
   filteredRawMaterials: Array<RawMaterial> = [];
 
-  displayedColumns: string[] = ['index', 'code', 'name', 'category', 'unit', 'stock', 'warehouse', 'currency', 'purchase', 'sale','maxDiscount', 'actions'];
+  displayedColumns: string[] = ['index', 'code', 'name', 'category', 'stock', 'unit', 'purchase', 'sale', 'actions'];
 
 
   dataSource = new MatTableDataSource();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+
+  subscriptions: Array<Subscription> = [];
 
   constructor(
     public dbs: DatabaseService,
@@ -28,16 +35,31 @@ export class RawMaterialComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort  = this.sort;
+
+    const raw$ =
+    this.dbs.currentDataRawMaterials.subscribe(res => {
+      if(res) {
+        this.filteredRawMaterials = res;
+        this.dataSource.data = res;
+      }
+    });
+
+    this.subscriptions.push(raw$);
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   filterData(ref: string) {
     ref = ref.toLowerCase();
     this.filteredRawMaterials = this.dbs.rawMaterials.filter(option =>
-      option.category.name.toLowerCase().includes(ref) ||
-      option.warehouse.name.toLowerCase().includes(ref) ||
+      option.category.toLowerCase().includes(ref) ||
       option.code.toLowerCase().includes(ref) ||
       option.name.toLowerCase().includes(ref) ||
-      option.unit.name.toLowerCase().includes(ref) ||
+      option.unit.toLowerCase().includes(ref) ||
       option.stock.toString().includes(ref) ||
       option.purchase.toString().includes(ref) ||
       option.sale.toString().includes(ref));
@@ -46,6 +68,22 @@ export class RawMaterialComponent implements OnInit {
 
   createRawMaterial(): void {
     this.dialog.open(RawMaterialCreateDialogComponent);
+  }
+
+  editRawMaterial(raw: RawMaterial): void {
+
+  }
+
+  deleteRawMaterial(raw: RawMaterial): void {
+
+  }
+
+  addStock(raw: RawMaterial): void {
+    this.dialog.open(RawMaterialAddStockDialogComponent, {
+      data: {
+        raw: raw,
+      }
+    })
   }
 
 }

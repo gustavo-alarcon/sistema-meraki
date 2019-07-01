@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RawMaterialRoutingModule } from './raw-material-routing.module';
 import { RawMaterialComponent } from './raw-material.component';
 import { RawMaterialCreateDialogComponent } from './raw-material-create-dialog/raw-material-create-dialog.component';
+import { RawMaterialAddStockDialogComponent } from './raw-material-add-stock-dialog/raw-material-add-stock-dialog.component';
 
 import {  MatInputModule,
           MatButtonModule,
@@ -20,13 +21,18 @@ import {  MatInputModule,
           MatDialogModule,
           MatSnackBarModule,
           MatProgressSpinnerModule,
-          MatProgressBarModule} from '@angular/material';
-
+          MatProgressBarModule,
+          MatMenuModule} from '@angular/material';
+import { RawMaterialAddStockConfirmComponent } from './raw-material-add-stock-confirm/raw-material-add-stock-confirm.component';
+import { RawMaterialEditDialogComponent } from './raw-material-edit-dialog/raw-material-edit-dialog.component';
 
 @NgModule({
   declarations: [
     RawMaterialComponent,
-    RawMaterialCreateDialogComponent
+    RawMaterialCreateDialogComponent,
+    RawMaterialAddStockDialogComponent,
+    RawMaterialAddStockConfirmComponent,
+    RawMaterialEditDialogComponent
   ],
   imports: [
     CommonModule,
@@ -47,10 +53,13 @@ import {  MatInputModule,
     MatDialogModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatMenuModule
   ],
   entryComponents: [
-    RawMaterialCreateDialogComponent
+    RawMaterialCreateDialogComponent,
+    RawMaterialAddStockDialogComponent,
+    RawMaterialAddStockConfirmComponent
   ]
 })
 export class RawMaterialModule { }

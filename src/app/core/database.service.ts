@@ -122,7 +122,7 @@ export class DatabaseService {
    */
   getRequirements(all: boolean, from?: number, to?: number): void {
     if (all) {
-      this.requirementsCollection = this.af.collection(`db/dbs_interiores/requirements`);
+      this.requirementsCollection = this.af.collection(`db/dbs_interiores/requirements`, ref => ref.orderBy('regDate','desc'));
     } else {
       this.requirementsCollection = this.af.collection(`db/dbs_interiores/requirements`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
     }
@@ -136,7 +136,7 @@ export class DatabaseService {
 
   getOrders(all: boolean, from?: number, to?: number): void {
     if (all) {
-      this.ordersCollection = this.af.collection(`db/dbs_interiores/orders`);
+      this.ordersCollection = this.af.collection(`db/dbs_interiores/orders`, ref => ref.orderBy('regDate','desc'));
     } else {
       this.ordersCollection = this.af.collection(`db/dbs_interiores/orders`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
     }
@@ -170,7 +170,7 @@ export class DatabaseService {
 
   getRawMaterials(all: boolean, from?: number, to?: number): void {
     if (all) {
-      this.rawMaterialsCollection = this.af.collection(`db/dbs_interiores/rawMaterials`);
+      this.rawMaterialsCollection = this.af.collection(`db/dbs_interiores/rawMaterials`, ref => ref.orderBy('regDate','desc'));
     } else {
       this.rawMaterialsCollection = this.af.collection(`db/dbs_interiores/rawMaterials`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
     }

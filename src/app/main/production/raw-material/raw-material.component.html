@@ -1,6 +1,6 @@
 <div style="min-height:100vh; background:lavender">
     <div class="animated fadeInUpBig w3-margin-bottom" style="padding:16px">
-        <div class="w3-row">
+        <div class="w3-row w3-margin-bottom">
             <div class="w3-col s0 m1 l1">
                 <p></p>
             </div>
@@ -30,6 +30,112 @@
                     </span>
                 </div>
                 <mat-divider></mat-divider>
+            </div>
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+        </div>
+
+        <div class="w3-row">
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+            <div class="w3-col s12 m10 l10">
+                <div class="mat-elevation-z8">
+                    <div style=" overflow:auto">
+                        <table mat-table [dataSource]="dataSource" matSort style="width:100%">
+
+                            <ng-container matColumnDef="index" sticky>
+                                <th mat-header-cell *matHeaderCellDef>N°</th>
+                                <td mat-cell *matCellDef="let raw; let i = index">
+                                    {{raw.index}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="code">
+                                <th mat-header-cell *matHeaderCellDef matTooltip="Ordenar tabla por código"
+                                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value"
+                                    mat-sort-header>Código</th>
+                                <td mat-cell *matCellDef="let raw">
+                                    {{raw.code}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef matTooltip="Ordenar tabla por nombre"
+                                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value"
+                                    mat-sort-header>Nombre</th>
+                                <td mat-cell *matCellDef="let raw">
+                                    {{raw.name}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="category">
+                                <th mat-header-cell *matHeaderCellDef matTooltip="Ordenar tabla por categoría"
+                                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value"
+                                    mat-sort-header>Categoría</th>
+                                <td mat-cell *matCellDef="let raw">
+                                    {{raw.category}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="stock">
+                                <th mat-header-cell *matHeaderCellDef matTooltip="Ordenar tabla por stock"
+                                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value"
+                                    mat-sort-header>Stock</th>
+                                <td mat-cell *matCellDef="let raw">
+                                    {{raw.stock | number : '2.2'}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="unit">
+                                <th mat-header-cell *matHeaderCellDef matTooltip="Ordenar tabla por unidad de medida"
+                                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value"
+                                    mat-sort-header>U. Medida</th>
+                                <td mat-cell *matCellDef="let raw">
+                                    {{raw.unit}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="purchase">
+                                <th mat-header-cell *matHeaderCellDef matTooltip="Ordenar tabla por precio de compra"
+                                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value"
+                                    mat-sort-header>Compra</th>
+                                <td mat-cell *matCellDef="let raw">
+                                    {{raw.purchase | number : '.2' | currency : 'S/.'}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="sale">
+                                <th mat-header-cell *matHeaderCellDef matTooltip="Ordenar tabla por precio de venta"
+                                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value"
+                                    mat-sort-header>Venta</th>
+                                <td mat-cell *matCellDef="let product">
+                                    {{product.sale |  number : '.2' | currency : 'S/.'}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="actions">
+                                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                <td mat-cell *matCellDef="let raw">
+                                    <mat-menu #rawMenu="matMenu">
+                                        <button mat-menu-item (click)="addStock(raw)">Agregar stock</button>
+                                        <button mat-menu-item (click)="editRawMaterial(raw)">Editar</button>
+                                        <button mat-menu-item (click)="deleteRawMaterial(raw)">Borrar</button>
+                                    </mat-menu>
+                                    <button mat-icon-button [matMenuTriggerFor]="rawMenu">
+                                        <mat-icon>more_vert</mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                        </table>
+                    </div>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                </div>
             </div>
             <div class="w3-col s0 m1 l1">
                 <p></p>
