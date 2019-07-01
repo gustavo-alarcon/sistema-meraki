@@ -26,6 +26,7 @@ import {  MatInputModule,
           MatProgressBarModule,
           MatMenuModule} from '@angular/material';
 import { RawMaterialEditConfirmComponent } from './raw-material-edit-confirm/raw-material-edit-confirm.component';
+import { RawMaterialDeleteConfirmComponent } from './raw-material-delete-confirm/raw-material-delete-confirm.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { RawMaterialEditConfirmComponent } from './raw-material-edit-confirm/raw
     RawMaterialAddStockDialogComponent,
     RawMaterialAddStockConfirmComponent,
     RawMaterialEditDialogComponent,
-    RawMaterialEditConfirmComponent
+    RawMaterialEditConfirmComponent,
+    RawMaterialDeleteConfirmComponent
   ],
   imports: [
     CommonModule,
@@ -64,7 +66,8 @@ import { RawMaterialEditConfirmComponent } from './raw-material-edit-confirm/raw
     RawMaterialAddStockDialogComponent,
     RawMaterialAddStockConfirmComponent,
     RawMaterialEditDialogComponent,
-    RawMaterialEditConfirmComponent
+    RawMaterialEditConfirmComponent,
+    RawMaterialDeleteConfirmComponent
   ]
 })
 export class RawMaterialModule { }
