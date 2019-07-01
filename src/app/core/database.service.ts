@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from "@angular/fire/firestore";
-import { Requirement, Correlative } from './types';
+import { Requirement, Correlative, Product, Color, RawMaterial, Warehouse, Category, Unit } from './types';
 import { BehaviorSubject } from 'rxjs';
 
 
@@ -46,20 +46,59 @@ export class DatabaseService {
   /**
    * PRODUCTS
    */
-  productsCollection: AngularFirestoreCollection<Requirement>;
-  products: Array<Requirement>;
+  productsCollection: AngularFirestoreCollection<Product>;
+  products: Array<Product>;
 
-  public dataProducts = new BehaviorSubject<Requirement[]>([]);
+  public dataProducts = new BehaviorSubject<Product[]>([]);
   public currentDataProducts = this.dataProducts.asObservable();
+
+  /**
+   * RAW MATERIAL
+   */
+  rawMaterialsCollection: AngularFirestoreCollection<RawMaterial>;
+  rawMaterials: Array<RawMaterial> = [];
+
+  public dataRawMaterials = new BehaviorSubject<RawMaterial[]>([]);
+  public currentDataRawMaterials = this.dataRawMaterials.asObservable();
 
   /**
    * COLORS
    */
-  colorsCollection: AngularFirestoreCollection<Requirement>;
-  colors: Array<Requirement>;
+  colorsCollection: AngularFirestoreCollection<Color>;
+  colors: Array<Color>;
 
-  public dataColors = new BehaviorSubject<Requirement[]>([]);
+  public dataColors = new BehaviorSubject<Color[]>([]);
   public currentDataColors = this.dataColors.asObservable();
+
+  /**
+   * CATEGORIES
+   */
+  categoryCollection: AngularFirestoreCollection<Category>;
+  category: Array<Category>;
+
+  public dataCategory = new BehaviorSubject<Category[]>([]);
+  public currentDataCategory = this.dataCategory.asObservable();
+
+  /**
+   * UNITS
+   */
+  unitsCollection: AngularFirestoreCollection<Unit>;
+  units: Array<Unit>;
+
+  public dataUnits = new BehaviorSubject<Unit[]>([]);
+  public currentDataUnits = this.dataUnits.asObservable();
+
+
+  /**
+   * WAREHOUSES
+   */
+  warehousesCollection: AngularFirestoreCollection<Warehouse>;
+  warehouses: Array<Warehouse>;
+
+  public dataWarehouses = new BehaviorSubject<Warehouse[]>([]);
+  public currentDataWarehouses = this.dataWarehouses.asObservable();
+
+  
 
   constructor(
     public af: AngularFirestore
@@ -68,7 +107,10 @@ export class DatabaseService {
     this.getRequirementsCorrelative();
     this.getOrders(true);
     this.getOrdersCorrelative();
+    this.getRawMaterials(true);
   }
+
+  // *************************************** SALES ********************************************
 
   /**
    * @desc Function to get the requirements coleection from firestore
@@ -122,4 +164,19 @@ export class DatabaseService {
       })
   }
 
+  // *************************************** PRODUCTION *****************************************
+
+  getRawMaterials(all: boolean, from?: number, to?: number): void {
+    if (all) {
+      this.rawMaterialsCollection = this.af.collection(`db/dbs_interiores/rawMaterials`);
+    } else {
+      this.rawMaterialsCollection = this.af.collection(`db/dbs_interiores/rawMaterials`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
+    }
+
+    this.rawMaterialsCollection.valueChanges()
+      .subscribe(res => {
+        this.rawMaterials = res;
+        this.dataRawMaterials.next(res);
+      })
+  }
 }
