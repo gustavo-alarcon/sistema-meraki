@@ -8,6 +8,8 @@ import { RawMaterialCreateDialogComponent } from './raw-material-create-dialog/r
 import { RawMaterialAddStockDialogComponent } from './raw-material-add-stock-dialog/raw-material-add-stock-dialog.component';
 import { RawMaterialAddStockConfirmComponent } from './raw-material-add-stock-confirm/raw-material-add-stock-confirm.component';
 import { RawMaterialEditDialogComponent } from './raw-material-edit-dialog/raw-material-edit-dialog.component';
+import { RawMaterialEditConfirmComponent } from './raw-material-edit-confirm/raw-material-edit-confirm.component';
+import { RawMaterialDeleteConfirmComponent } from './raw-material-delete-confirm/raw-material-delete-confirm.component';
 
 import {  MatInputModule,
           MatButtonModule,
@@ -25,8 +27,7 @@ import {  MatInputModule,
           MatProgressSpinnerModule,
           MatProgressBarModule,
           MatMenuModule} from '@angular/material';
-import { RawMaterialEditConfirmComponent } from './raw-material-edit-confirm/raw-material-edit-confirm.component';
-import { RawMaterialDeleteConfirmComponent } from './raw-material-delete-confirm/raw-material-delete-confirm.component';
+
 
 
 @NgModule({

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from "@angular/fire/firestore";
 import { Requirement, Correlative, Product, Color, RawMaterial, Warehouse, Category, Unit } from './types';
 import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 
 
@@ -98,11 +99,11 @@ export class DatabaseService {
   public dataWarehouses = new BehaviorSubject<Warehouse[]>([]);
   public currentDataWarehouses = this.dataWarehouses.asObservable();
 
-  
+
 
   constructor(
     public af: AngularFirestore
-  ) { 
+  ) {
     this.getRequirements(true);
     this.getRequirementsCorrelative();
     this.getOrders(true);
@@ -122,12 +123,20 @@ export class DatabaseService {
    */
   getRequirements(all: boolean, from?: number, to?: number): void {
     if (all) {
-      this.requirementsCollection = this.af.collection(`db/dbs_interiores/requirements`, ref => ref.orderBy('regDate','desc'));
+      this.requirementsCollection = this.af.collection(`db/dbs_interiores/requirements`, ref => ref.orderBy('regDate', 'desc'));
     } else {
       this.requirementsCollection = this.af.collection(`db/dbs_interiores/requirements`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
     }
 
     this.requirementsCollection.valueChanges()
+      .pipe(
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = index;
+          });
+          return res;
+        })
+      )
       .subscribe(res => {
         this.requirements = res;
         this.dataRequirements.next(res);
@@ -136,12 +145,20 @@ export class DatabaseService {
 
   getOrders(all: boolean, from?: number, to?: number): void {
     if (all) {
-      this.ordersCollection = this.af.collection(`db/dbs_interiores/orders`, ref => ref.orderBy('regDate','desc'));
+      this.ordersCollection = this.af.collection(`db/dbs_interiores/orders`, ref => ref.orderBy('regDate', 'desc'));
     } else {
       this.ordersCollection = this.af.collection(`db/dbs_interiores/orders`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
     }
 
     this.ordersCollection.valueChanges()
+      .pipe(
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = index;
+          });
+          return res;
+        })
+      )
       .subscribe(res => {
         this.orders = res;
         this.dataOrders.next(res);
@@ -170,12 +187,20 @@ export class DatabaseService {
 
   getRawMaterials(all: boolean, from?: number, to?: number): void {
     if (all) {
-      this.rawMaterialsCollection = this.af.collection(`db/dbs_interiores/rawMaterials`, ref => ref.orderBy('regDate','desc'));
+      this.rawMaterialsCollection = this.af.collection(`db/dbs_interiores/rawMaterials`, ref => ref.orderBy('regDate', 'desc'));
     } else {
       this.rawMaterialsCollection = this.af.collection(`db/dbs_interiores/rawMaterials`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
     }
 
     this.rawMaterialsCollection.valueChanges()
+      .pipe(
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = index;
+          });
+          return res;
+        })
+      )
       .subscribe(res => {
         this.rawMaterials = res;
         this.dataRawMaterials.next(res);
