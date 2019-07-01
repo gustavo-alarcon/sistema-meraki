@@ -4,6 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { RawMaterialRoutingModule } from './raw-material-routing.module';
 import { RawMaterialComponent } from './raw-material.component';
+import { RawMaterialCreateDialogComponent } from './raw-material-create-dialog/raw-material-create-dialog.component';
+
 import {  MatInputModule,
           MatButtonModule,
           MatAutocompleteModule,
@@ -16,13 +18,15 @@ import {  MatInputModule,
           MatFormFieldModule,
           MatIconModule,
           MatDialogModule,
-          MatSnackBarModule} from '@angular/material';
-
+          MatSnackBarModule,
+          MatProgressSpinnerModule,
+          MatProgressBarModule} from '@angular/material';
 
 
 @NgModule({
   declarations: [
-    RawMaterialComponent
+    RawMaterialComponent,
+    RawMaterialCreateDialogComponent
   ],
   imports: [
     CommonModule,
@@ -41,7 +45,12 @@ import {  MatInputModule,
     MatPaginatorModule,
     MatSortModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule
+  ],
+  entryComponents: [
+    RawMaterialCreateDialogComponent
   ]
 })
 export class RawMaterialModule { }

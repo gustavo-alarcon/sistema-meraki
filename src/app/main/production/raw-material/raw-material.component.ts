@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DatabaseService } from 'src/app/core/database.service';
 import { MatDialog, MatSnackBar, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { RawMaterial } from 'src/app/core/types';
+import { RawMaterialCreateDialogComponent } from './raw-material-create-dialog/raw-material-create-dialog.component';
 
 @Component({
   selector: 'app-raw-material',
@@ -41,6 +42,10 @@ export class RawMaterialComponent implements OnInit {
       option.purchase.toString().includes(ref) ||
       option.sale.toString().includes(ref));
     this.dataSource.data = this.filteredRawMaterials;
+  }
+
+  createRawMaterial(): void {
+    this.dialog.open(RawMaterialCreateDialogComponent);
   }
 
 }
