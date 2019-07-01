@@ -73,11 +73,11 @@ export class DatabaseService {
   /**
    * CATEGORIES
    */
-  categoryCollection: AngularFirestoreCollection<Category>;
-  category: Array<Category>;
+  categoriesCollection: AngularFirestoreCollection<Category>;
+  categories: Array<Category>;
 
-  public dataCategory = new BehaviorSubject<Category[]>([]);
-  public currentDataCategory = this.dataCategory.asObservable();
+  public dataCategories = new BehaviorSubject<Category[]>([]);
+  public currentDataCategories = this.dataCategories.asObservable();
 
   /**
    * UNITS
@@ -108,6 +108,8 @@ export class DatabaseService {
     this.getOrders(true);
     this.getOrdersCorrelative();
     this.getRawMaterials(true);
+    this.getCategories();
+    this.getUnits();
   }
 
   // *************************************** SALES ********************************************
@@ -177,6 +179,24 @@ export class DatabaseService {
       .subscribe(res => {
         this.rawMaterials = res;
         this.dataRawMaterials.next(res);
+      })
+  }
+
+  getCategories(): void {
+    this.categoriesCollection = this.af.collection(`db/dbs_interiores/categories`);
+    this.categoriesCollection.valueChanges()
+      .subscribe(res => {
+        this.categories = res;
+        this.dataCategories.next(res);
+      })
+  }
+
+  getUnits(): void {
+    this.unitsCollection = this.af.collection(`db/dbs_interiores/units`);
+    this.unitsCollection.valueChanges()
+      .subscribe(res => {
+        this.units = res;
+        this.dataUnits.next(res);
       })
   }
 }
