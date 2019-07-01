@@ -6,6 +6,8 @@ import { RawMaterialRoutingModule } from './raw-material-routing.module';
 import { RawMaterialComponent } from './raw-material.component';
 import { RawMaterialCreateDialogComponent } from './raw-material-create-dialog/raw-material-create-dialog.component';
 import { RawMaterialAddStockDialogComponent } from './raw-material-add-stock-dialog/raw-material-add-stock-dialog.component';
+import { RawMaterialAddStockConfirmComponent } from './raw-material-add-stock-confirm/raw-material-add-stock-confirm.component';
+import { RawMaterialEditDialogComponent } from './raw-material-edit-dialog/raw-material-edit-dialog.component';
 
 import {  MatInputModule,
           MatButtonModule,
@@ -23,8 +25,7 @@ import {  MatInputModule,
           MatProgressSpinnerModule,
           MatProgressBarModule,
           MatMenuModule} from '@angular/material';
-import { RawMaterialAddStockConfirmComponent } from './raw-material-add-stock-confirm/raw-material-add-stock-confirm.component';
-import { RawMaterialEditDialogComponent } from './raw-material-edit-dialog/raw-material-edit-dialog.component';
+
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { RawMaterialEditDialogComponent } from './raw-material-edit-dialog/raw-m
   entryComponents: [
     RawMaterialCreateDialogComponent,
     RawMaterialAddStockDialogComponent,
-    RawMaterialAddStockConfirmComponent
+    RawMaterialAddStockConfirmComponent,
+    RawMaterialEditDialogComponent
   ]
 })
 export class RawMaterialModule { }
