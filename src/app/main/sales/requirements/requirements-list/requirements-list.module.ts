@@ -58,7 +58,8 @@ import { RequirementsListRestoreConfirmComponent } from './requirements-list-res
   entryComponents: [
     RequirementsListEditDialogComponent,
     RequirementsListEditConfirmComponent,
-    RequirementsListCancelConfirmComponent
+    RequirementsListCancelConfirmComponent,
+    RequirementsListRestoreConfirmComponent
   ]
 })
 export class RequirementsListModule { }

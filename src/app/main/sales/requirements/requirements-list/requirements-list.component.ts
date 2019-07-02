@@ -7,6 +7,7 @@ import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/m
 import { Subscription } from 'rxjs';
 import { RequirementsListEditDialogComponent } from './requirements-list-edit-dialog/requirements-list-edit-dialog.component';
 import { RequirementsListCancelConfirmComponent } from './requirements-list-cancel-confirm/requirements-list-cancel-confirm.component';
+import { RequirementsListRestoreConfirmComponent } from './requirements-list-restore-confirm/requirements-list-restore-confirm.component';
 
 @Component({
   selector: 'app-requirements-list',
@@ -80,11 +81,32 @@ export class RequirementsListComponent implements OnInit, OnDestroy {
   }
 
   cancelRequirement(req: Requirement): void {
-    this.dialog.open(RequirementsListCancelConfirmComponent, {
-      data: {
-        req: req
-      }
-    })
+    if (req.status === 'Enviado') {
+      this.dialog.open(RequirementsListCancelConfirmComponent, {
+        data: {
+          req: req
+        }
+      })
+    } else {
+      this.snackbar.open('No se pueden anular requerimientos APROBADOS o RECHAZADOS', 'Cerrar', {
+        duration: 8000
+      });
+    }
+
+  }
+
+  restoreRequirement(req: Requirement): void {
+    if (req.status === 'Anulado') {
+      this.dialog.open(RequirementsListRestoreConfirmComponent, {
+        data: {
+          req: req
+        }
+      })
+    } else {
+      this.snackbar.open('No se pueden restaurar requerimientos APROBADOS o RECHAZADOS', 'Cerrar', {
+        duration: 8000
+      });
+    }
   }
 
   previewRequirement(req: Requirement): void {
