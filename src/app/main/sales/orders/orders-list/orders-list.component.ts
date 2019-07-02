@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Requirement, Order } from 'src/app/core/types';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/material';
@@ -12,7 +12,7 @@ import { OrdersListDeleteConfirmComponent } from './orders-list-delete-confirm/o
   templateUrl: './orders-list.component.html',
   styles: []
 })
-export class OrdersListComponent implements OnInit {
+export class OrdersListComponent implements OnInit, OnDestroy {
 
   disableTooltips = new FormControl(false);
 

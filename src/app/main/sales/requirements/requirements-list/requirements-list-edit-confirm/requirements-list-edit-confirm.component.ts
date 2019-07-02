@@ -1,6 +1,6 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { Observable, BehaviorSubject, Subscription } from 'rxjs';
-import { AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { DatabaseService } from 'src/app/core/database.service';
 import { AuthService } from 'src/app/core/auth.service';
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -14,7 +14,7 @@ import { finalize } from 'rxjs/operators';
   templateUrl: './requirements-list-edit-confirm.component.html',
   styles: []
 })
-export class RequirementsListEditConfirmComponent implements OnInit {
+export class RequirementsListEditConfirmComponent implements OnInit, OnDestroy {
 
   uploading: boolean = false;
 
