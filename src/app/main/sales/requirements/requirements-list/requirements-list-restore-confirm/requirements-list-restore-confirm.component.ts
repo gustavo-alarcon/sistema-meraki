@@ -2,7 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { DatabaseService } from 'src/app/core/database.service';
 import { AuthService } from 'src/app/core/auth.service';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
-import { RequirementsListCancelConfirmComponent } from '../requirements-list-cancel-confirm/requirements-list-cancel-confirm.component';
 import { Requirement } from 'src/app/core/types';
 
 @Component({
