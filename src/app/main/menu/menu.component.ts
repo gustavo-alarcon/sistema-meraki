@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import { Router, RouteConfigLoadStart, RouteConfigLoadEnd } from '@angular/router';
+import { AuthService } from 'src/app/core/auth.service';
 
 @Component({
   selector: 'app-menu',
@@ -20,7 +21,8 @@ export class MenuComponent implements OnInit {
 
   constructor(
     breakpointObserver: BreakpointObserver,
-    private router: Router
+    private router: Router,
+    public auth: AuthService
   ) {
     breakpointObserver.observe([
       Breakpoints.HandsetLandscape,
@@ -56,7 +58,6 @@ export class MenuComponent implements OnInit {
       } else if (event instanceof RouteConfigLoadEnd) {
           this.loadingRouteConfig = false;
       }
-      console.log(this.loadingRouteConfig);
   });
   }
 

@@ -8,6 +8,10 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       {
+        path: '',
+        loadChildren: () => import('./dashboard/dashboard.module').then(mod => mod.DashboardModule)
+      },
+      {
         path: 'sales/requirements',
         loadChildren: () => import('./sales/requirements/requirements.module').then(mod => mod.RequirementsModule)
       },

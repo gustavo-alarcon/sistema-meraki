@@ -7,6 +7,35 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+.ms-login-bg {
+    background-image: linear-gradient(45deg, #510e7e, #6727dd);
+}
+
+.ms-login-card{
+    width:36vh;
+
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px 10px 10px 10px;
+    padding: 16px 16px 16px 16px;
+}
+
+.ms-session-card{
+    width: 40vh;
+}
+
+.ms-login-btn {
+    padding: 0.5em 0.5em;
+    margin: 0.4em 0 0.4em 0;
+    background-color: #6727dd;
+    color: #fff;
+    font-weight: 500;
+}
+
+.ms-login-btn:hover {
+    background-color: #7949d3;
+    color: #fff;
+}
+
 .ms-font-montserrat {
     font-family: 'Montserrat', sans-serif !important;
 }

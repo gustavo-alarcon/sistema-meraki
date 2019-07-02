@@ -1,3 +1,20 @@
+export interface User {
+    uid: string;
+    name: string;
+    lastname: string;
+    displayName: string;
+    password: string;
+    permit: Permit;
+    db: string;
+    regDate: number;
+}
+
+export interface Permit {
+    id: string;
+    name: string;
+    regDate: number;
+}
+
 export interface SerialNumber {
     id: string;
     serial: number;
@@ -16,7 +33,7 @@ export interface Product {
     id: string;
     name: string;
     code: string;
-    colors?: Array<Color>; 
+    colors?: Array<Color>;
     serialNumbers?: Array<SerialNumber>;
     regDate: number;
 }

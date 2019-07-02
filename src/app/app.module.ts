@@ -1,3 +1,4 @@
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -14,6 +15,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import { DatabaseService } from './core/database.service';
 import { AuthService } from './core/auth.service';
+import { LoginModule } from './login/login.module';
+import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
 
 @NgModule({
   declarations: [
@@ -27,6 +30,9 @@ import { AuthService } from './core/auth.service';
     AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
     AngularFireStorageModule,
+    LoginModule,
+    MatPasswordStrengthModule.forRoot(),
+    MatSnackBarModule
   ],
   providers: [
     DatabaseService,

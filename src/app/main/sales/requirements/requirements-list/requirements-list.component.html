@@ -103,13 +103,21 @@
                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
                 <td mat-cell style="padding:0px 8px" *matCellDef="let req">
                     <mat-menu #reqMenu="matMenu">
-                        <button mat-menu-item (click)="previewRequirement(req)">Vista previa</button>
-                        <button mat-menu-item (click)="printRequirement(req)">Imprimir</button>
-                        <button mat-menu-item (click)="editRequirement(req)" [disabled]="req.status !== 'Enviado'">Editar</button>
-                        <button mat-menu-item (click)="cancelRequirement(req)"
-                            *ngIf="req.status === 'Enviado'">Anular</button>
-                        <button mat-menu-item (click)="restoreRequirement(req)"
-                            *ngIf="req.status === 'Anulado'">Restaurar</button>
+                        <button mat-menu-item (click)="previewRequirement(req)">
+                            <mat-icon class="ms-icons-color">description</mat-icon> Vista previa
+                        </button>
+                        <button mat-menu-item (click)="printRequirement(req)">
+                            <mat-icon class="ms-icons-color">print</mat-icon> Imprimir
+                        </button>
+                        <button mat-menu-item (click)="editRequirement(req)" [disabled]="req.status !== 'Enviado'">
+                            <mat-icon class="ms-icons-color">edit</mat-icon> Editar
+                        </button>
+                        <button mat-menu-item (click)="cancelRequirement(req)" *ngIf="req.status === 'Enviado'">
+                            <mat-icon class="ms-icons-color">cancel</mat-icon> Anular
+                        </button>
+                        <button mat-menu-item (click)="restoreRequirement(req)" *ngIf="req.status === 'Anulado'">
+                            <mat-icon class="ms-icons-color">history</mat-icon> Restaurar
+                        </button>
                     </mat-menu>
                     <button mat-icon-button [matMenuTriggerFor]="reqMenu">
                         <mat-icon>more_vert</mat-icon>

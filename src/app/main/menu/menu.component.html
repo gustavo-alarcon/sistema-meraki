@@ -12,7 +12,7 @@
             <button mat-button class="mat-subheading-1" style="margin:0px; border:1px solid #321937; border-radius:10px"
                 [matMenuTriggerFor]="accountMenu" *ngIf="deviceFormat !== 'mobile'">
                 <mat-icon class="ms-icons-color" style="vertical-align:middle">account_circle</mat-icon>
-                Nombre, Apellido
+                {{auth.userInteriores ? auth.userInteriores.displayName : '---'}}
                 <mat-icon class="ms-icons-color" style="vertical-align:middle">keyboard_arrow_down</mat-icon>
             </button>
             <mat-menu #accountMenu="matMenu">
