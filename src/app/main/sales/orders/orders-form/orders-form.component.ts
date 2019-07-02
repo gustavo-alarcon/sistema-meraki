@@ -55,8 +55,8 @@ export class OrdersFormComponent implements OnInit {
     })
   }
 
-  showDocument(product: Document): string | null {
-    return product ? product.name : null;
+  showDocument(document: Document): string | null {
+    return document ? document.name : null;
   }
 
   clean(): void {
@@ -71,7 +71,6 @@ export class OrdersFormComponent implements OnInit {
 
   save(): void {
     if (this.dataFormGroup.valid) {
-      console.log(this.dataFormGroup.value['deliveryDate'].valueOf());
       this.dialog.open(OrdersFormSaveDialogComponent, {
         data: {
           form: this.dataFormGroup.value,
