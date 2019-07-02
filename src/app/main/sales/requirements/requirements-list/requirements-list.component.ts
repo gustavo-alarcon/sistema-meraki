@@ -1,3 +1,4 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatabaseService } from './../../../../core/database.service';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -5,7 +6,7 @@ import { Requirement } from 'src/app/core/types';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { RequirementsListEditDialogComponent } from './requirements-list-edit-dialog/requirements-list-edit-dialog.component';
-import { RequirementsListDeleteConfirmComponent } from './requirements-list-delete-confirm/requirements-list-delete-confirm.component';
+import { RequirementsListCancelConfirmComponent } from './requirements-list-cancel-confirm/requirements-list-cancel-confirm.component';
 
 @Component({
   selector: 'app-requirements-list',
@@ -23,27 +24,28 @@ export class RequirementsListComponent implements OnInit, OnDestroy {
 
   dataSource = new MatTableDataSource();
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   subscriptions: Array<Subscription> = [];
-  
+
   constructor(
     public dbs: DatabaseService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackbar: MatSnackBar
   ) { }
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort  = this.sort;
+    this.dataSource.sort = this.sort;
 
     const req$ =
-    this.dbs.currentDataRequirements.subscribe(res => {
-      if(res) {
-        this.filteredRequirements = res;
-        this.dataSource.data = res;
-      }
-    });
+      this.dbs.currentDataRequirements.subscribe(res => {
+        if (res) {
+          this.filteredRequirements = res;
+          this.dataSource.data = res;
+        }
+      });
 
     this.subscriptions.push(req$);
   }
@@ -63,15 +65,22 @@ export class RequirementsListComponent implements OnInit, OnDestroy {
   }
 
   editRequirement(req: Requirement): void {
-    this.dialog.open(RequirementsListEditDialogComponent, {
-      data: {
-        req: req
-      }
-    });
+    if (req.status === "Enviado") {
+      this.dialog.open(RequirementsListEditDialogComponent, {
+        data: {
+          req: req
+        }
+      });
+    } else {
+      this.snackbar.open('No se pueden editar requerimientos APROBADOS o RECHAZADOS', 'Cerrar', {
+        duration: 8000
+      });
+    }
+
   }
 
-  deleteRequirement(req: Requirement): void {
-    this.dialog.open(RequirementsListDeleteConfirmComponent, {
+  cancelRequirement(req: Requirement): void {
+    this.dialog.open(RequirementsListCancelConfirmComponent, {
       data: {
         req: req
       }

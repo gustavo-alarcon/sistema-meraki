@@ -43,7 +43,7 @@ export class RequirementFormSaveDialogComponent implements OnInit, OnDestroy {
 
   storageUploading = new BehaviorSubject<boolean>(false);
   currentStorageUploading = this.storageUploading.asObservable();
-  totalFiles: number = 0;
+  totalFiles: number = 1;
   filesCount: number = 0;
 
   requirementRef: AngularFirestoreDocument;
@@ -87,7 +87,7 @@ export class RequirementFormSaveDialogComponent implements OnInit, OnDestroy {
   }
 
   checkNumberOfFiles(): void {
-    this.totalFiles = 0;
+    this.totalFiles = 1;
     if (this.data['image1']) {
       this.totalFiles++;
     }
@@ -137,7 +137,8 @@ export class RequirementFormSaveDialogComponent implements OnInit, OnDestroy {
           });
       }).then(() => {
         this.flags.created = true;
-
+        this.storageUploading.next(true);
+        
         if (this.data['image1']) {
           this.uploading1 = true;
           const file = this.data['image1'];

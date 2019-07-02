@@ -1,1 +1,77 @@
-<p>requirements-list-edit-dialog works!</p>
+<div class="ms-font-montserrat mat-title">
+    <mat-icon class="ms-icons-color" style="vertical-align:middle">edit</mat-icon> Editar Requerimiento
+</div>
+
+<mat-dialog-content>
+    <form [formGroup]="dataFormGroup">
+        <mat-form-field class="w3-margin-right w3-margin-bottom" style="width:250px" appearance="outline">
+            <mat-label>Seleccione un <b>producto</b></mat-label>
+            <input matInput type="text" [matAutocomplete]="productAuto" placeholder="Escriba..."
+                formControlName="product" autocomplete="off">
+            <mat-autocomplete #productAuto="matAutocomplete" [displayWith]="showProduct">
+                <mat-option *ngFor="let product of productList | async" [value]="product">
+                    {{product.name}}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-hint>requerido *</mat-hint>
+            <mat-error *ngIf="!dataFormGroup.valid">Seleccione un producto *</mat-error>
+        </mat-form-field><br>
+
+        <mat-form-field class="w3-margin-right w3-margin-bottom" style="width:250px" appearance="outline">
+            <mat-label>Seleccione un <b>color</b></mat-label>
+            <input matInput type="text" [matAutocomplete]="colorAuto" placeholder="Escriba..." formControlName="color" autocomplete="off">
+            <mat-autocomplete #colorAuto="matAutocomplete" [displayWith]="showColor">
+                <mat-option *ngFor="let color of colorList | async" [value]="color">
+                    {{color.name}}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-hint>requerido *</mat-hint>
+            <mat-error *ngIf="!dataFormGroup.valid">Seleccione un color *</mat-error>
+        </mat-form-field><br>
+
+        <mat-form-field class="w3-margin-right w3-margin-bottom" style="width:250px" appearance="outline">
+            <mat-label>Cantidad</mat-label>
+            <input matInput type="number" min="0" step="1" formControlName="quantity" placeholder="Escriba..." autocomplete="off">
+            <mat-hint>requerido *</mat-hint>
+        </mat-form-field><br>
+
+        <mat-form-field class="w3-margin-right" style="width:250px" appearance="outline">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput placeholder="Describa el requerimiento ..." cols="10" rows="5"
+                formControlName="description" autocomplete="off"></textarea>
+        </mat-form-field><br>
+
+        <div class="w3-row-padding w3-margin-bottom">
+            <div class="w3-half">
+                <input #fileInput1 style="display: none" type="file" (change)="onFileSelected1($event)">
+                <img [src]="imageSrc1 || '../../../../assets/images/no-image.png'"
+                    style="width:100px; height:75px; cursor:pointer" class="mat-elevation-z4 w3-hover-shadow"
+                    (click)="fileInput1.click()">
+            </div>
+            <div class="w3-half">
+                <input #fileInput2 style="display: none" type="file" (change)="onFileSelected2($event)">
+                <img [src]="imageSrc2 || '../../../../assets/images/no-image.png'"
+                    style="width:100px; height:75px; cursor:pointer" class="mat-elevation-z4 w3-hover-shadow"
+                    (click)="fileInput2.click()">
+            </div>
+        </div>
+
+        <input #fileInput3 style="display: none" type="file" (change)="onFileSelected3($event)">
+        <button class="ms-icons-color w3-margin-right w3-margin-bottom" mat-stroked-button
+            (click)="fileInput3.click()">Adjuntar PDF
+            <mat-icon *ngIf="selectedFile3">check_circle</mat-icon> <span
+                class="w3-small">{{selectedFile3 ? selectedFile3.name.substring(0,25) : '' }}</span></button><br>
+        <input #fileInput4 style="display: none" type="file" (change)="onFileSelected4($event)">
+        <button class="ms-icons-color w3-margin-right w3-margin-bottom" mat-stroked-button
+            (click)="fileInput4.click()">Adjuntar PDF
+            <mat-icon *ngIf="selectedFile4">check_circle</mat-icon> <span
+                class="w3-small">{{selectedFile4 ? selectedFile4.name.substring(0,25) : '' }}</span></button><br>
+
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align=end>
+    <button mat-stroked-button class="w3-margin-right" color="warn" mat-dialog-close>Cancelar</button>
+    <button mat-raised-button class="w3-margin-right" color="primary" (click)="save()"
+        [disabled]="!dataFormGroup.valid">Guardar</button>
+</mat-dialog-actions>

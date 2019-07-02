@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { RequirementsListRoutingModule } from './requirements-list-routing.module';
 import { RequirementsListComponent } from './requirements-list.component';
 import { RequirementsListEditDialogComponent } from './requirements-list-edit-dialog/requirements-list-edit-dialog.component';
-import { RequirementsListDeleteConfirmComponent } from './requirements-list-delete-confirm/requirements-list-delete-confirm.component';
+import { RequirementsListCancelConfirmComponent } from './requirements-list-cancel-confirm/requirements-list-cancel-confirm.component';
 import { RequirementsListEditConfirmComponent } from './requirements-list-edit-confirm/requirements-list-edit-confirm.component';
 import {  MatFormFieldModule,
           MatIconModule,
@@ -22,17 +23,21 @@ import {  MatFormFieldModule,
           MatProgressSpinnerModule,
           MatProgressBarModule,
           MatMenuModule} from '@angular/material';
+import { RequirementsListRestoreConfirmComponent } from './requirements-list-restore-confirm/requirements-list-restore-confirm.component';
 
 @NgModule({
   declarations: [
     RequirementsListComponent,
     RequirementsListEditDialogComponent,
-    RequirementsListDeleteConfirmComponent,
-    RequirementsListEditConfirmComponent
+    RequirementsListEditConfirmComponent,
+    RequirementsListCancelConfirmComponent,
+    RequirementsListRestoreConfirmComponent
   ],
   imports: [
     CommonModule,
     RequirementsListRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
@@ -50,11 +55,10 @@ import {  MatFormFieldModule,
     MatProgressBarModule,
     MatMenuModule
   ],
-  exports: [
-    RequirementsListComponent,
+  entryComponents: [
     RequirementsListEditDialogComponent,
-    RequirementsListDeleteConfirmComponent,
-    RequirementsListEditConfirmComponent
+    RequirementsListEditConfirmComponent,
+    RequirementsListCancelConfirmComponent
   ]
 })
 export class RequirementsListModule { }
