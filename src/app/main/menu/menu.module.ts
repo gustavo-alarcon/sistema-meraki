@@ -1,3 +1,4 @@
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -11,6 +12,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {LayoutModule} from '@angular/cdk/layout';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 
@@ -29,7 +31,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatIconModule,
     MatMenuModule,
     MatSidenavModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatProgressBarModule
   ],
   exports: [
     MenuComponent

@@ -104,7 +104,7 @@
                     <mat-menu #reqMenu="matMenu">
                         <button mat-menu-item (click)="previewOrder(order)">Vista previa</button>
                         <button mat-menu-item (click)="printOrder(order)">Imprimir</button>
-                        <button mat-menu-item (click)="editOrder(order)">Editar</button>
+                        <button mat-menu-item (click)="editOrder(order)" [disabled]="order.status !== 'Enviado'">Editar</button>
                         <button mat-menu-item (click)="cancelOrder(order)" *ngIf="order.status === 'Enviado'">Anular</button>
                         <button mat-menu-item (click)="restoreOrder(order)" *ngIf="order.status === 'Anulado'">Restaurar</button>
                     </mat-menu>

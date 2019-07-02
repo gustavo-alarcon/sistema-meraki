@@ -24,8 +24,8 @@
         <table mat-table [dataSource]="dataSource" matSort style="width:100%">
 
             <ng-container matColumnDef="correlative" sticky>
-                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por correlativo" matTooltipPosition="above"
-                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por correlativo"
+                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
                     Correlativo</th>
                 <td mat-cell style="padding:0px 8px" *matCellDef="let req">
                     {{'OR' + req.correlative}}
@@ -33,8 +33,8 @@
             </ng-container>
 
             <ng-container matColumnDef="product">
-                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por producto" matTooltipPosition="above"
-                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por producto"
+                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
                     Producto</th>
                 <td mat-cell style="padding:0px 8px" *matCellDef="let req">
                     {{req.product.name}}
@@ -51,8 +51,8 @@
             </ng-container>
 
             <ng-container matColumnDef="quantity">
-                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por cantidad" matTooltipPosition="above"
-                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por cantidad"
+                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
                     Cantidad</th>
                 <td mat-cell style="padding:0px 8px" *matCellDef="let req">
                     {{req.quantity | number : '2.2'}}
@@ -85,7 +85,8 @@
                     matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
                     Estado</th>
                 <td mat-cell style="padding:0px 8px" *matCellDef="let req">
-                    <span style="padding: 8px 8px; border-radius: 10px" [ngClass]="{'w3-amber': req.status === 'Enviado', 'w3-red': req.status === 'Rechazado', 'w3-green': req.status === 'Aprobado', 'w3-black': req.status === 'Anulado'}">{{req.status}}</span>
+                    <span style="padding: 8px 8px; border-radius: 10px"
+                        [ngClass]="{'w3-amber': req.status === 'Enviado', 'w3-red': req.status === 'Rechazado', 'w3-green': req.status === 'Aprobado', 'w3-black': req.status === 'Anulado'}">{{req.status}}</span>
                 </td>
             </ng-container>
 
@@ -102,11 +103,13 @@
                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
                 <td mat-cell style="padding:0px 8px" *matCellDef="let req">
                     <mat-menu #reqMenu="matMenu">
-                            <button mat-menu-item (click)="previewRequirement(req)">Vista previa</button>
-                            <button mat-menu-item (click)="printRequirement(req)">Imprimir</button>
-                        <button mat-menu-item (click)="editRequirement(req)">Editar</button>
-                        <button mat-menu-item (click)="cancelRequirement(req)" *ngIf="req.status === 'Enviado'">Anular</button>
-                        <button mat-menu-item (click)="restoreRequirement(req)" *ngIf="req.status === 'Anulado'">Restaurar</button>
+                        <button mat-menu-item (click)="previewRequirement(req)">Vista previa</button>
+                        <button mat-menu-item (click)="printRequirement(req)">Imprimir</button>
+                        <button mat-menu-item (click)="editRequirement(req)" [disabled]="req.status !== 'Enviado'">Editar</button>
+                        <button mat-menu-item (click)="cancelRequirement(req)"
+                            *ngIf="req.status === 'Enviado'">Anular</button>
+                        <button mat-menu-item (click)="restoreRequirement(req)"
+                            *ngIf="req.status === 'Anulado'">Restaurar</button>
                     </mat-menu>
                     <button mat-icon-button [matMenuTriggerFor]="reqMenu">
                         <mat-icon>more_vert</mat-icon>

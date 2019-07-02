@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import { Router, RouteConfigLoadStart, RouteConfigLoadEnd } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -15,8 +16,11 @@ export class MenuComponent implements OnInit {
   salesOpenedFlag: boolean = false;
   productionOpenedFlag: boolean = false;
 
+  loadingRouteConfig: boolean;
+
   constructor(
-    breakpointObserver: BreakpointObserver
+    breakpointObserver: BreakpointObserver,
+    private router: Router
   ) {
     breakpointObserver.observe([
       Breakpoints.HandsetLandscape,
@@ -24,7 +28,6 @@ export class MenuComponent implements OnInit {
     ]).subscribe(res => {
       if (res.matches) {
         this.deviceFormat = 'mobile';
-        console.log(this.deviceFormat);
       }
     });
 
@@ -34,7 +37,6 @@ export class MenuComponent implements OnInit {
     ]).subscribe(res => {
       if (res.matches) {
         this.deviceFormat = 'web';
-        console.log(this.deviceFormat);
       }
     });
 
@@ -43,18 +45,23 @@ export class MenuComponent implements OnInit {
     ]).subscribe(res => {
       if (res.matches) {
         this.deviceFormat = 'tablet';
-        console.log(this.deviceFormat);
       }
     });
   }
 
   ngOnInit() {
-    console.log(this.deviceFormat);
+    this.router.events.subscribe(event => {
+      if (event instanceof RouteConfigLoadStart) {
+          this.loadingRouteConfig = true;
+      } else if (event instanceof RouteConfigLoadEnd) {
+          this.loadingRouteConfig = false;
+      }
+      console.log(this.loadingRouteConfig);
+  });
   }
 
   toggleSideMenu(): void {
     this.openedMenu = !this.openedMenu;
-    console.log(this.openedMenu);
   }
 
   toggleSideNotifications(): void{

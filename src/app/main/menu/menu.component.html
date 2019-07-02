@@ -73,9 +73,10 @@
             </mat-tab>
         </mat-tab-group>
     </div>
+    <mat-progress-bar mode="indeterminate" *ngIf="loadingRouteConfig"></mat-progress-bar>
 
-
-    <router-outlet *ngIf="deviceFormat === 'web' || deviceFormat === 'tablet'"></router-outlet>
+    <router-outlet *ngIf="deviceFormat === 'web' || deviceFormat === 'tablet'">
+    </router-outlet>
 
 
     <mat-sidenav-container *ngIf="deviceFormat === 'mobile'">
