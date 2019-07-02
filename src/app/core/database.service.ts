@@ -15,13 +15,13 @@ export class DatabaseService {
    * SYSTEM CORRELATIVES
    */
   requirementCorrelativeDocument: AngularFirestoreDocument<Correlative>;
-  requirementCorrelative: Correlative;
+  requirementCorrelative: Correlative = null;
 
   public dataRequirementCorrelative = new BehaviorSubject<Correlative>(null);
   public currentDataRequirementCorrelative = this.dataRequirementCorrelative.asObservable();
 
   orderCorrelativeDocument: AngularFirestoreDocument<Correlative>;
-  orderCorrelative: Correlative;
+  orderCorrelative: Correlative = null;
 
   public dataOrderCorrelative = new BehaviorSubject<Correlative>(null);
   public currentDataOrderCorrelative = this.dataOrderCorrelative.asObservable();
@@ -30,7 +30,7 @@ export class DatabaseService {
    * ORDERS
    */
   ordersCollection: AngularFirestoreCollection<Requirement>;
-  orders: Array<Requirement>;
+  orders: Array<Requirement> = []
 
   public dataOrders = new BehaviorSubject<Requirement[]>([]);
   public currentDataOrders = this.dataOrders.asObservable();
@@ -39,7 +39,7 @@ export class DatabaseService {
    * REQUIREMENTS
    */
   requirementsCollection: AngularFirestoreCollection<Requirement>;
-  requirements: Array<Requirement>;
+  requirements: Array<Requirement> = [];
 
   public dataRequirements = new BehaviorSubject<Requirement[]>([]);
   public currentDataRequirements = this.dataRequirements.asObservable();
@@ -48,7 +48,7 @@ export class DatabaseService {
    * PRODUCTS
    */
   productsCollection: AngularFirestoreCollection<Product>;
-  products: Array<Product>;
+  products: Array<Product> = [];
 
   public dataProducts = new BehaviorSubject<Product[]>([]);
   public currentDataProducts = this.dataProducts.asObservable();
@@ -66,7 +66,7 @@ export class DatabaseService {
    * COLORS
    */
   colorsCollection: AngularFirestoreCollection<Color>;
-  colors: Array<Color>;
+  colors: Array<Color> = [];
 
   public dataColors = new BehaviorSubject<Color[]>([]);
   public currentDataColors = this.dataColors.asObservable();
@@ -75,7 +75,7 @@ export class DatabaseService {
    * CATEGORIES
    */
   categoriesCollection: AngularFirestoreCollection<Category>;
-  categories: Array<Category>;
+  categories: Array<Category> = [];
 
   public dataCategories = new BehaviorSubject<Category[]>([]);
   public currentDataCategories = this.dataCategories.asObservable();
@@ -84,7 +84,7 @@ export class DatabaseService {
    * UNITS
    */
   unitsCollection: AngularFirestoreCollection<Unit>;
-  units: Array<Unit>;
+  units: Array<Unit> = [];
 
   public dataUnits = new BehaviorSubject<Unit[]>([]);
   public currentDataUnits = this.dataUnits.asObservable();
@@ -94,7 +94,7 @@ export class DatabaseService {
    * WAREHOUSES
    */
   warehousesCollection: AngularFirestoreCollection<Warehouse>;
-  warehouses: Array<Warehouse>;
+  warehouses: Array<Warehouse> = [];
 
   public dataWarehouses = new BehaviorSubject<Warehouse[]>([]);
   public currentDataWarehouses = this.dataWarehouses.asObservable();

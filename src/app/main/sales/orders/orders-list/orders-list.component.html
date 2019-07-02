@@ -1,1 +1,122 @@
-<p>orders-list works!</p>
+<div>
+    <!-- <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em" (click)="createRawMaterial()">
+            <mat-icon>add_circle</mat-icon> Crear
+        </button> -->
+    <button mat-button style="margin:0em 0.2em 1em 0.2em" disabled>
+        <mat-icon>assignment</mat-icon> {{ dbs.orders.length | number: '2.0'}} Pedidos
+    </button>
+    <span style="margin-right:1em">
+        <mat-form-field autocomplete="off" color="accent">
+            <mat-label>Filtrar</mat-label>
+            <mat-icon matPrefix style="margin-right:0.5em; vertical-align:text-bottom">filter_list
+            </mat-icon>
+            <input matInput type="text" placeholder="Escriba ..." (input)="filterData($event.target.value)"
+                autocomplete="off">
+        </mat-form-field>
+    </span>
+</div>
+<mat-divider></mat-divider>
+
+
+
+<div class="mat-elevation-z8">
+    <div style=" overflow:auto">
+        <table mat-table [dataSource]="dataSource" matSort style="width:100%">
+
+            <ng-container matColumnDef="correlative" sticky>
+                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por correlativo"
+                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                    Correlativo</th>
+                <td mat-cell style="padding:0px 8px" *matCellDef="let order">
+                    {{'OPe' + order.correlative}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="document">
+                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por documento"
+                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                    Documento</th>
+                <td mat-cell style="padding:0px 8px" *matCellDef="let order">
+                    {{order.document.name}}-{{order.documentCorrelative}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="quantity">
+                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por cantidad"
+                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                    Cantidad</th>
+                <td mat-cell style="padding:0px 8px" *matCellDef="let req">
+                    {{req.quantity | number : '2.2'}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="deliveryDate">
+                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>
+                    Fecha de entrega</th>
+                <td mat-cell style="padding:0px 8px" *matCellDef="let order">
+                    {{order.deliveryDate | date : "dd/MM/yyyy"}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="description">
+                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>
+                    Descripción</th>
+                <td mat-cell style="padding:0px 8px" *matCellDef="let order">
+                    {{order.description}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="files">
+                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>
+                    Archivos</th>
+                <td mat-cell style="padding-right:8px; min-width:110px" *matCellDef="let req">
+                    <ul>
+                        <li class="w3-small" *ngIf="req.image1"><a [href]="req.image1" target="_blank">Imagen 1</a></li>
+                        <li class="w3-small" *ngIf="req.image2"><a [href]="req.image2" target="_blank">Imagen 2</a></li>
+                        <li class="w3-small" *ngIf="req.file1"><a [href]="req.file1" target="_blank">PDF 1</a></li>
+                        <li class="w3-small" *ngIf="req.file2"><a [href]="req.file2" target="_blank">PDF 2</a></li>
+                    </ul>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por estado"
+                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                    Estado</th>
+                <td mat-cell style="padding:0px 8px" *matCellDef="let req">
+                    <span style="padding: 8px 8px; border-radius: 10px"
+                        [ngClass]="{'w3-amber': req.status === 'Enviado', 'w3-red': req.status === 'Rechazado', 'w3-green': req.status === 'Aprobado'}">{{req.status}}</span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="orderedBy">
+                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por solicitante"
+                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                    Solicitado por</th>
+                <td mat-cell style="padding:0px 8px" *matCellDef="let req">
+                    {{req.orderedBy}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions" stickyEnd>
+                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
+                <td mat-cell style="padding:0px 8px" *matCellDef="let req">
+                    <mat-menu #reqMenu="matMenu">
+                        <button mat-menu-item (click)="previewRequirement(req)">Vista previa</button>
+                        <button mat-menu-item (click)="printRequirement(req)">Imprimir</button>
+                        <button mat-menu-item (click)="editRequirement(req)">Editar</button>
+                        <button mat-menu-item (click)="deleteRequirement(req)">Borrar</button>
+                    </mat-menu>
+                    <button mat-icon-button [matMenuTriggerFor]="reqMenu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
