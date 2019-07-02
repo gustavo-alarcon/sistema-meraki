@@ -85,7 +85,7 @@
                     Estado</th>
                 <td mat-cell style="padding:0px 8px" *matCellDef="let req">
                     <span style="padding: 8px 8px; border-radius: 10px"
-                        [ngClass]="{'w3-amber': req.status === 'Enviado', 'w3-red': req.status === 'Rechazado', 'w3-green': req.status === 'Aprobado'}">{{req.status}}</span>
+                        [ngClass]="{'w3-amber': req.status === 'Enviado', 'w3-red': req.status === 'Rechazado', 'w3-green': req.status === 'Aprobado', 'w3-black': req.status === 'Anulado'}">{{req.status}}</span>
                 </td>
             </ng-container>
 
@@ -100,12 +100,13 @@
 
             <ng-container matColumnDef="actions" stickyEnd>
                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
-                <td mat-cell style="padding:0px 8px" *matCellDef="let req">
+                <td mat-cell style="padding:0px 8px" *matCellDef="let order">
                     <mat-menu #reqMenu="matMenu">
-                        <button mat-menu-item (click)="previewRequirement(req)">Vista previa</button>
-                        <button mat-menu-item (click)="printRequirement(req)">Imprimir</button>
-                        <button mat-menu-item (click)="editRequirement(req)">Editar</button>
-                        <button mat-menu-item (click)="deleteRequirement(req)">Borrar</button>
+                        <button mat-menu-item (click)="previewOrder(order)">Vista previa</button>
+                        <button mat-menu-item (click)="printOrder(order)">Imprimir</button>
+                        <button mat-menu-item (click)="editOrder(order)">Editar</button>
+                        <button mat-menu-item (click)="cancelOrder(order)" *ngIf="order.status === 'Enviado'">Anular</button>
+                        <button mat-menu-item (click)="restoreOrder(order)" *ngIf="order.status === 'Anulado'">Restaurar</button>
                     </mat-menu>
                     <button mat-icon-button [matMenuTriggerFor]="reqMenu">
                         <mat-icon>more_vert</mat-icon>

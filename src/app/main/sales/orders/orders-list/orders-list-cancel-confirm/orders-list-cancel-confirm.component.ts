@@ -2,14 +2,15 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { DatabaseService } from 'src/app/core/database.service';
 import { AuthService } from 'src/app/core/auth.service';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
-import { Requirement } from 'src/app/core/types';
+import { RequirementsListCancelConfirmComponent } from '../../../requirements/requirements-list/requirements-list-cancel-confirm/requirements-list-cancel-confirm.component';
+import { Order } from 'src/app/core/types';
 
 @Component({
-  selector: 'app-requirements-list-cancel-confirm',
-  templateUrl: './requirements-list-cancel-confirm.component.html',
+  selector: 'app-orders-list-cancel-confirm',
+  templateUrl: './orders-list-cancel-confirm.component.html',
   styles: []
 })
-export class RequirementsListCancelConfirmComponent implements OnInit {
+export class OrdersListCancelConfirmComponent implements OnInit {
 
   uploading: boolean = false;
 
@@ -20,24 +21,23 @@ export class RequirementsListCancelConfirmComponent implements OnInit {
   constructor(
     public dbs: DatabaseService,
     public auth: AuthService,
-    private dialogRef: MatDialogRef<RequirementsListCancelConfirmComponent>,
+    private dialogRef: MatDialogRef<OrdersListCancelConfirmComponent>,
     private snackbar: MatSnackBar,
-    @Inject(MAT_DIALOG_DATA) public data: { req: Requirement }
+    @Inject(MAT_DIALOG_DATA) public data: { order: Order }
   ) { }
 
   ngOnInit() {
   }
-
   cancel(): void {
     this.uploading = true;
 
-    this.dbs.requirementsCollection
-      .doc(this.data.req.id)
+    this.dbs.ordersCollection
+      .doc(this.data.order.id)
       .update({status: 'Anulado'})
         .then(() => {
           this.flags.deleted = true;
           this.uploading = false;
-          this.snackbar.open(`Requrimiento #${this.data.req.correlative} anualdo!`, 'Cerrar', {
+          this.snackbar.open(`Pedido #${this.data.order.correlative} anualdo!`, 'Cerrar', {
             duration: 6000
           });
           this.dialogRef.close(true);
@@ -49,5 +49,6 @@ export class RequirementsListCancelConfirmComponent implements OnInit {
           this.uploading = false;
         });
   }
+
 
 }
