@@ -113,8 +113,15 @@ export class AuthService {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then(credential => {
         if (credential) {
-          this.authLoader = false;
-          this.router.navigateByUrl('/main');
+          this.afs.doc<User>(`users/${credential.user.uid}`).get().forEach(snapshot => {
+            if (snapshot.data().lastRoute) {
+              this.authLoader = false;
+              this.router.navigateByUrl(snapshot.data().lastRoute);
+            } else {
+              this.authLoader = false;
+              this.router.navigateByUrl('/main');
+            }
+          })
         }
       })
       .catch(error => this.handleError(error));
@@ -162,5 +169,16 @@ export class AuthService {
     });
 
     this.authLoader = false;
+  }
+
+  saveLastRoute(url: string): void {
+    this.afs.doc(`users/${this.userInteriores.uid}`)
+      .update({ lastRoute: url })
+      .catch(err => {
+        this.snackbar.open('Error guardando la última ruta', 'Cerrar', {
+          duration: 6000
+        });
+        console.log(err);
+      })
   }
 }

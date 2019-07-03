@@ -76,7 +76,9 @@ export class MenuComponent implements OnInit {
       } else if (event instanceof RouteConfigLoadEnd) {
         this.loadingRouteConfig = false;
       } else if (event instanceof NavigationStart) {
-        console.log(event.url);
+        
+        this.auth.saveLastRoute(event.url);
+        
         switch (event.url) {
           case '/main/sales/requirements/form':
             this.selectedTab.setValue(0);
@@ -125,7 +127,7 @@ export class MenuComponent implements OnInit {
             this.cleanButtons();
             this.buttonOptions.production.orders = true;
             break;
-            
+
           case '/main/production/production':
             this.selectedTab.setValue(1);
             this.cleanButtons();
