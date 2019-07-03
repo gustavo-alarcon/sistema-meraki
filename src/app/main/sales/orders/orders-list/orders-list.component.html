@@ -102,11 +102,11 @@
                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
                 <td mat-cell style="padding:0px 8px" *matCellDef="let order">
                     <mat-menu #reqMenu="matMenu">
-                        <button mat-menu-item (click)="previewOrder(order)">Vista previa</button>
-                        <button mat-menu-item (click)="printOrder(order)">Imprimir</button>
-                        <button mat-menu-item (click)="editOrder(order)" [disabled]="order.status !== 'Enviado'">Editar</button>
-                        <button mat-menu-item (click)="cancelOrder(order)" *ngIf="order.status === 'Enviado'">Anular</button>
-                        <button mat-menu-item (click)="restoreOrder(order)" *ngIf="order.status === 'Anulado'">Restaurar</button>
+                        <button mat-menu-item (click)="previewOrder(order)"><mat-icon>description</mat-icon> Vista previa</button>
+                        <button mat-menu-item (click)="printOrder(order)"><mat-icon>print</mat-icon> Imprimir</button>
+                        <button mat-menu-item (click)="editOrder(order)" [disabled]="order.status !== 'Enviado'"><mat-icon>edit</mat-icon> Editar</button>
+                        <button mat-menu-item (click)="cancelOrder(order)" *ngIf="order.status === 'Enviado'"><mat-icon>cancel</mat-icon> Anular</button>
+                        <button mat-menu-item (click)="restoreOrder(order)" *ngIf="order.status === 'Anulado'"><mat-icon>history</mat-icon> Restaurar</button>
                     </mat-menu>
                     <button mat-icon-button [matMenuTriggerFor]="reqMenu">
                         <mat-icon>more_vert</mat-icon>

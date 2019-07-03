@@ -27,6 +27,14 @@ const routes: Routes = [
         path: 'production/raw-material',
         loadChildren: () => import('./production/raw-material/raw-material.module').then(mod => mod.RawMaterialModule)
       },
+      {
+        path: 'production/requirements',
+        loadChildren: () => import('./production/prod-requirements/prod-requirements.module').then(mod => mod.ProdRequirementsModule)
+      },
+      {
+        path: 'production/orders',
+        loadChildren: () => import('./production/prod-orders/prod-orders.module').then(mod => mod.ProdOrdersModule)
+      },
       
     ]
   },
