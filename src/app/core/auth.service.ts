@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestoreDocument, AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
-import { User } from './types';
+import { User, Permit } from './types';
 
 @Injectable({
   providedIn: 'root'
@@ -12,21 +12,21 @@ import { User } from './types';
 export class AuthService {
 
   // *********** USER PERMITS - (START) ***************************
-  // -------------------------- USERS --------------------------------------
-  public permitsDocument: AngularFirestoreDocument<any>;
-  public permits: Array<any> = [];
+  // -------------------------- PERMITS --------------------------------------
+  public permitDocument: AngularFirestoreDocument<Permit>;
+  public permit: Permit = null;
 
-  public dataPermits = new BehaviorSubject<any[]>([]);
-  public currentDataPermits = this.dataPermits.asObservable();
+  public dataPermit = new BehaviorSubject<Permit>(null);
+  public currentDataPermit = this.dataPermit.asObservable();
 
-  // *********** NOTIFICATIONS - (START) ***************************
+  // *********** NOTIFICATIONS UNSEEN - (START) ***************************
   notificationsCollection: AngularFirestoreCollection<any[]>;
   notifications: Array<any> = [];
 
   public dataNotifications = new BehaviorSubject<any[]>([]);
   currentDataNotifications = this.dataNotifications.asObservable();
 
-  // *********** NOTIFICATIONS - (START) ***************************
+  // *********** NOTIFICATIONS COMPLETE - (START) ***************************
   notificationsCompleteCollection: AngularFirestoreCollection<any[]>;
   notificationsComplete: Array<any> = [];
 
@@ -34,7 +34,7 @@ export class AuthService {
   currentDataNotificationsComplete = this.dataNotificationsComplete.asObservable();
   // ************************************************************************* //
 
-  user: Observable<User>;
+  user: Observable<User> = of(null);
   userInteriores: User = null;
 
   authLoader: boolean = false;
@@ -55,10 +55,10 @@ export class AuthService {
         this.afs.doc<User>(`users/${user.uid}`).valueChanges().subscribe(user => {
           this.userInteriores = user;
 
-          this.permitsDocument = this.afs.doc(`db/${this.userInteriores.db}/permits/${this.userInteriores.permit.id}`);
-          this.permitsDocument.valueChanges().subscribe(res => {
-            this.permits = res;
-            this.dataPermits.next(res);
+          this.permitDocument = this.afs.doc(`db/${this.userInteriores.db}/permits/${this.userInteriores.permit.id}`);
+          this.permitDocument.valueChanges().subscribe(res => {
+            this.permit = res;
+            this.dataPermit.next(res);
           });
 
           this.notificationsCollection =

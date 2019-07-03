@@ -1,6 +1,6 @@
 import { AngularFirestoreDocument } from '@angular/fire/firestore';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Correlative, Requirement } from './../../../../../core/types';
+import { Requirement } from './../../../../../core/types';
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -129,7 +129,8 @@ export class RequirementFormSaveDialogComponent implements OnInit, OnDestroy {
               file1: '',
               file2: '',
               regDate: Date.now(),
-              requestedBy: 'User'
+              createdBy: this.auth.userInteriores.displayName,
+              uid: this.auth.userInteriores.uid
             };
 
             t.set(this.requirementRef.ref, data);

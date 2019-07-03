@@ -51,7 +51,8 @@ export interface Requirement {
     file1: string;
     file2: string;
     regDate: number;
-    requestedBy: string;
+    createdBy: string;
+    uid: string;
 }
 
 export interface Correlative {
@@ -83,7 +84,8 @@ export interface Order {
     file1: string;
     file2: string;
     regDate: number;
-    requestedBy: string;
+    createdBy: string;
+    uid: string;
 }
 
 export interface RawMaterial {

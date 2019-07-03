@@ -22,6 +22,9 @@
                 <button mat-menu-item>
                     <mat-icon>vpn_key</mat-icon> Cambiar clave
                 </button>
+                <button mat-menu-item (click)="auth.signOut()">
+                    <mat-icon>eject</mat-icon> Cerrar sesión
+                </button>
                 <button mat-menu-item>
                     <mat-icon>info</mat-icon> Ayuda
                 </button>
@@ -29,23 +32,25 @@
             </mat-menu>
         </div>
 
-        <mat-tab-group dynamicHeight *ngIf="deviceFormat === 'web' || deviceFormat === 'tablet'">
+        <mat-tab-group  dynamicHeight *ngIf="deviceFormat === 'web' || deviceFormat === 'tablet'"
+                        [selectedIndex]="selectedTab.value"
+                        (selectedIndexChange)="selectedTab.setValue($event)">
             <mat-tab label="Ventas">
                 <div class="w3-padding w3-border-bottom w3-border-lightgray">
                     <div style="display:flex">
                         <div class="w3-margin-right">
-                            <button mat-button class="w3-small" routerLink="sales/requirements/form">
+                            <button mat-button class="w3-small" [ngClass]="{'ms-button-selected': buttonOptions.sales.requirements}" routerLink="sales/requirements/form">
                                 <mat-icon class="ms-icons-color">assignment</mat-icon> Requerimientos
                             </button><br>
-                            <button mat-button class="w3-small" routerLink="sales/orders/form">
+                            <button mat-button class="w3-small" [ngClass]="{'ms-button-selected': buttonOptions.sales.orders}" routerLink="sales/orders/form">
                                 <mat-icon class="ms-icons-color">assignment</mat-icon> Pedidos
                             </button><br>
                         </div>
                         <div class="w3-border-left w3-border-lightgray w3-margin-right">
-                            <button mat-button class="w3-small" routerLink="sales/shopping" disabled>
+                            <button mat-button class="w3-small" [ngClass]="{'ms-button-selected': buttonOptions.sales.sales}" routerLink="sales/shopping" disabled>
                                 <mat-icon class="ms-icons-color">shopping_cart</mat-icon> Ventas
                             </button><br>
-                            <button mat-button class="w3-small" routerLink="sales/stores" disabled>
+                            <button mat-button class="w3-small" [ngClass]="{'ms-button-selected': buttonOptions.sales.stores}" routerLink="sales/stores" disabled>
                                 <mat-icon class="ms-icons-color">store</mat-icon> Tiendas
                             </button><br>
                         </div>
@@ -56,20 +61,20 @@
                 <div class="w3-padding  w3-border-bottom w3-border-lightgray">
                     <div style="display:flex">
                         <div>
-                            <button class="w3-small" mat-button routerLink="production/requirements">
+                            <button class="w3-small" mat-button [ngClass]="{'ms-button-selected': buttonOptions.production.requirements}" routerLink="production/requirements">
                                 <mat-icon class="ms-icons-color">assignment</mat-icon> Requerimientos
                             </button><br>
-                            <button class="w3-small" mat-button routerLink="production/orders">
+                            <button class="w3-small" mat-button [ngClass]="{'ms-button-selected': buttonOptions.production.orders}" routerLink="production/orders">
                                 <mat-icon class="ms-icons-color">assignment</mat-icon> Pedidos
                             </button><br>
                         </div>
                         <div class="w3-margin-right">
-                            <button class="w3-small" mat-button routerLink="production/production-list">
+                            <button class="w3-small" mat-button [ngClass]="{'ms-button-selected': buttonOptions.production.production}" routerLink="production/production">
                                 <mat-icon class="ms-icons-color">build</mat-icon> Producción
                             </button><br>
                         </div>
                         <div class="w3-border-left w3-border-lightgray w3-margin-right">
-                            <button class="w3-small" mat-button class="w3-small" routerLink="production/raw-material">
+                            <button class="w3-small" mat-button [ngClass]="{'ms-button-selected': buttonOptions.production.materials}" routerLink="production/raw-material">
                                 <mat-icon class="ms-icons-color">view_module</mat-icon> Materia prima
                             </button><br>
                         </div>

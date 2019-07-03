@@ -19,7 +19,7 @@ export class ProdRequirementsComponent implements OnInit, OnDestroy {
 
   filteredRequirements: Array<Requirement> = [];
 
-  displayedColumns: string[] = ['correlative', 'product', 'color', 'quantity', 'description', 'files', 'status', 'requestedBy', 'actions'];
+  displayedColumns: string[] = ['correlative', 'product', 'color', 'quantity', 'description', 'files', 'status', 'createdBy', 'actions'];
 
 
   dataSource = new MatTableDataSource();
@@ -60,7 +60,7 @@ export class ProdRequirementsComponent implements OnInit, OnDestroy {
       ('OR' + option.correlative).toLowerCase().includes(ref) ||
       option.product.name.toLowerCase().includes(ref) ||
       option.color.name.toLowerCase().includes(ref) ||
-      option.requestedBy.toString().includes(ref));
+      option.createdBy.toString().includes(ref));
     this.dataSource.data = this.filteredRequirements;
   }
 

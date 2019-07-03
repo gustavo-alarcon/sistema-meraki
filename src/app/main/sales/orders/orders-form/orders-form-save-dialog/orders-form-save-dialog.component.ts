@@ -131,7 +131,8 @@ export class OrdersFormSaveDialogComponent implements OnInit, OnDestroy {
             file1: '',
             file2: '',
             regDate: Date.now(),
-            orderedBy: 'User'
+            createdBy: this.auth.userInteriores.displayName,
+            uid: this.auth.userInteriores.uid
           };
 
           t.set(this.orderRef.ref, data);

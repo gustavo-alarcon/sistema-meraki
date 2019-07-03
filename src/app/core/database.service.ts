@@ -3,6 +3,7 @@ import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection 
 import { Requirement, Correlative, Product, Color, RawMaterial, Warehouse, Category, Unit } from './types';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AuthService } from './auth.service';
 
 
 
@@ -102,15 +103,21 @@ export class DatabaseService {
 
 
   constructor(
-    public af: AngularFirestore
+    public af: AngularFirestore,
+    public auth: AuthService
   ) {
-    this.getRequirements(true);
-    this.getRequirementsCorrelative();
-    this.getOrders(true);
-    this.getOrdersCorrelative();
-    this.getRawMaterials(true);
-    this.getCategories();
-    this.getUnits();
+    this.auth.currentDataPermit.subscribe(res => {
+      if (res) {
+        this.getRequirements(true);
+        this.getRequirementsCorrelative();
+        this.getOrders(true);
+        this.getOrdersCorrelative();
+        this.getRawMaterials(true);
+        this.getCategories();
+        this.getUnits();
+      }
+    })
+
   }
 
   // *************************************** SALES ********************************************
@@ -123,9 +130,9 @@ export class DatabaseService {
    */
   getRequirements(all: boolean, from?: number, to?: number): void {
     if (all) {
-      this.requirementsCollection = this.af.collection(`db/dbs_interiores/requirements`, ref => ref.orderBy('regDate', 'desc'));
+      this.requirementsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/requirements`, ref => ref.orderBy('regDate', 'desc'));
     } else {
-      this.requirementsCollection = this.af.collection(`db/dbs_interiores/requirements`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
+      this.requirementsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/requirements`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
     }
 
     this.requirementsCollection.valueChanges()
@@ -145,9 +152,9 @@ export class DatabaseService {
 
   getOrders(all: boolean, from?: number, to?: number): void {
     if (all) {
-      this.ordersCollection = this.af.collection(`db/dbs_interiores/orders`, ref => ref.orderBy('regDate', 'desc'));
+      this.ordersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/orders`, ref => ref.orderBy('regDate', 'desc'));
     } else {
-      this.ordersCollection = this.af.collection(`db/dbs_interiores/orders`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
+      this.ordersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/orders`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
     }
 
     this.ordersCollection.valueChanges()
@@ -166,7 +173,7 @@ export class DatabaseService {
   }
 
   getRequirementsCorrelative(): void {
-    this.requirementCorrelativeDocument = this.af.doc(`db/dbs_interiores/correlatives/OR`);
+    this.requirementCorrelativeDocument = this.af.doc(`db/${this.auth.userInteriores.db}/correlatives/OR`);
     this.requirementCorrelativeDocument.valueChanges()
       .subscribe(res => {
         this.requirementCorrelative = res;
@@ -175,7 +182,7 @@ export class DatabaseService {
   }
 
   getOrdersCorrelative(): void {
-    this.orderCorrelativeDocument = this.af.doc(`db/dbs_interiores/correlatives/OPe`);
+    this.orderCorrelativeDocument = this.af.doc(`db/${this.auth.userInteriores.db}/correlatives/OPe`);
     this.orderCorrelativeDocument.valueChanges()
       .subscribe(res => {
         this.orderCorrelative = res;
@@ -187,9 +194,9 @@ export class DatabaseService {
 
   getRawMaterials(all: boolean, from?: number, to?: number): void {
     if (all) {
-      this.rawMaterialsCollection = this.af.collection(`db/dbs_interiores/rawMaterials`, ref => ref.orderBy('regDate', 'desc'));
+      this.rawMaterialsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/rawMaterials`, ref => ref.orderBy('regDate', 'desc'));
     } else {
-      this.rawMaterialsCollection = this.af.collection(`db/dbs_interiores/rawMaterials`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
+      this.rawMaterialsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/rawMaterials`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
     }
 
     this.rawMaterialsCollection.valueChanges()
@@ -208,7 +215,7 @@ export class DatabaseService {
   }
 
   getCategories(): void {
-    this.categoriesCollection = this.af.collection(`db/dbs_interiores/categories`);
+    this.categoriesCollection = this.af.collection(`db/${this.auth.userInteriores.db}/categories`);
     this.categoriesCollection.valueChanges()
       .subscribe(res => {
         this.categories = res;
@@ -217,7 +224,7 @@ export class DatabaseService {
   }
 
   getUnits(): void {
-    this.unitsCollection = this.af.collection(`db/dbs_interiores/units`);
+    this.unitsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/units`);
     this.unitsCollection.valueChanges()
       .subscribe(res => {
         this.units = res;

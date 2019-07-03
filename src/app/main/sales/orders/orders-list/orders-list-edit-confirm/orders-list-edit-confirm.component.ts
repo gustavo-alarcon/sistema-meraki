@@ -70,7 +70,7 @@ export class OrdersListEditConfirmComponent implements OnInit, OnDestroy {
           this.filesCount++;
           if (this.filesCount === this.totalFiles) {
             this.uploading = false;
-            this.snackbar.open(`Order de Pedido #${this.data.order.color} editada!`, 'Cerrar', {
+            this.snackbar.open(`Order de Pedido #${this.data.order.correlative} editada!`, 'Cerrar', {
               duration: 10000
             });
             this.dialogRef.close(true);

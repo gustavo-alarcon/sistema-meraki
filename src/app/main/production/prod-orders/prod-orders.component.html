@@ -120,13 +120,13 @@
                                 </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="orderedBy">
+                            <ng-container matColumnDef="createdBy">
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
                                     matTooltip="Ordenar tabla por solicitante" matTooltipPosition="above"
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
                                     Solicitado por</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let req">
-                                    {{req.orderedBy}}
+                                    {{req.createdBy}}
                                 </td>
                             </ng-container>
 

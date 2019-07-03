@@ -36,6 +36,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     color: #fff;
 }
 
+.ms-button-selected {
+    background: rgba(138, 43, 226, 0.2) !important;
+    margin-left: 8px !important;
+    transition: 0.7s;
+}
+
 .ms-font-montserrat {
     font-family: 'Montserrat', sans-serif !important;
 }

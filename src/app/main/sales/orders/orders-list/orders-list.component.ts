@@ -19,7 +19,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
   filteredOrders: Array<Requirement> = [];
 
-  displayedColumns: string[] = ['correlative', 'document', 'quantity', 'deliveryDate', 'description', 'files', 'status', 'orderedBy', 'actions'];
+  displayedColumns: string[] = ['correlative', 'document', 'quantity', 'deliveryDate', 'description', 'files', 'status', 'actions'];
 
 
   dataSource = new MatTableDataSource();
