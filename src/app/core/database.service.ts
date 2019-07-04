@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from "@angular/fire/firestore";
-import { Requirement, Correlative, Product, Color, RawMaterial, Warehouse, Category, Unit, ProductionOrder, PurchaseRawMaterial, DepartureRawMaterial } from './types';
+import { Requirement, Correlative, Product, Color, RawMaterial, Warehouse, Category, Unit, ProductionOrder, TicketRawMaterial, DepartureRawMaterial } from './types';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
@@ -116,13 +116,13 @@ export class DatabaseService {
   public currentDataWarehouses = this.dataWarehouses.asObservable();
 
   /**
-   * PURCHASES
+   * TICKETS
    */
-  purchasesCollection: AngularFirestoreCollection<PurchaseRawMaterial>;
-  purchases: Array<PurchaseRawMaterial> = [];
+  ticketsCollection: AngularFirestoreCollection<TicketRawMaterial>;
+  tickets: Array<TicketRawMaterial> = [];
 
-  public dataPurchases = new BehaviorSubject<PurchaseRawMaterial[]>([]);
-  public currentDataPurchases = this.dataPurchases.asObservable();
+  public dataTickets = new BehaviorSubject<TicketRawMaterial[]>([]);
+  public currentDataTickets = this.dataTickets.asObservable();
 
   /**
    * DEPARTURES
@@ -150,7 +150,7 @@ export class DatabaseService {
         this.getUnits();
         this.getProductionOrders(true);
         this.getProductionOrdersCorrelative();
-        this.getPurchases(true);
+        this.getTickets(true);
         this.getDepartures(true);
       }
     })
@@ -300,14 +300,14 @@ export class DatabaseService {
       })
   }
 
-  getPurchases(all: boolean, from?: number, to?: number): void {
+  getTickets(all: boolean, from?: number, to?: number): void {
     if (all) {
-      this.purchasesCollection = this.af.collection(`db/${this.auth.userInteriores.db}/purchases`, ref => ref.orderBy('regDate', 'desc'));
+      this.ticketsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/tickets`, ref => ref.orderBy('regDate', 'desc'));
     } else {
-      this.purchasesCollection = this.af.collection(`db/${this.auth.userInteriores.db}/purchases`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
+      this.ticketsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/tickets`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
     }
 
-    this.purchasesCollection.valueChanges()
+    this.ticketsCollection.valueChanges()
       .pipe(
         map(res => {
           res.forEach((element, index) => {
@@ -317,8 +317,8 @@ export class DatabaseService {
         })
       )
       .subscribe(res => {
-        this.purchases = res;
-        this.dataPurchases.next(res);
+        this.tickets = res;
+        this.dataTickets.next(res);
       })
   }
 

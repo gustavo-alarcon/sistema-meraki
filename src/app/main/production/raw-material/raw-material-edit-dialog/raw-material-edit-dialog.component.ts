@@ -68,12 +68,12 @@ export class RawMaterialEditDialogComponent implements OnInit, OnDestroy {
           tap(res => {
 
             this.duplicate.name = false;
-            const find = this.dbs.rawMaterials.filter(option => option.name === res);
+            const find = this.dbs.rawMaterials.filter(option => option.name === res && option.brand === this.dataFormGroup.value['brand']);
 
-            if (find.length > 0) {
+            if (find.length > 1) {
               this.duplicate.nameLoading = false;
               this.duplicate.name = true;
-              this.snackbar.open('Nombre duplicado', 'Cerrar', {
+              this.snackbar.open('Ya existe este material en esta marca', 'Cerrar', {
                 duration: 4000
               });
             } else {
@@ -96,7 +96,7 @@ export class RawMaterialEditDialogComponent implements OnInit, OnDestroy {
             this.duplicate.code = false;
             const find = this.dbs.rawMaterials.filter(option => option.code === res);
 
-            if (find.length > 0) {
+            if (find.length > 1) {
               this.duplicate.codeLoading = false;
               this.duplicate.code = true;
               this.snackbar.open('Código duplicado', 'Cerrar', {
@@ -117,6 +117,7 @@ export class RawMaterialEditDialogComponent implements OnInit, OnDestroy {
 
   createForm(): void {
     this.dataFormGroup = this.fb.group({
+      brand: [this.data.raw.brand, [Validators.required]],
       name: [this.data.raw.name, [Validators.required]],
       code: [this.data.raw.code, [Validators.required]],
       category: [this.data.raw.category, [Validators.required]],
