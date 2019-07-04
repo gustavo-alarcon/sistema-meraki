@@ -41,7 +41,7 @@ export class RawMaterialAddStockConfirmComponent implements OnInit {
         return t.get(this.dbs.rawMaterialsCollection.doc(this.data.raw.id).ref)
           .then(doc => {
             const newStock = doc.data().stock + this.data.form.quantity;
-            const purchaseRef = this.af.firestore.collection(this.dbs.purchasesCollection.ref.path).doc()
+            const purchaseRef = this.af.firestore.collection(this.dbs.ticketsCollection.ref.path).doc()
 
 
             t.update(this.dbs.rawMaterialsCollection.doc(this.data.raw.id).ref, {

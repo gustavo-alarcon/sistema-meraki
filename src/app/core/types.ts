@@ -93,6 +93,7 @@ export interface RawMaterial {
     id: string;
     category: string;
     warehouse?: Warehouse;
+    brand: string;
     code: string;
     name: string;
     unit: string;

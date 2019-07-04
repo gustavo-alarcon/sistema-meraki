@@ -11,6 +11,12 @@
                     <span class="ms-color-11 mat-subheading-1 w3-margin-bottom"><b>Información</b></span>
                     <mat-divider class="w3-margin-bottom"></mat-divider>
                     <mat-form-field class="w3-margin-bottom" appearance="outline">
+                        <mat-label>Marca</mat-label>
+                        <input matInput type="text" formControlName="brand" placeholder="Escriba..." autocomplete="off">
+                        <mat-hint *ngIf="!duplicate.code">Requerido *</mat-hint>
+                        <mat-error *ngIf="!dataFormGroup.valid">Marca requerida *</mat-error>
+                    </mat-form-field><br>
+                    <mat-form-field class="w3-margin-bottom" appearance="outline">
                         <mat-label>Nombre</mat-label>
                         <input matInput type="text" formControlName="name" placeholder="Escriba..." autocomplete="off">
                         <mat-progress-bar mode="indeterminate" *ngIf="duplicate.nameLoading">
@@ -28,16 +34,6 @@
                         <mat-hint *ngIf="duplicate.code">Este código ya existe <b>!!!</b></mat-hint>
                         <mat-error *ngIf="!dataFormGroup.valid">Código requerido *</mat-error>
                     </mat-form-field><br>
-                    <mat-form-field class="w3-margin-bottom" appearance="outline">
-                        <mat-label>Marca</mat-label>
-                        <input matInput type="text" formControlName="brand" placeholder="Escriba..." autocomplete="off">
-                        <mat-progress-bar mode="indeterminate" *ngIf="duplicate.brandLoading">
-                        </mat-progress-bar>
-                        <mat-hint *ngIf="!duplicate.code">Requerido *</mat-hint>
-                        <mat-hint *ngIf="duplicate.code">Este código ya existe<b>!!!</b></mat-hint>
-                        <mat-error *ngIf="!dataFormGroup.valid">Marca requerida *</mat-error>
-                    </mat-form-field><br>
-
                     <mat-form-field class="w3-margin-bottom" appearance="outline">
                         <mat-label>Categoría</mat-label>
                         <input matInput type="text" formControlName="category" [matAutocomplete]="categoryAuto"

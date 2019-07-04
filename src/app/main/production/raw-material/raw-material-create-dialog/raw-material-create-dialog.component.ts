@@ -63,12 +63,12 @@ export class RawMaterialCreateDialogComponent implements OnInit, OnDestroy {
           tap(res => {
 
             this.duplicate.name = false;
-            const find = this.dbs.rawMaterials.filter(option => option.name === res);
+            const find = this.dbs.rawMaterials.filter(option => option.name === res && option.brand === this.dataFormGroup.value['brand']);
 
             if (find.length > 0) {
               this.duplicate.nameLoading = false;
               this.duplicate.name = true;
-              this.snackbar.open('Nombre duplicado', 'Cerrar', {
+              this.snackbar.open('Ya existe este material en esta marca', 'Cerrar', {
                 duration: 4000
               });
             } else {
