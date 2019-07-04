@@ -53,8 +53,12 @@ export class ProdOrdersComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
+  filterData(ref: string): void {
+    
+  }
+
   generateProductionOrder(order: Order): void {
-    if (order.status === 'Anulado') {
+    if (order.status === 'Enviado') {
       this.dialog.open(ProdOrdersGenerateOPConfirmComponent, {
         data: {
           order: order

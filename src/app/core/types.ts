@@ -52,7 +52,7 @@ export interface Requirement {
     file2: string;
     regDate: number;
     createdBy: string;
-    uid: string;
+    createdByUid: string;
 }
 
 export interface Correlative {
@@ -65,18 +65,19 @@ export interface Document {
     id: string;
     name: string;
     serie: number;
-    correlative: number;
+    correlative?: number;
     regDate: number;
 }
 
 export interface Order {
     id: string;
     correlative: number;
-    document: string;
+    ORCorrelative?: number;
+    OPeCorrelative?: number;
+    document: Document;
     documentCorrelative: string;
     deliveryDate: number;
     status: string;
-    color?: Array<Color>;
     quantity: number;
     description: string;
     image1: string;
@@ -85,7 +86,7 @@ export interface Order {
     file2: string;
     regDate: number;
     createdBy: string;
-    uid: string;
+    createdByUid: string;
 }
 
 export interface RawMaterial {
@@ -116,4 +117,65 @@ export interface Unit {
     id: string;
     name: string;
     regDate: number;
+}
+
+export interface ProductionOrder{
+    id: string;
+    correlative: number;
+    ORCorrelative?: number;
+    OPeCorrelative?: number;
+    product?: Product;
+    document?: Document;
+    documentCorrelative?: string;
+    deliveryDate?: number;
+    status: string;
+    color?: Array<Color>;
+    quantity: number;
+    description: string;
+    image1: string;
+    image2: string;
+    file1: string;
+    file2: string;
+    regDate: number;
+    createdBy: string;
+    createdByUid: string;
+    approvedBy: string;
+    approvedByUid: string;
+}
+
+export interface TicketRawMaterial {
+    id: string;
+    document: string;
+    documentCorrelative: string;
+    provider?: Provider;
+    raw: RawMaterial;
+    quantity: number;
+    totalPrice: number;
+    unitPrice?: number;
+    source: string;
+    regDate: number;
+    createdBy: string;
+    createdByUid: string;
+}
+
+export interface DepartureRawMaterial {
+    id: string;
+    OPCorrelative: string;
+    raw: RawMaterial;
+    quantity: number;
+    source: string;
+    regDate: number;
+    createdBy: string;
+    createdByUid: string;
+}
+
+export interface Provider {
+    id: string;
+    name: string;
+    shortName: string;
+    address: string;
+    ruc: number;
+    regDate: number;
+    createdBy: string;
+    createdByUid: string;
 }

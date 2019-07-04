@@ -1,19 +1,17 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { DatabaseService } from 'src/app/core/database.service';
 import { AuthService } from 'src/app/core/auth.service';
-import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
-import { RequirementFormSaveDialogComponent } from 'src/app/main/sales/requirements/requirements-form/requirement-form-save-dialog/requirement-form-save-dialog.component';
-import { Subscription } from 'rxjs';
+import { RawMaterialAddStockConfirmComponent } from '../raw-material-add-stock-confirm/raw-material-add-stock-confirm.component';
 import { RawMaterial } from 'src/app/core/types';
 
 @Component({
-  selector: 'app-raw-material-add-stock-confirm',
-  templateUrl: './raw-material-add-stock-confirm.component.html',
+  selector: 'app-raw-material-substract-stock-confirm',
+  templateUrl: './raw-material-substract-stock-confirm.component.html',
   styles: []
 })
-export class RawMaterialAddStockConfirmComponent implements OnInit {
+export class RawMaterialSubstractStockConfirmComponent implements OnInit {
 
   uploading: boolean = false;
 
@@ -27,7 +25,7 @@ export class RawMaterialAddStockConfirmComponent implements OnInit {
     private af: AngularFirestore,
     private dialogRef: MatDialogRef<RawMaterialAddStockConfirmComponent>,
     private snackbar: MatSnackBar,
-    @Inject(MAT_DIALOG_DATA) public data: { raw: RawMaterial, form: { document: string, documentCorrelative: number, quantity: number, totalPrice: number } }
+    @Inject(MAT_DIALOG_DATA) public data: { raw: RawMaterial, form: { OPCorrelative: number, quantity: number} }
   ) { }
 
   ngOnInit() {
@@ -40,22 +38,16 @@ export class RawMaterialAddStockConfirmComponent implements OnInit {
       this.af.firestore.runTransaction(t => {
         return t.get(this.dbs.rawMaterialsCollection.doc(this.data.raw.id).ref)
           .then(doc => {
-            const newStock = doc.data().stock + this.data.form.quantity;
-            const purchaseRef = this.af.firestore.collection(this.dbs.purchasesCollection.ref.path).doc()
-
+            const newStock = doc.data().stock - this.data.form.quantity;
+            const departureRef = this.af.firestore.collection(this.dbs.departuresCollection.ref.path).doc()
 
             t.update(this.dbs.rawMaterialsCollection.doc(this.data.raw.id).ref, {
-              stock: newStock,
-              purchase: this.data.form.totalPrice / this.data.form.quantity
+              stock: newStock
             });
-            t.set(purchaseRef, {
-              document: this.data.form.document,
-              documentCorrelative: this.data.form.documentCorrelative,
-              provider: null,
+            t.set(departureRef, {
+              OPCorrelative: this.data.form.OPCorrelative,
               raw: this.data.raw,
               quantity: this.data.form.quantity,
-              totalPrice: this.data.form.totalPrice,
-              unitPrice: this.data.form.totalPrice / this.data.form.quantity,
               source: 'production',
               regDate: Date.now(),
               createdBy: this.auth.userInteriores.displayName,

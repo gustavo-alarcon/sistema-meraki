@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from "@angular/fire/firestore";
-import { Requirement, Correlative, Product, Color, RawMaterial, Warehouse, Category, Unit } from './types';
+import { Requirement, Correlative, Product, Color, RawMaterial, Warehouse, Category, Unit, ProductionOrder, PurchaseRawMaterial, DepartureRawMaterial } from './types';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
@@ -27,6 +27,12 @@ export class DatabaseService {
   public dataOrderCorrelative = new BehaviorSubject<Correlative>(null);
   public currentDataOrderCorrelative = this.dataOrderCorrelative.asObservable();
 
+  productionOrdersCorrelativeDocument: AngularFirestoreDocument<Correlative>;
+  productionOrdersCorrelative: Correlative = null;
+
+  public dataProductionOrdersCorrelative = new BehaviorSubject<Correlative>(null);
+  public currentDataProductionOrdersCorrelative = this.dataProductionOrdersCorrelative.asObservable();
+
   /**
    * ORDERS
    */
@@ -44,6 +50,15 @@ export class DatabaseService {
 
   public dataRequirements = new BehaviorSubject<Requirement[]>([]);
   public currentDataRequirements = this.dataRequirements.asObservable();
+
+  /**
+   * PRODUCTION ORDERS
+   */
+  productionOrdersCollection: AngularFirestoreCollection<ProductionOrder>;
+  productionOrders: Array<ProductionOrder> = []
+
+  public dataProductionOrders = new BehaviorSubject<ProductionOrder[]>([]);
+  public currentDataProductionOrders = this.dataProductionOrders.asObservable();
 
   /**
    * PRODUCTS
@@ -100,6 +115,24 @@ export class DatabaseService {
   public dataWarehouses = new BehaviorSubject<Warehouse[]>([]);
   public currentDataWarehouses = this.dataWarehouses.asObservable();
 
+  /**
+   * PURCHASES
+   */
+  purchasesCollection: AngularFirestoreCollection<PurchaseRawMaterial>;
+  purchases: Array<PurchaseRawMaterial> = [];
+
+  public dataPurchases = new BehaviorSubject<PurchaseRawMaterial[]>([]);
+  public currentDataPurchases = this.dataPurchases.asObservable();
+
+  /**
+   * DEPARTURES
+   */
+  departuresCollection: AngularFirestoreCollection<DepartureRawMaterial>;
+  departures: Array<DepartureRawMaterial> = [];
+
+  public dataDepartures = new BehaviorSubject<DepartureRawMaterial[]>([]);
+  public currentDataDepartures = this.dataDepartures.asObservable();
+
 
 
   constructor(
@@ -115,6 +148,10 @@ export class DatabaseService {
         this.getRawMaterials(true);
         this.getCategories();
         this.getUnits();
+        this.getProductionOrders(true);
+        this.getProductionOrdersCorrelative();
+        this.getPurchases(true);
+        this.getDepartures(true);
       }
     })
 
@@ -229,6 +266,81 @@ export class DatabaseService {
       .subscribe(res => {
         this.units = res;
         this.dataUnits.next(res);
+      })
+  }
+
+  getProductionOrders(all: boolean, from?: number, to?: number): void {
+    if (all) {
+      this.productionOrdersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/productionOrders`, ref => ref.orderBy('regDate', 'desc'));
+    } else {
+      this.productionOrdersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/productionOrders`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
+    }
+
+    this.productionOrdersCollection.valueChanges()
+      .pipe(
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = index;
+          });
+          return res;
+        })
+      )
+      .subscribe(res => {
+        this.productionOrders = res;
+        this.dataProductionOrders.next(res);
+      })
+  }
+
+  getProductionOrdersCorrelative(): void {
+    this.productionOrdersCorrelativeDocument = this.af.doc(`db/${this.auth.userInteriores.db}/correlatives/OP`);
+    this.productionOrdersCorrelativeDocument.valueChanges()
+      .subscribe(res => {
+        this.productionOrdersCorrelative = res;
+        this.dataProductionOrdersCorrelative.next(res);
+      })
+  }
+
+  getPurchases(all: boolean, from?: number, to?: number): void {
+    if (all) {
+      this.purchasesCollection = this.af.collection(`db/${this.auth.userInteriores.db}/purchases`, ref => ref.orderBy('regDate', 'desc'));
+    } else {
+      this.purchasesCollection = this.af.collection(`db/${this.auth.userInteriores.db}/purchases`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
+    }
+
+    this.purchasesCollection.valueChanges()
+      .pipe(
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = index;
+          });
+          return res;
+        })
+      )
+      .subscribe(res => {
+        this.purchases = res;
+        this.dataPurchases.next(res);
+      })
+  }
+
+  getDepartures(all: boolean, from?: number, to?: number): void {
+    if (all) {
+      this.departuresCollection = this.af.collection(`db/${this.auth.userInteriores.db}/departures`, ref => ref.orderBy('regDate', 'desc'));
+    } else {
+      this.departuresCollection = this.af.collection(`db/${this.auth.userInteriores.db}/departures`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
+    }
+
+    this.departuresCollection.valueChanges()
+      .pipe(
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = index;
+          });
+          return res;
+        })
+      )
+      .subscribe(res => {
+        this.departures = res;
+        this.dataDepartures.next(res);
       })
   }
 }

@@ -55,6 +55,10 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
+  filterData(ref: string): void {
+    
+  }
+
   editOrder(order: Order): void {
     this.dialog.open(OrdersListEditDialogComponent, {
       data: {

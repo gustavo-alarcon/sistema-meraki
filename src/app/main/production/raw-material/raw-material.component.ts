@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { RawMaterialEditDialogComponent } from './raw-material-edit-dialog/raw-material-edit-dialog.component';
 import { RawMaterialDeleteConfirmComponent } from './raw-material-delete-confirm/raw-material-delete-confirm.component';
+import { RawMaterialSubstractStockDialogComponent } from './raw-material-substract-stock-dialog/raw-material-substract-stock-dialog.component';
 
 @Component({
   selector: 'app-raw-material',
@@ -20,7 +21,7 @@ export class RawMaterialComponent implements OnInit {
 
   filteredRawMaterials: Array<RawMaterial> = [];
 
-  displayedColumns: string[] = ['index', 'code', 'name', 'category', 'stock', 'unit', 'purchase', 'sale', 'actions'];
+  displayedColumns: string[] = ['index', 'code', 'name', 'category', 'brand', 'stock', 'unit', 'purchase', 'sale', 'actions'];
 
 
   dataSource = new MatTableDataSource();
@@ -90,6 +91,14 @@ export class RawMaterialComponent implements OnInit {
 
   addStock(raw: RawMaterial): void {
     this.dialog.open(RawMaterialAddStockDialogComponent, {
+      data: {
+        raw: raw,
+      }
+    });
+  }
+
+  substractStock(raw: RawMaterial): void {
+    this.dialog.open(RawMaterialSubstractStockDialogComponent, {
       data: {
         raw: raw,
       }

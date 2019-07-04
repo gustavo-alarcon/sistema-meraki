@@ -115,6 +115,7 @@ export class RawMaterialCreateDialogComponent implements OnInit, OnDestroy {
       name: [null, [Validators.required]],
       code: [null, [Validators.required]],
       category: [null, [Validators.required]],
+      brand: [null, [Validators.required]],
       stock: [null, [Validators.required]],
       unit: [null, [Validators.required]],
       purchase: [null, [Validators.required]],

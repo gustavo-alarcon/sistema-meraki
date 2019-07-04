@@ -130,7 +130,7 @@ export class RequirementFormSaveDialogComponent implements OnInit, OnDestroy {
               file2: '',
               regDate: Date.now(),
               createdBy: this.auth.userInteriores.displayName,
-              uid: this.auth.userInteriores.uid
+              createdByUid: this.auth.userInteriores.uid
             };
 
             t.set(this.requirementRef.ref, data);
