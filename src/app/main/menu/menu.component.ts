@@ -34,6 +34,7 @@ export class MenuComponent implements OnInit {
       orders: false,
       production: false,
       materials: false,
+      finishedProducts: false
     }
   }
 
@@ -76,9 +77,9 @@ export class MenuComponent implements OnInit {
       } else if (event instanceof RouteConfigLoadEnd) {
         this.loadingRouteConfig = false;
       } else if (event instanceof NavigationStart) {
-        
+
         this.auth.saveLastRoute(event.url);
-        
+
         switch (event.url) {
           case '/main/sales/requirements/form':
             this.selectedTab.setValue(0);
@@ -121,7 +122,7 @@ export class MenuComponent implements OnInit {
             this.cleanButtons();
             this.buttonOptions.production.requirements = true;
             break;
-          
+
           case '/main/production/orders':
             this.selectedTab.setValue(1);
             this.cleanButtons();
@@ -138,6 +139,12 @@ export class MenuComponent implements OnInit {
             this.selectedTab.setValue(1);
             this.cleanButtons();
             this.buttonOptions.production.materials = true;
+            break;
+
+          case '/main/production/finished-products':
+            this.selectedTab.setValue(1);
+            this.cleanButtons();
+            this.buttonOptions.production.finishedProducts = true;
             break;
 
           default:
@@ -208,6 +215,12 @@ export class MenuComponent implements OnInit {
         this.buttonOptions.production.materials = true;
         break;
 
+      case '/main/production/finished-products':
+        this.selectedTab.setValue(1);
+        this.cleanButtons();
+        this.buttonOptions.production.finishedProducts = true;
+        break;
+
       default:
         this.selectedTab.setValue(0);
         break;
@@ -229,6 +242,7 @@ export class MenuComponent implements OnInit {
         orders: false,
         production: false,
         materials: false,
+        finishedProducts: false
       }
     }
   }
