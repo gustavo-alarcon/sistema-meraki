@@ -25,9 +25,6 @@ export class RequirementsFormComponent implements OnInit {
   selectedFile4 = null;
 
   products: Array<Product> = [
-    { id: 'aaa', name: 'Antare', code: '1010100', regDate: 0 },
-    { id: 'bbb', name: 'Aleman', code: '1010200', regDate: 0 },
-    { id: 'ccc', name: 'Egipto', code: '1010300', regDate: 0 }
   ]
 
   colors: Array<Color> = [

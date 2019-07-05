@@ -63,11 +63,11 @@ export class DatabaseService {
   /**
    * PRODUCTS
    */
-  productsCollection: AngularFirestoreCollection<Product>;
-  products: Array<Product> = [];
+  finishedProductsCollection: AngularFirestoreCollection<Product>;
+  finishedProducts: Array<Product> = [];
 
-  public dataProducts = new BehaviorSubject<Product[]>([]);
-  public currentDataProducts = this.dataProducts.asObservable();
+  public dataFinishedProducts = new BehaviorSubject<Product[]>([]);
+  public currentDataFinishedProducts = this.dataFinishedProducts.asObservable();
 
   /**
    * RAW MATERIAL
@@ -152,6 +152,7 @@ export class DatabaseService {
         this.getProductionOrdersCorrelative();
         this.getTickets(true);
         this.getDepartures(true);
+        this.getFinishedProducts();
       }
     })
 
@@ -343,4 +344,22 @@ export class DatabaseService {
         this.dataDepartures.next(res);
       })
   }
+
+  getFinishedProducts(): void {
+    this.finishedProductsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/finishedProducts`, ref => ref.orderBy('regDate', 'desc'));
+    this.finishedProductsCollection.valueChanges()
+      .pipe(
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = index;
+          });
+          return res;
+        })
+      )
+      .subscribe(res => {
+        this.finishedProducts = res;
+        this.dataFinishedProducts.next(res);
+      });
+  }
+
 }

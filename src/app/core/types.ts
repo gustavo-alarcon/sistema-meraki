@@ -33,8 +33,12 @@ export interface Product {
     id: string;
     name: string;
     code: string;
-    colors?: Array<Color>;
-    serialNumbers?: Array<SerialNumber>;
+    category: string;
+    colors: Array<string>;
+    correlative: number;
+    stock: number;
+    rawMaterialList: RawMaterialList;
+    sale: number;
     regDate: number;
 }
 
@@ -100,6 +104,29 @@ export interface RawMaterial {
     stock: number;
     purchase: number;
     sale: number;
+}
+
+export interface RawMaterialList {
+    id: string;
+    rawList: Array<RawMaterial>;
+    otherResources: Array<OtherResource>;
+    cost: number;
+    createdBy: string;
+    createdByUid: string;
+    lastUpdateBy: string;
+    lastUpdateByUid: string;
+    regDate: number;
+}
+
+export interface OtherResource {
+    id: string;
+    description: string;
+    cost: number;
+    createdBy: string;
+    createdByUid: string;
+    lastUpdateBy: string;
+    lastUpdateByUid: string;
+    regDate: number;
 }
 
 export interface Category {
