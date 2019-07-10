@@ -57,7 +57,9 @@ import { FinishedProductsEditConfirmComponent } from './finished-products-edit-c
     FinishedProductsChangeStatusConfirmComponent,
     FinishedProductsAddStockDialogComponent,
     FinishedProductsDeleteConfirmComponent,
-    FinishedProductsAddStockConfirmComponent
+    FinishedProductsAddStockConfirmComponent,
+    FinishedProductsEditDialogComponent,
+    FinishedProductsEditConfirmComponent
   ]
 })
 export class FinishedProductsModule { }

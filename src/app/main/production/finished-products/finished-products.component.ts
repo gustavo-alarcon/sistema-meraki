@@ -8,6 +8,7 @@ import { FinishedProductsCreateDialogComponent } from './finished-products-creat
 import { FinishedProductsShowSerieDialogComponent } from './finished-products-show-serie-dialog/finished-products-show-serie-dialog.component';
 import { FinishedProductsDeleteConfirmComponent } from './finished-products-delete-confirm/finished-products-delete-confirm.component';
 import { FinishedProductsAddStockDialogComponent } from './finished-products-add-stock-dialog/finished-products-add-stock-dialog.component';
+import { FinishedProductsEditDialogComponent } from './finished-products-edit-dialog/finished-products-edit-dialog.component';
 
 @Component({
   selector: 'app-finished-products',
@@ -71,11 +72,9 @@ export class FinishedProductsComponent implements OnInit, OnDestroy {
   }
 
   editFinishedProduct(product: Product): void {
-    // this.dialog.open(RawMaterialEditDialogComponent, {
-    //   data: {
-    //     raw: raw
-    //   }
-    // });
+    this.dialog.open(FinishedProductsEditDialogComponent, {
+      data: product
+    });
   }
 
   deleteFinishedProduct(product: Product): void {
