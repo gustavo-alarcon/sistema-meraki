@@ -130,6 +130,7 @@ export class FinishedProductsEditDialogComponent implements OnInit, OnDestroy {
     if (this.dataFormGroup.valid) {
       this.dialog.open(FinishedProductsEditConfirmComponent, {
         data: {
+          product: this.data,
           form: this.dataFormGroup.value
         }
       }).afterClosed().subscribe(res => {
