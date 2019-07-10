@@ -140,7 +140,7 @@ export class DatabaseService {
     public auth: AuthService
   ) {
     this.auth.currentDataPermit.subscribe(res => {
-      if (res) {
+      if (res.name) {
         this.getRequirements(true);
         this.getRequirementsCorrelative();
         this.getOrders(true);
@@ -153,6 +153,7 @@ export class DatabaseService {
         this.getTickets(true);
         this.getDepartures(true);
         this.getFinishedProducts();
+        this.getColors();
       }
     })
 
@@ -359,6 +360,23 @@ export class DatabaseService {
       .subscribe(res => {
         this.finishedProducts = res;
         this.dataFinishedProducts.next(res);
+      });
+  }
+
+  getColors(): void {
+    this.colorsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/colors`, ref => ref.orderBy('regDate', 'desc'));
+    this.colorsCollection.valueChanges()
+      .pipe(
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = index;
+          });
+          return res;
+        })
+      )
+      .subscribe(res => {
+        this.colors = res;
+        this.dataColors.next(res);
       });
   }
 

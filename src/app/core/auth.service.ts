@@ -16,7 +16,25 @@ export class AuthService {
   public permitDocument: AngularFirestoreDocument<Permit>;
   public permit: Permit = null;
 
-  public dataPermit = new BehaviorSubject<Permit>(null);
+  public dataPermit = new BehaviorSubject<Permit>(
+    {
+      id: '',
+      name: '',
+      salesSection: false,
+      salesRequirementsButton: false,
+      salesOrdersButton: false,
+      salesShoppingButton: false,
+      salesStoresButton: false,
+      productionSection: false,
+      productionRequirementsButton: false,
+      productionOrdersButton: false,
+      productionProductionOrdersButton: false,
+      productionRawMaterialsButton: false,
+      productionFinishedProductsButton: false,
+      logisticSection: false,
+      regDate: 0
+    }
+  );
   public currentDataPermit = this.dataPermit.asObservable();
 
   // *********** NOTIFICATIONS UNSEEN - (START) ***************************
@@ -55,7 +73,7 @@ export class AuthService {
         this.afs.doc<User>(`users/${user.uid}`).valueChanges().subscribe(user => {
           this.userInteriores = user;
 
-          this.permitDocument = this.afs.doc(`db/${this.userInteriores.db}/permits/${this.userInteriores.permit.id}`);
+          this.permitDocument = this.afs.doc<Permit>(`db/${this.userInteriores.db}/permits/${this.userInteriores.permitId}`);
           this.permitDocument.valueChanges().subscribe(res => {
             this.permit = res;
             this.dataPermit.next(res);

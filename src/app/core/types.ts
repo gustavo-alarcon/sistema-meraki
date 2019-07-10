@@ -4,7 +4,7 @@ export interface User {
     lastname: string;
     displayName: string;
     password: string;
-    permit: Permit;
+    permitId: string;
     db: string;
     regDate: number;
 }
@@ -12,15 +12,31 @@ export interface User {
 export interface Permit {
     id: string;
     name: string;
+    salesSection: boolean;
+    salesRequirementsButton: boolean;
+    salesOrdersButton: boolean;
+    salesShoppingButton: boolean;
+    salesStoresButton: boolean;
+    productionSection: boolean;
+    productionRequirementsButton: boolean;
+    productionOrdersButton: boolean;
+    productionProductionOrdersButton: boolean;
+    productionRawMaterialsButton: boolean;
+    productionFinishedProductsButton: boolean;
+    logisticSection: boolean;
     regDate: number;
 }
 
 export interface SerialNumber {
     id: string;
-    serial: number;
+    serie: number;
+    productId: string;
     name: string;
     code: string;
+    status: string;
     regDate: number;
+    createdBy: string;
+    createdByUid: string;
 }
 
 export interface Color {
@@ -37,7 +53,7 @@ export interface Product {
     colors: Array<string>;
     correlative: number;
     stock: number;
-    rawMaterialList: RawMaterialList;
+    rawMaterialList?: RawMaterialList;
     sale: number;
     regDate: number;
 }
@@ -132,6 +148,7 @@ export interface OtherResource {
 export interface Category {
     id: string;
     name: string;
+    source: string;
     regDate: number;
 }
 
@@ -147,7 +164,7 @@ export interface Unit {
     regDate: number;
 }
 
-export interface ProductionOrder{
+export interface ProductionOrder {
     id: string;
     correlative: number;
     ORCorrelative?: number;
@@ -190,6 +207,17 @@ export interface DepartureRawMaterial {
     id: string;
     OPCorrelative: string;
     raw: RawMaterial;
+    quantity: number;
+    source: string;
+    regDate: number;
+    createdBy: string;
+    createdByUid: string;
+}
+
+export interface TicketProduct {
+    id: string;
+    OPCorrelative: string;
+    product: Product;
     quantity: number;
     source: string;
     regDate: number;

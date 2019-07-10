@@ -42,67 +42,76 @@
 
         <mat-tab-group dynamicHeight *ngIf="deviceFormat === 'web' || deviceFormat === 'tablet'"
             [selectedIndex]="selectedTab.value" (selectedIndexChange)="selectedTab.setValue($event)">
-            <mat-tab label="Ventas">
+            <mat-tab label="Ventas" [disabled]="!permits.salesSection">
                 <div class="w3-padding w3-border-bottom w3-border-lightgray">
                     <div style="display:flex">
                         <div class="w3-margin-right">
                             <button mat-button class="w3-small"
                                 [ngClass]="{'ms-button-selected': buttonOptions.sales.requirements}"
-                                routerLink="sales/requirements/form">
+                                routerLink="sales/requirements/form"
+                                [disabled]="!permits.salesRequirementsButton">
                                 <mat-icon class="ms-icons-color">assignment</mat-icon> Requerimientos
                             </button><br>
                             <button mat-button class="w3-small"
                                 [ngClass]="{'ms-button-selected': buttonOptions.sales.orders}"
-                                routerLink="sales/orders/form">
+                                routerLink="sales/orders/form"
+                                [disabled]="!permits.salesOrdersButton">
                                 <mat-icon class="ms-icons-color">assignment</mat-icon> Pedidos
                             </button><br>
                         </div>
                         <div class="w3-border-left w3-border-lightgray w3-margin-right">
                             <button mat-button class="w3-small"
                                 [ngClass]="{'ms-button-selected': buttonOptions.sales.sales}"
-                                routerLink="sales/shopping" disabled>
+                                routerLink="sales/shopping"
+                                [disabled]="!permits.salesShoppingButton">
                                 <mat-icon class="ms-icons-color">shopping_cart</mat-icon> Ventas
                             </button><br>
                             <button mat-button class="w3-small"
-                                [ngClass]="{'ms-button-selected': buttonOptions.sales.stores}" routerLink="sales/stores"
-                                disabled>
+                                    [ngClass]="{'ms-button-selected': buttonOptions.sales.stores}"
+                                    routerLink="sales/stores"
+                                    [disabled]="!permits.salesStoresButton">
                                 <mat-icon class="ms-icons-color">store</mat-icon> Tiendas
                             </button><br>
                         </div>
                     </div>
                 </div>
             </mat-tab>
-            <mat-tab label="Producción">
+            <mat-tab label="Producción" [disabled]="!permits.productionSection">
                 <div class="w3-padding  w3-border-bottom w3-border-lightgray">
                     <div style="display:flex">
                         <div>
                             <button class="w3-small" mat-button
                                 [ngClass]="{'ms-button-selected': buttonOptions.production.requirements}"
-                                routerLink="production/requirements">
+                                routerLink="production/requirements"
+                                [disabled]="!permits.productionRequirementsButton">
                                 <mat-icon class="ms-icons-color">assignment</mat-icon> Requerimientos
                             </button><br>
                             <button class="w3-small" mat-button
                                 [ngClass]="{'ms-button-selected': buttonOptions.production.orders}"
-                                routerLink="production/orders">
+                                routerLink="production/orders"
+                                [disabled]="!permits.productionOrdersButton">
                                 <mat-icon class="ms-icons-color">assignment</mat-icon> Pedidos
                             </button><br>
                         </div>
                         <div class="w3-margin-right">
                             <button class="w3-small" mat-button
                                 [ngClass]="{'ms-button-selected': buttonOptions.production.production}"
-                                routerLink="production/production">
+                                routerLink="production/production"
+                                [disabled]="!permits.productionProductionOrdersButton">
                                 <mat-icon class="ms-icons-color">build</mat-icon> Producción
                             </button><br>
                         </div>
                         <div class="w3-border-left w3-border-lightgray w3-margin-right">
                             <button class="w3-small" mat-button
                                 [ngClass]="{'ms-button-selected': buttonOptions.production.materials}"
-                                routerLink="production/raw-material">
+                                routerLink="production/raw-material"
+                                [disabled]="!permits.productionRawMaterialsButton">
                                 <mat-icon class="ms-icons-color">view_module</mat-icon> Materia prima
                             </button><br>
                             <button class="w3-small" mat-button
                                 [ngClass]="{'ms-button-selected': buttonOptions.production.finishedProducts}"
-                                routerLink="production/finished-products">
+                                routerLink="production/finished-products"
+                                [disabled]="!permits.productionFinishedProductsButton">
                                 <mat-icon class="ms-icons-color">local_offer</mat-icon> Productos acabados
                             </button><br>
                         </div>

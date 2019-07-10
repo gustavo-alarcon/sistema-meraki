@@ -65,6 +65,7 @@ export class RawMaterialEditConfirmComponent implements OnInit {
         const data = {
           id: '',
           name: category,
+          source: 'raw',
           regDate: Date.now()
         }
 

@@ -1,15 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Router, RouteConfigLoadStart, RouteConfigLoadEnd, NavigationStart } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
 import { FormControl } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { Permit } from 'src/app/core/types';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styles: []
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, OnDestroy {
 
   deviceFormat: string = 'web';
 
@@ -37,6 +40,27 @@ export class MenuComponent implements OnInit {
       finishedProducts: false
     }
   }
+
+  permits: Permit =
+    {
+      id: '',
+      name: '',
+      salesSection: false,
+      salesRequirementsButton: false,
+      salesOrdersButton: false,
+      salesShoppingButton: false,
+      salesStoresButton: false,
+      productionSection: false,
+      productionRequirementsButton: false,
+      productionOrdersButton: false,
+      productionProductionOrdersButton: false,
+      productionRawMaterialsButton: false,
+      productionFinishedProductsButton: false,
+      logisticSection: false,
+      regDate: 0
+    };
+
+  subscriptions: Array<Subscription> = [];
 
   constructor(
     breakpointObserver: BreakpointObserver,
@@ -71,162 +95,36 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.router.events.subscribe(event => {
-      if (event instanceof RouteConfigLoadStart) {
-        this.loadingRouteConfig = true;
-      } else if (event instanceof RouteConfigLoadEnd) {
-        this.loadingRouteConfig = false;
-      } else if (event instanceof NavigationStart) {
-
-        this.auth.saveLastRoute(event.url);
-
-        switch (event.url) {
-          case '/main/sales/requirements/form':
-            this.selectedTab.setValue(0);
-            this.cleanButtons();
-            this.buttonOptions.sales.requirements = true;
-            break;
-
-          case '/main/sales/requirements/list':
-            this.selectedTab.setValue(0);
-            this.cleanButtons();
-            this.buttonOptions.sales.requirements = true;
-            break;
-
-          case '/main/sales/orders/form':
-            this.selectedTab.setValue(0);
-            this.cleanButtons();
-            this.buttonOptions.sales.orders = true;
-            break;
-
-          case '/main/sales/orders/list':
-            this.selectedTab.setValue(0);
-            this.cleanButtons();
-            this.buttonOptions.sales.orders = true;
-            break;
-
-          case '/main/sales/sales':
-            this.selectedTab.setValue(0);
-            this.cleanButtons();
-            this.buttonOptions.sales.sales = true;
-            break;
-
-          case '/main/sales/stores':
-            this.selectedTab.setValue(0);
-            this.cleanButtons();
-            this.buttonOptions.sales.stores = true;
-            break;
-
-          case '/main/production/requirements':
-            this.selectedTab.setValue(1);
-            this.cleanButtons();
-            this.buttonOptions.production.requirements = true;
-            break;
-
-          case '/main/production/orders':
-            this.selectedTab.setValue(1);
-            this.cleanButtons();
-            this.buttonOptions.production.orders = true;
-            break;
-
-          case '/main/production/production':
-            this.selectedTab.setValue(1);
-            this.cleanButtons();
-            this.buttonOptions.production.production = true;
-            break;
-
-          case '/main/production/raw-material':
-            this.selectedTab.setValue(1);
-            this.cleanButtons();
-            this.buttonOptions.production.materials = true;
-            break;
-
-          case '/main/production/finished-products':
-            this.selectedTab.setValue(1);
-            this.cleanButtons();
-            this.buttonOptions.production.finishedProducts = true;
-            break;
-
-          default:
-            this.selectedTab.setValue(0);
-            break;
+    const permit$ =
+      this.auth.currentDataPermit.subscribe(res => {
+        if (res.name) {
+          this.permits = res;
+          this.checkRoute(this.router.url);
         }
-      }
-    });
+      });
 
-    switch (this.router.url) {
-      case '/main/sales/requirements/form':
-        this.selectedTab.setValue(0);
-        this.cleanButtons();
-        this.buttonOptions.sales.requirements = true;
-        break;
+    this.subscriptions.push(permit$);
 
-      case '/main/sales/requirements/list':
-        this.selectedTab.setValue(0);
-        this.cleanButtons();
-        this.buttonOptions.sales.requirements = true;
-        break;
+    this.router.events
+      .subscribe(event => {
+        if (event instanceof RouteConfigLoadStart) {
+          this.loadingRouteConfig = true;
+        } else if (event instanceof RouteConfigLoadEnd) {
+          this.loadingRouteConfig = false;
+        } else if (event instanceof NavigationStart) {
 
-      case '/main/sales/orders/form':
-        this.selectedTab.setValue(0);
-        this.cleanButtons();
-        this.buttonOptions.sales.orders = true;
-        break;
+          if (event.url !== '/main') {
+            this.auth.saveLastRoute(event.url);
+            this.checkRoute(event.url);
+          }
 
-      case '/main/sales/orders/list':
-        this.selectedTab.setValue(0);
-        this.cleanButtons();
-        this.buttonOptions.sales.orders = true;
-        break;
+        }
+      });
 
-      case '/main/sales/sales':
-        this.selectedTab.setValue(0);
-        this.cleanButtons();
-        this.buttonOptions.sales.sales = true;
-        break;
+  }
 
-      case '/main/sales/stores':
-        this.selectedTab.setValue(0);
-        this.cleanButtons();
-        this.buttonOptions.sales.stores = true;
-        break;
-
-      case '/main/production/requirements':
-        this.selectedTab.setValue(1);
-        this.cleanButtons();
-        this.buttonOptions.production.requirements = true;
-        break;
-
-      case '/main/production/orders':
-        this.selectedTab.setValue(1);
-        this.cleanButtons();
-        this.buttonOptions.production.orders = true;
-        break;
-
-      case '/main/production/production':
-        this.selectedTab.setValue(1);
-        this.cleanButtons();
-        this.buttonOptions.production.production = true;
-        break;
-
-      case '/main/production/raw-material':
-        this.selectedTab.setValue(1);
-        this.cleanButtons();
-        this.buttonOptions.production.materials = true;
-        break;
-
-      case '/main/production/finished-products':
-        this.selectedTab.setValue(1);
-        this.cleanButtons();
-        this.buttonOptions.production.finishedProducts = true;
-        break;
-
-      default:
-        this.selectedTab.setValue(0);
-        break;
-    }
-
-
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   cleanButtons(): void {
@@ -271,6 +169,101 @@ export class MenuComponent implements OnInit {
     this.productionOpenedFlag = false;
   }
 
+  checkRoute(route: string): void {
+    let coincidence = false;
 
+    if (this.permits.salesSection) {
+      switch (route) {
+        case '/main/sales/requirements/form':
+          this.selectedTab.setValue(0);
+          this.cleanButtons();
+          this.buttonOptions.sales.requirements = true;
+          coincidence = true;
+          break;
+
+        case '/main/sales/requirements/list':
+          this.selectedTab.setValue(0);
+          this.cleanButtons();
+          this.buttonOptions.sales.requirements = true;
+          coincidence = true;
+          break;
+
+        case '/main/sales/orders/form':
+          this.selectedTab.setValue(0);
+          this.cleanButtons();
+          this.buttonOptions.sales.orders = true;
+          coincidence = true;
+          break;
+
+        case '/main/sales/orders/list':
+          this.selectedTab.setValue(0);
+          this.cleanButtons();
+          this.buttonOptions.sales.orders = true;
+          coincidence = true;
+          break;
+
+        case '/main/sales/sales':
+          this.selectedTab.setValue(0);
+          this.cleanButtons();
+          this.buttonOptions.sales.sales = true;
+          coincidence = true;
+          break;
+
+        case '/main/sales/stores':
+          this.selectedTab.setValue(0);
+          this.cleanButtons();
+          this.buttonOptions.sales.stores = true;
+          coincidence = true;
+          break;
+      }
+    }
+
+    if (this.permits.productionSection) {
+      switch (route) {
+        case '/main/production/requirements':
+          this.selectedTab.setValue(1);
+          this.cleanButtons();
+          this.buttonOptions.production.requirements = true;
+          coincidence = true;
+          break;
+
+        case '/main/production/orders':
+          this.selectedTab.setValue(1);
+          this.cleanButtons();
+          this.buttonOptions.production.orders = true;
+          coincidence = true;
+          break;
+
+        case '/main/production/production':
+          this.selectedTab.setValue(1);
+          this.cleanButtons();
+          this.buttonOptions.production.production = true;
+          coincidence = true;
+          break;
+
+        case '/main/production/raw-material':
+          this.selectedTab.setValue(1);
+          this.cleanButtons();
+          this.buttonOptions.production.materials = true;
+          coincidence = true;
+          break;
+
+        case '/main/production/finished-products':
+          this.selectedTab.setValue(1);
+          this.cleanButtons();
+          this.buttonOptions.production.finishedProducts = true;
+          coincidence = true;
+          break;
+      }
+    }
+
+    if (!coincidence) {
+      console.log('route');
+      this.selectedTab.setValue(0);
+      this.router.navigate(['/main']);
+    }
+
+    console.log(route);
+  }
 
 }
