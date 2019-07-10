@@ -57,6 +57,7 @@ export class RawMaterialAddStockConfirmComponent implements OnInit {
               totalPrice: this.data.form.totalPrice,
               unitPrice: this.data.form.totalPrice / this.data.form.quantity,
               source: 'production',
+              status: 'Grabado',
               regDate: Date.now(),
               createdBy: this.auth.userInteriores.displayName,
               createdByUid: this.auth.userInteriores.uid

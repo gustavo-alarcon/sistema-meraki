@@ -127,7 +127,7 @@
                                             <mat-icon class="ms-icons-color">assignment</mat-icon> Mostrar receta
                                         </button>
                                         <button mat-menu-item (click)="assignRawMaterialList(raw)"
-                                                *ngIf="!raw.rawMaterialList">
+                                                *ngIf="!raw.rawMaterialList" disabled>
                                             <mat-icon class="ms-icons-color">assignment</mat-icon> Asignar receta
                                         </button>
                                         <button mat-menu-item (click)="addStock(raw)">

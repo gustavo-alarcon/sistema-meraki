@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FinishedProductsRoutingModule } from './finished-products-routing.module';
 import { FinishedProductsComponent } from './finished-products.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatAutocompleteModule, MatCheckboxModule, MatTooltipModule, MatDividerModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSnackBarModule, MatProgressSpinnerModule, MatProgressBarModule, MatMenuModule } from '@angular/material';
+import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatAutocompleteModule, MatCheckboxModule, MatTooltipModule, MatDividerModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSnackBarModule, MatProgressSpinnerModule, MatProgressBarModule, MatMenuModule, MatSelectModule } from '@angular/material';
 import { FinishedProductsCreateDialogComponent } from './finished-products-create-dialog/finished-products-create-dialog.component';
 import { FinishedProductsCreateConfirmComponent } from './finished-products-create-confirm/finished-products-create-confirm.component';
 import { FinishedProductsShowSerieDialogComponent } from './finished-products-show-serie-dialog/finished-products-show-serie-dialog.component';
@@ -48,7 +48,8 @@ import { FinishedProductsEditConfirmComponent } from './finished-products-edit-c
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSelectModule
   ],
   entryComponents: [
     FinishedProductsCreateDialogComponent,

@@ -49,6 +49,7 @@ export class RawMaterialSubstractStockConfirmComponent implements OnInit {
               raw: this.data.raw,
               quantity: this.data.form.quantity,
               source: 'production',
+              status: 'Grabado',
               regDate: Date.now(),
               createdBy: this.auth.userInteriores.displayName,
               createdByUid: this.auth.userInteriores.uid

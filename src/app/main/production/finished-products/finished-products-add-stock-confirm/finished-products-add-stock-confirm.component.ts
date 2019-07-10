@@ -57,7 +57,9 @@ export class FinishedProductsAddStockConfirmComponent implements OnInit {
                 status: 'Acabado',
                 regDate: Date.now(),
                 createdBy: this.auth.userInteriores.displayName,
-                createdByUid: this.auth.userInteriores.uid
+                createdByUid: this.auth.userInteriores.uid,
+                modifiedBy: '',
+                modifiedByUid: ''
               });
             }
 
@@ -73,20 +75,21 @@ export class FinishedProductsAddStockConfirmComponent implements OnInit {
               product: this.data.product,
               quantity: this.data.form.quantity,
               source: 'finished products',
+              status: 'Grabado',
               regDate: Date.now(),
               createdBy: this.auth.userInteriores.displayName,
               createdByUid: this.auth.userInteriores.uid
             });
 
-      });
-  }).then(() => {
-    this.flags.created = true;
-    this.uploading = false;
-    this.snackbar.open('Stock actualizado!', 'Cerrar', {
-      duration: 6000
-    });
-    this.dialogRef.close(true)
-  })
+          });
+      }).then(() => {
+        this.flags.created = true;
+        this.uploading = false;
+        this.snackbar.open('Stock actualizado!', 'Cerrar', {
+          duration: 6000
+        });
+        this.dialogRef.close(true)
+      })
   }
 
 }

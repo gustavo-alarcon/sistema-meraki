@@ -37,6 +37,8 @@ export interface SerialNumber {
     regDate: number;
     createdBy: string;
     createdByUid: string;
+    modifiedBy?: string;
+    modifiedByUid?: string;
 }
 
 export interface Color {

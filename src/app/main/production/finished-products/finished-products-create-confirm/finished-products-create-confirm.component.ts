@@ -66,7 +66,9 @@ export class FinishedProductsCreateConfirmComponent implements OnInit {
                     status: 'Acabado',
                     regDate: Date.now(),
                     createdBy: this.auth.userInteriores.displayName,
-                    createdByUid: this.auth.userInteriores.uid
+                    createdByUid: this.auth.userInteriores.uid,
+                    modifiedBy: '',
+                    modifiedByUid: ''
                   }
                 ).then(refSerie => {
                   refSerie.update({ id: refSerie.id })

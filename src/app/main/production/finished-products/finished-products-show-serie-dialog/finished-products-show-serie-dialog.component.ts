@@ -55,10 +55,6 @@ export class FinishedProductsShowSerieDialogComponent implements OnInit, OnDestr
   changeStatus(product: SerialNumber) {
     this.dialog.open(FinishedProductsChangeStatusConfirmComponent, {
       data: product
-    }).afterClosed().subscribe(res => {
-      if (res) {
-        this.dialogRef.close(true);
-      }
     })
   }
 
