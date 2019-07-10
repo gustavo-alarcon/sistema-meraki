@@ -25,7 +25,7 @@ export class RawMaterialCreateDialogComponent implements OnInit, OnDestroy {
   }
 
   filteredCategories: Observable<Category[]>
-  filteredUnits: Observable<Category[]>
+  filteredUnits: Observable<Unit[]>
 
   subscriptions: Array<Subscription> = [];
 
@@ -43,7 +43,7 @@ export class RawMaterialCreateDialogComponent implements OnInit, OnDestroy {
       .pipe(
         startWith<any>(''),
         map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-        map(name => name ? this.dbs.categories.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.categories)
+        map(name => name ? this.dbs.categories.filter(option => option.name.toLowerCase().includes(name) && option.source === 'raw') : this.dbs.categories)
       );
 
     this.filteredUnits = this.dataFormGroup.get('unit').valueChanges
@@ -167,6 +167,7 @@ export class RawMaterialCreateDialogComponent implements OnInit, OnDestroy {
         const data = {
           id: '',
           name: category,
+          source: 'raw',
           regDate: Date.now()
         }
 

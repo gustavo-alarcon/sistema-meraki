@@ -4,6 +4,10 @@ import { Product } from 'src/app/core/types';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { DatabaseService } from 'src/app/core/database.service';
+import { FinishedProductsCreateDialogComponent } from './finished-products-create-dialog/finished-products-create-dialog.component';
+import { FinishedProductsShowSerieDialogComponent } from './finished-products-show-serie-dialog/finished-products-show-serie-dialog.component';
+import { FinishedProductsDeleteConfirmComponent } from './finished-products-delete-confirm/finished-products-delete-confirm.component';
+import { FinishedProductsAddStockDialogComponent } from './finished-products-add-stock-dialog/finished-products-add-stock-dialog.component';
 
 @Component({
   selector: 'app-finished-products',
@@ -63,7 +67,7 @@ export class FinishedProductsComponent implements OnInit, OnDestroy {
   }
 
   createFinishedProduct(): void {
-    // this.dialog.open(RawMaterialCreateDialogComponent);
+    this.dialog.open(FinishedProductsCreateDialogComponent);
   }
 
   editFinishedProduct(product: Product): void {
@@ -75,11 +79,9 @@ export class FinishedProductsComponent implements OnInit, OnDestroy {
   }
 
   deleteFinishedProduct(product: Product): void {
-    // this.dialog.open(RawMaterialDeleteConfirmComponent, {
-    //   data: {
-    //     raw: raw
-    //   }
-    // })
+    this.dialog.open(FinishedProductsDeleteConfirmComponent, {
+      data: product
+    })
   }
 
   showRawMaterialList(product: Product): void {
@@ -88,6 +90,28 @@ export class FinishedProductsComponent implements OnInit, OnDestroy {
     //     raw: raw,
     //   }
     // });
+  }
+
+  showProducts(product: Product): void {
+    this.dialog.open(FinishedProductsShowSerieDialogComponent, {
+      data: product
+    });
+  }
+
+  assignRawMaterialList(product: Product): void {
+    // this.dialog.open(RawMaterialAddStockDialogComponent, {
+    //   data: {
+    //     raw: raw,
+    //   }
+    // });
+  }
+
+  addStock(product: Product): void {
+    this.dialog.open(FinishedProductsAddStockDialogComponent, {
+      data: {
+        product: product
+      }
+    });
   }
 
 }

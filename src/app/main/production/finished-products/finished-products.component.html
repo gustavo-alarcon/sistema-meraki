@@ -85,8 +85,8 @@
                                     matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Color</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
-                                    <ul>
-                                        <li style="padding:0px 0px" *ngFor="let color of raw.colors">{{color}}</li>
+                                    <ul style="padding:0px 0px">
+                                        <li>{{raw.colors}}</li>
                                     </ul>
                                 </td>
                             </ng-container>
@@ -105,7 +105,7 @@
                                     matTooltip="Ordenar tabla por stock" matTooltipPosition="above"
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Stock</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
-                                    {{raw.stock | number : '2.2'}}
+                                    {{raw.stock | number : '2.'}}
                                 </td>
                             </ng-container>
 
@@ -114,7 +114,7 @@
                                     matTooltip="Ordenar tabla por precio de venta" matTooltipPosition="above"
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Venta</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let product">
-                                    {{product.sale |  number : '.2' | currency : 'S/.'}}
+                                    {{product.sale | currency : 'S/.'}}
                                 </td>
                             </ng-container>
 
@@ -122,8 +122,19 @@
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <mat-menu #rawMenu="matMenu">
-                                        <button mat-menu-item (click)="showRawMaterialList(raw)">
-                                            <mat-icon class="ms-icons-color">assignment</mat-icon> Lista de producción
+                                        <button mat-menu-item (click)="showRawMaterialList(raw)"
+                                                *ngIf="raw.rawMaterialList">
+                                            <mat-icon class="ms-icons-color">assignment</mat-icon> Mostrar receta
+                                        </button>
+                                        <button mat-menu-item (click)="assignRawMaterialList(raw)"
+                                                *ngIf="!raw.rawMaterialList">
+                                            <mat-icon class="ms-icons-color">assignment</mat-icon> Asignar receta
+                                        </button>
+                                        <button mat-menu-item (click)="addStock(raw)">
+                                            <mat-icon class="ms-icons-color">add_circle</mat-icon> Agregar stock
+                                        </button>
+                                        <button mat-menu-item (click)="showProducts(raw)">
+                                            <mat-icon class="ms-icons-color">money</mat-icon> Productos n/s
                                         </button>
                                         <button mat-menu-item (click)="editFinishedProduct(raw)">
                                             <mat-icon class="ms-icons-color">edit</mat-icon> Editar
