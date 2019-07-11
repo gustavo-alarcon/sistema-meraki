@@ -55,11 +55,14 @@ export class FinishedProductsAddStockConfirmComponent implements OnInit {
                 name: this.data.product.name,
                 code: this.data.product.code,
                 status: 'Acabado',
+                location: 'Taller',
                 regDate: Date.now(),
                 createdBy: this.auth.userInteriores.displayName,
                 createdByUid: this.auth.userInteriores.uid,
                 modifiedBy: '',
-                modifiedByUid: ''
+                modifiedByUid: '',
+                customerDisplayName: '',
+                customerDocumentNumber: ''
               });
             }
 
@@ -78,7 +81,7 @@ export class FinishedProductsAddStockConfirmComponent implements OnInit {
               status: 'Grabado',
               regDate: Date.now(),
               createdBy: this.auth.userInteriores.displayName,
-              createdByUid: this.auth.userInteriores.uid
+              createdByUid: this.auth.userInteriores.uid,
             });
 
           });
