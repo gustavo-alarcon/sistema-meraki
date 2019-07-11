@@ -33,8 +33,7 @@ export class FinishedProductsComponent implements OnInit, OnDestroy {
 
   constructor(
     public dbs: DatabaseService,
-    private dialog: MatDialog,
-    private snackbar: MatSnackBar
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {

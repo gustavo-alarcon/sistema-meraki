@@ -31,6 +31,7 @@ export interface SerialNumber {
     id: string;
     serie: number;
     productId: string;
+    location: string | Store;
     name: string;
     code: string;
     status: string;
@@ -39,6 +40,8 @@ export interface SerialNumber {
     createdByUid: string;
     modifiedBy?: string;
     modifiedByUid?: string;
+    customerDisplayName?: string;
+    customerDocumentNumber?: string;
 }
 
 export interface Color {
@@ -114,7 +117,6 @@ export interface Order {
 export interface RawMaterial {
     id: string;
     category: string;
-    warehouse?: Warehouse;
     brand: string;
     code: string;
     name: string;
@@ -154,9 +156,10 @@ export interface Category {
     regDate: number;
 }
 
-export interface Warehouse {
+export interface Store {
     id: string;
     name: string;
+    supervisor?: User;
     regDate: number;
 }
 

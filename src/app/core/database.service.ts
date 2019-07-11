@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from "@angular/fire/firestore";
-import { Requirement, Correlative, Product, Color, RawMaterial, Warehouse, Category, Unit, ProductionOrder, TicketRawMaterial, DepartureRawMaterial } from './types';
+import { Requirement, Correlative, Product, Color, RawMaterial, Category, Unit, ProductionOrder, TicketRawMaterial, DepartureRawMaterial, Store, User } from './types';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
@@ -32,6 +32,15 @@ export class DatabaseService {
 
   public dataProductionOrdersCorrelative = new BehaviorSubject<Correlative>(null);
   public currentDataProductionOrdersCorrelative = this.dataProductionOrdersCorrelative.asObservable();
+
+  /**
+   * USERS
+   */
+  usersCollection: AngularFirestoreCollection<User>;
+  users: Array<User> = [];
+
+  public dataUsers = new BehaviorSubject<User[]>([]);
+  public currentDataUsers = this.dataUsers.asObservable();
 
   /**
    * ORDERS
@@ -107,13 +116,13 @@ export class DatabaseService {
 
 
   /**
-   * WAREHOUSES
+   * STORES
    */
-  warehousesCollection: AngularFirestoreCollection<Warehouse>;
-  warehouses: Array<Warehouse> = [];
+  storesCollection: AngularFirestoreCollection<Store>;
+  stores: Array<Store> = [];
 
-  public dataWarehouses = new BehaviorSubject<Warehouse[]>([]);
-  public currentDataWarehouses = this.dataWarehouses.asObservable();
+  public dataStores = new BehaviorSubject<Store[]>([]);
+  public currentDataStores = this.dataStores.asObservable();
 
   /**
    * TICKETS
@@ -141,10 +150,12 @@ export class DatabaseService {
   ) {
     this.auth.currentDataPermit.subscribe(res => {
       if (res.name) {
+        this.getUsers();
         this.getRequirements(true);
         this.getRequirementsCorrelative();
         this.getOrders(true);
         this.getOrdersCorrelative();
+        this.getStores();
         this.getRawMaterials(true);
         this.getCategories();
         this.getUnits();
@@ -154,9 +165,27 @@ export class DatabaseService {
         this.getDepartures(true);
         this.getFinishedProducts();
         this.getColors();
+
       }
     })
 
+  }
+
+  getUsers(): void {
+    this.usersCollection = this.af.collection(`users`, ref => ref.orderBy('regDate', 'desc'));
+    this.usersCollection.valueChanges()
+      .pipe(
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = index;
+          });
+          return res;
+        })
+      )
+      .subscribe(res => {
+        this.users = res;
+        this.dataUsers.next(res);
+      })
   }
 
   // *************************************** SALES ********************************************
@@ -227,6 +256,23 @@ export class DatabaseService {
         this.orderCorrelative = res;
         this.dataOrderCorrelative.next(res);
       })
+  }
+
+  getStores(): void {
+    this.storesCollection = this.af.collection(`db/${this.auth.userInteriores.db}/stores`, ref => ref.orderBy('regDate', 'desc'));
+    this.storesCollection.valueChanges()
+      .pipe(
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = index;
+          });
+          return res;
+        })
+      )
+      .subscribe(res => {
+        this.stores = res;
+        this.dataStores.next(res);
+      });
   }
 
   // *************************************** PRODUCTION *****************************************

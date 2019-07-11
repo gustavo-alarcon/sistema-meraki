@@ -64,11 +64,14 @@ export class FinishedProductsCreateConfirmComponent implements OnInit {
                     code: this.data['form']['code'],
                     serie: serie,
                     status: 'Acabado',
+                    location: 'Taller',
                     regDate: Date.now(),
                     createdBy: this.auth.userInteriores.displayName,
                     createdByUid: this.auth.userInteriores.uid,
                     modifiedBy: '',
-                    modifiedByUid: ''
+                    modifiedByUid: '',
+                    customerDisplayName: '',
+                    customerDocumentNumber: ''
                   }
                 ).then(refSerie => {
                   refSerie.update({ id: refSerie.id })
