@@ -52,6 +52,15 @@ export class StoresComponent implements OnInit {
       );
   }
 
+  filterData(ref: string) {
+    // ref = ref.toLowerCase();
+    // this.filteredRequirements = this.dbs.requirements.filter(option =>
+    //   ('OR' + option.correlative).toLowerCase().includes(ref) ||
+    //   option.product.name.toLowerCase().includes(ref) ||
+    //   option.color.name.toLowerCase().includes(ref));
+    // this.dataSource.data = this.filteredRequirements;
+  }
+
 
   showSelectedStore(store: Store): string | null {
     return store ? store.name : null

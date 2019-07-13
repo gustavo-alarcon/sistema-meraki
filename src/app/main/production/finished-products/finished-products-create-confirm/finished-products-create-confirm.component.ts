@@ -63,15 +63,17 @@ export class FinishedProductsCreateConfirmComponent implements OnInit {
                     name: this.data['form']['name'],
                     code: this.data['form']['code'],
                     serie: serie,
+                    color: '',
                     status: 'Acabado',
-                    location: 'Taller',
+                    location: 'Productos acabados',
                     regDate: Date.now(),
                     createdBy: this.auth.userInteriores.displayName,
                     createdByUid: this.auth.userInteriores.uid,
                     modifiedBy: '',
                     modifiedByUid: '',
                     customerDisplayName: '',
-                    customerDocumentNumber: ''
+                    customerDocumentNumber: '',
+                    customerDate: null
                   }
                 ).then(refSerie => {
                   refSerie.update({ id: refSerie.id })

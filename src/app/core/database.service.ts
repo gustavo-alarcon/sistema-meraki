@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from "@angular/fire/firestore";
-import { Requirement, Correlative, Product, Color, RawMaterial, Category, Unit, ProductionOrder, TicketRawMaterial, DepartureRawMaterial, Store, User } from './types';
+import { Requirement, Correlative, Product, Color, RawMaterial, Category, Unit, ProductionOrder, TicketRawMaterial, DepartureRawMaterial, Store, User, Transfer } from './types';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
@@ -32,6 +32,12 @@ export class DatabaseService {
 
   public dataProductionOrdersCorrelative = new BehaviorSubject<Correlative>(null);
   public currentDataProductionOrdersCorrelative = this.dataProductionOrdersCorrelative.asObservable();
+
+  transferCorrelativeDocument: AngularFirestoreDocument<Correlative>;
+  transferCorrelative: Correlative = null;
+
+  public dataTransferCorrelative = new BehaviorSubject<Correlative>(null);
+  public currentDataTransferCorrelative = this.dataTransferCorrelative.asObservable();
 
   /**
    * USERS
@@ -142,6 +148,15 @@ export class DatabaseService {
   public dataDepartures = new BehaviorSubject<DepartureRawMaterial[]>([]);
   public currentDataDepartures = this.dataDepartures.asObservable();
 
+  /**
+   * TRANSFERS
+   */
+  transfersCollection: AngularFirestoreCollection<Transfer>;
+  transfers: Array<Transfer> = [];
+
+  public dataTransfers = new BehaviorSubject<Transfer[]>([]);
+  public currentDataTransfers = this.dataTransfers.asObservable();
+
 
 
   constructor(
@@ -165,6 +180,8 @@ export class DatabaseService {
         this.getDepartures(true);
         this.getFinishedProducts();
         this.getColors();
+        this.getTransfers(true);
+        this.getTransfersCorrelative();
 
       }
     })
@@ -424,6 +441,38 @@ export class DatabaseService {
         this.colors = res;
         this.dataColors.next(res);
       });
+  }
+
+  /***************************LOGISTIC ********************************** */
+  getTransfers(all: boolean, from?: number, to?: number): void {
+    if (all) {
+      this.transfersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/transfers`, ref => ref.orderBy('regDate', 'desc'));
+    } else {
+      this.transfersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/transfers`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
+    }
+
+    this.transfersCollection.valueChanges()
+      .pipe(
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = index;
+          });
+          return res;
+        })
+      )
+      .subscribe(res => {
+        this.transfers = res;
+        this.dataTransfers.next(res);
+      })
+  }
+
+  getTransfersCorrelative(): void {
+    this.transferCorrelativeDocument = this.af.doc(`db/${this.auth.userInteriores.db}/correlatives/TR`);
+    this.transferCorrelativeDocument.valueChanges()
+      .subscribe(res => {
+        this.transferCorrelative = res;
+        this.dataTransferCorrelative.next(res);
+      })
   }
 
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Product } from 'src/app/core/types';
+import { Product, SerialNumber } from 'src/app/core/types';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { DatabaseService } from 'src/app/core/database.service';
@@ -9,6 +9,7 @@ import { FinishedProductsShowSerieDialogComponent } from './finished-products-sh
 import { FinishedProductsDeleteConfirmComponent } from './finished-products-delete-confirm/finished-products-delete-confirm.component';
 import { FinishedProductsAddStockDialogComponent } from './finished-products-add-stock-dialog/finished-products-add-stock-dialog.component';
 import { FinishedProductsEditDialogComponent } from './finished-products-edit-dialog/finished-products-edit-dialog.component';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-finished-products',
@@ -21,13 +22,15 @@ export class FinishedProductsComponent implements OnInit, OnDestroy {
 
   filteredFinishedProducts: Array<Product> = [];
 
-  displayedColumns: string[] = ['index', 'code', 'name', 'category', 'colors', 'correlative', 'stock', 'sale', 'actions'];
+  serialNumbersInTransfering: object = {};
+
+  displayedColumns: string[] = ['index', 'code', 'name', 'category', 'description', 'correlative', 'stock', 'sale', 'actions'];
 
 
   dataSource = new MatTableDataSource();
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   subscriptions: Array<Subscription> = [];
 
@@ -38,15 +41,38 @@ export class FinishedProductsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort  = this.sort;
+    this.dataSource.sort = this.sort;
 
     const finishedProduct$ =
-    this.dbs.currentDataFinishedProducts.subscribe(res => {
-      if(res) {
-        this.filteredFinishedProducts = res;
-        this.dataSource.data = res;
-      }
-    });
+      this.dbs.currentDataFinishedProducts
+        .pipe(
+          tap(res => {
+            if (res) {
+              this.serialNumbersInTransfering = {};
+              res.forEach(product => {
+                let transferCount = 0;
+                this.dbs.finishedProductsCollection
+                .doc(product.id)
+                .collection<SerialNumber>('products')
+                .get().forEach(snapshots => {
+                  snapshots.forEach(serial => {
+                    if(serial.data()['status'] === 'Traslado'){
+                      transferCount++;
+                    }
+                  });
+                  this.serialNumbersInTransfering[product.id] = transferCount;
+                });
+              });
+            }
+            console.log(this.serialNumbersInTransfering);
+          })
+        )
+        .subscribe(res => {
+          if (res) {
+            this.filteredFinishedProducts = res;
+            this.dataSource.data = res;
+          }
+        });
 
     this.subscriptions.push(finishedProduct$);
   }

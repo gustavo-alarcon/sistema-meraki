@@ -6,7 +6,7 @@
                 *ngIf="deviceFormat === 'mobile'">
                 <mat-icon>menu</mat-icon>
             </button>
-            
+
             <img src="../../../assets/images/logo.png" alt="logo interiores" style="height:8vh">
             <span class="ms-fill" *ngIf="deviceFormat !== 'mobile'"></span>
             <button mat-button class="mat-subheading-1" style="margin:0px; border:1px solid #321937; border-radius:10px"
@@ -22,7 +22,8 @@
             </button>
             <mat-menu #accountMenu="matMenu">
                 <button mat-menu-item *ngIf="deviceFormat === 'mobile'" disabled>
-                    <mat-icon>account_circle</mat-icon> {{auth.userInteriores ? auth.userInteriores.displayName : '---'}}
+                    <mat-icon>account_circle</mat-icon>
+                    {{auth.userInteriores ? auth.userInteriores.displayName : '---'}}
                 </button>
                 <button mat-menu-item>
                     <mat-icon>settings</mat-icon> Configuración
@@ -48,28 +49,24 @@
                         <div class="w3-margin-right">
                             <button mat-button class="w3-small"
                                 [ngClass]="{'ms-button-selected': buttonOptions.sales.requirements}"
-                                routerLink="sales/requirements/form"
-                                [disabled]="!permits.salesRequirementsButton">
+                                routerLink="sales/requirements/form" [disabled]="!permits.salesRequirementsButton">
                                 <mat-icon class="ms-icons-color">assignment</mat-icon> Requerimientos
                             </button><br>
                             <button mat-button class="w3-small"
                                 [ngClass]="{'ms-button-selected': buttonOptions.sales.orders}"
-                                routerLink="sales/orders/form"
-                                [disabled]="!permits.salesOrdersButton">
+                                routerLink="sales/orders/form" [disabled]="!permits.salesOrdersButton">
                                 <mat-icon class="ms-icons-color">assignment</mat-icon> Pedidos
                             </button><br>
                         </div>
                         <div class="w3-border-left w3-border-lightgray w3-margin-right">
                             <button mat-button class="w3-small"
                                 [ngClass]="{'ms-button-selected': buttonOptions.sales.sales}"
-                                routerLink="sales/shopping"
-                                [disabled]="!permits.salesShoppingButton">
+                                routerLink="sales/shopping" [disabled]="!permits.salesShoppingButton">
                                 <mat-icon class="ms-icons-color">shopping_cart</mat-icon> Ventas
                             </button><br>
                             <button mat-button class="w3-small"
-                                    [ngClass]="{'ms-button-selected': buttonOptions.sales.stores}"
-                                    routerLink="sales/stores"
-                                    [disabled]="!permits.salesStoresButton">
+                                [ngClass]="{'ms-button-selected': buttonOptions.sales.stores}" routerLink="sales/stores"
+                                [disabled]="!permits.salesStoresButton">
                                 <mat-icon class="ms-icons-color">store</mat-icon> Tiendas
                             </button><br>
                         </div>
@@ -82,14 +79,12 @@
                         <div>
                             <button class="w3-small" mat-button
                                 [ngClass]="{'ms-button-selected': buttonOptions.production.requirements}"
-                                routerLink="production/requirements"
-                                [disabled]="!permits.productionRequirementsButton">
+                                routerLink="production/requirements" [disabled]="!permits.productionRequirementsButton">
                                 <mat-icon class="ms-icons-color">assignment</mat-icon> Requerimientos
                             </button><br>
                             <button class="w3-small" mat-button
                                 [ngClass]="{'ms-button-selected': buttonOptions.production.orders}"
-                                routerLink="production/orders"
-                                [disabled]="!permits.productionOrdersButton">
+                                routerLink="production/orders" [disabled]="!permits.productionOrdersButton">
                                 <mat-icon class="ms-icons-color">assignment</mat-icon> Pedidos
                             </button><br>
                         </div>
@@ -104,8 +99,7 @@
                         <div class="w3-border-left w3-border-lightgray w3-margin-right">
                             <button class="w3-small" mat-button
                                 [ngClass]="{'ms-button-selected': buttonOptions.production.materials}"
-                                routerLink="production/raw-material"
-                                [disabled]="!permits.productionRawMaterialsButton">
+                                routerLink="production/raw-material" [disabled]="!permits.productionRawMaterialsButton">
                                 <mat-icon class="ms-icons-color">view_module</mat-icon> Materia prima
                             </button><br>
                             <button class="w3-small" mat-button
@@ -113,6 +107,19 @@
                                 routerLink="production/finished-products"
                                 [disabled]="!permits.productionFinishedProductsButton">
                                 <mat-icon class="ms-icons-color">local_offer</mat-icon> Productos acabados
+                            </button><br>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Logística" [disabled]="!permits.logisticSection">
+                <div class="w3-padding  w3-border-bottom w3-border-lightgray">
+                    <div style="display:flex">
+                        <div>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.logistic.transfers}"
+                                routerLink="logistic/transfers" [disabled]="!permits.logisticTransfersButton">
+                                <mat-icon class="ms-icons-color">local_shipping</mat-icon> Translados
                             </button><br>
                         </div>
                     </div>
@@ -157,8 +164,7 @@
                     </button>
                     <button mat-button *ngIf="true"
                         class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
-                        routerLink="sales/sales"
-                        style="text-align:left;border-radius:0px 0px 0px 0px"
+                        routerLink="sales/sales" style="text-align:left;border-radius:0px 0px 0px 0px"
                         (click)="toggleSideMenu()" disabled>
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">shopping_cart
                         </mat-icon> Ventas
@@ -202,16 +208,14 @@
                     </button>
                     <button mat-button *ngIf="true"
                         class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
-                        routerLink="production/production"
-                        style="text-align:left;border-radius:0px 0px 0px 0px"
+                        routerLink="production/production" style="text-align:left;border-radius:0px 0px 0px 0px"
                         (click)="toggleSideMenu()">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">build
                         </mat-icon> Producción
                     </button>
                     <button mat-button *ngIf="true"
                         class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
-                        routerLink="production/raw-material"
-                        style="text-align:left;border-radius:0px 0px 0px 0px"
+                        routerLink="production/raw-material" style="text-align:left;border-radius:0px 0px 0px 0px"
                         (click)="toggleSideMenu()">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">view_module
                         </mat-icon> Materia prima

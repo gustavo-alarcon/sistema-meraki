@@ -6,6 +6,7 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Product, SerialNumber } from 'src/app/core/types';
 import { DatabaseService } from 'src/app/core/database.service';
 import { FinishedProductsChangeStatusConfirmComponent } from '../finished-products-change-status-confirm/finished-products-change-status-confirm.component';
+import { FinishedProductsChangeColorConfirmComponent } from '../finished-products-change-color-confirm/finished-products-change-color-confirm.component';
 
 @Component({
   selector: 'app-finished-products-show-serie-dialog',
@@ -14,7 +15,7 @@ import { FinishedProductsChangeStatusConfirmComponent } from '../finished-produc
 })
 export class FinishedProductsShowSerieDialogComponent implements OnInit, OnDestroy {
 
-  displayedColumns: string[] = ['serie', 'status', 'actions'];
+  displayedColumns: string[] = ['serie', 'status', 'color', 'actions'];
   dataSource = new MatTableDataSource();
 
   subscriptions: Array<Subscription> = [];
@@ -52,8 +53,14 @@ export class FinishedProductsShowSerieDialogComponent implements OnInit, OnDestr
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  changeStatus(product: SerialNumber) {
+  changeStatus(product: SerialNumber): void {
     this.dialog.open(FinishedProductsChangeStatusConfirmComponent, {
+      data: product
+    })
+  }
+
+  changeColor(product: SerialNumber): void {
+    this.dialog.open(FinishedProductsChangeColorConfirmComponent, {
       data: product
     })
   }

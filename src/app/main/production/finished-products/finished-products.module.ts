@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FinishedProductsRoutingModule } from './finished-products-routing.module';
 import { FinishedProductsComponent } from './finished-products.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatAutocompleteModule, MatCheckboxModule, MatTooltipModule, MatDividerModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSnackBarModule, MatProgressSpinnerModule, MatProgressBarModule, MatMenuModule, MatSelectModule } from '@angular/material';
+
 import { FinishedProductsCreateDialogComponent } from './finished-products-create-dialog/finished-products-create-dialog.component';
 import { FinishedProductsCreateConfirmComponent } from './finished-products-create-confirm/finished-products-create-confirm.component';
 import { FinishedProductsShowSerieDialogComponent } from './finished-products-show-serie-dialog/finished-products-show-serie-dialog.component';
@@ -14,6 +14,10 @@ import { FinishedProductsDeleteConfirmComponent } from './finished-products-dele
 import { FinishedProductsAddStockConfirmComponent } from './finished-products-add-stock-confirm/finished-products-add-stock-confirm.component';
 import { FinishedProductsEditDialogComponent } from './finished-products-edit-dialog/finished-products-edit-dialog.component';
 import { FinishedProductsEditConfirmComponent } from './finished-products-edit-confirm/finished-products-edit-confirm.component';
+
+import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatAutocompleteModule, MatCheckboxModule, MatTooltipModule, MatDividerModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSnackBarModule, MatProgressSpinnerModule, MatProgressBarModule, MatMenuModule, MatSelectModule } from '@angular/material';
+import { FinishedProductsChangeColorConfirmComponent } from './finished-products-change-color-confirm/finished-products-change-color-confirm.component';
+
 
 @NgModule({
   declarations: [
@@ -26,7 +30,8 @@ import { FinishedProductsEditConfirmComponent } from './finished-products-edit-c
     FinishedProductsDeleteConfirmComponent,
     FinishedProductsAddStockConfirmComponent,
     FinishedProductsEditDialogComponent,
-    FinishedProductsEditConfirmComponent
+    FinishedProductsEditConfirmComponent,
+    FinishedProductsChangeColorConfirmComponent
   ],
   imports: [
     CommonModule,
@@ -60,7 +65,8 @@ import { FinishedProductsEditConfirmComponent } from './finished-products-edit-c
     FinishedProductsDeleteConfirmComponent,
     FinishedProductsAddStockConfirmComponent,
     FinishedProductsEditDialogComponent,
-    FinishedProductsEditConfirmComponent
+    FinishedProductsEditConfirmComponent,
+    FinishedProductsChangeColorConfirmComponent
   ]
 })
 export class FinishedProductsModule { }

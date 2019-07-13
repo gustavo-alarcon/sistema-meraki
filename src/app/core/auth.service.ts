@@ -32,6 +32,7 @@ export class AuthService {
       productionRawMaterialsButton: false,
       productionFinishedProductsButton: false,
       logisticSection: false,
+      logisticTransfersButton: false,
       regDate: 0
     }
   );

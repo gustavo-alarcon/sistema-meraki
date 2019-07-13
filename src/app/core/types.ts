@@ -24,16 +24,19 @@ export interface Permit {
     productionRawMaterialsButton: boolean;
     productionFinishedProductsButton: boolean;
     logisticSection: boolean;
+    logisticTransfersButton: boolean;
     regDate: number;
 }
 
 export interface SerialNumber {
     id: string;
+    index?: number;
     serie: number;
     productId: string;
     location: string | Store;
     name: string;
     code: string;
+    color: string;
     status: string;
     regDate: number;
     createdBy: string;
@@ -42,6 +45,7 @@ export interface SerialNumber {
     modifiedByUid?: string;
     customerDisplayName?: string;
     customerDocumentNumber?: string;
+    customerDate?: number;
 }
 
 export interface Color {
@@ -55,7 +59,7 @@ export interface Product {
     name: string;
     code: string;
     category: string;
-    colors: Array<string>;
+    description: string;
     correlative: number;
     stock: number;
     rawMaterialList?: RawMaterialList;
@@ -78,6 +82,12 @@ export interface Requirement {
     regDate: number;
     createdBy: string;
     createdByUid: string;
+    approvedBy?: string;
+    approvedByUid?: string;
+    approvedDate?: number;
+    canceledBy?: string;
+    canceledByUid?: string;
+    canceledDate?: number;
 }
 
 export interface Correlative {
@@ -112,6 +122,9 @@ export interface Order {
     regDate: number;
     createdBy: string;
     createdByUid: string;
+    approvedBy?: string;
+    approvedByUid?: string;
+    approvedDate?: number;
 }
 
 export interface RawMaterial {
@@ -131,22 +144,25 @@ export interface RawMaterialList {
     rawList: Array<RawMaterial>;
     otherResources: Array<OtherResource>;
     cost: number;
+    regDate: number;
     createdBy: string;
     createdByUid: string;
-    lastUpdateBy: string;
-    lastUpdateByUid: string;
-    regDate: number;
+    lastUpdateBy?: string;
+    lastUpdateByUid?: string;
+    lastUpdateDate?: number;
 }
 
 export interface OtherResource {
     id: string;
     description: string;
     cost: number;
+    regDate: number;
     createdBy: string;
     createdByUid: string;
-    lastUpdateBy: string;
-    lastUpdateByUid: string;
-    regDate: number;
+    lastUpdateBy?: string;
+    lastUpdateByUid?: string;
+    lastUpdateDate?: number;
+    
 }
 
 export interface Category {
@@ -189,8 +205,9 @@ export interface ProductionOrder {
     regDate: number;
     createdBy: string;
     createdByUid: string;
-    approvedBy: string;
-    approvedByUid: string;
+    approvedBy?: string;
+    approvedByUid?: string;
+    approvedDate?: number;
 }
 
 export interface TicketRawMaterial {
@@ -206,6 +223,9 @@ export interface TicketRawMaterial {
     regDate: number;
     createdBy: string;
     createdByUid: string;
+    canceledBy?: string;
+    canceldByUid?: string;
+    canceledDate?: number;
 }
 
 export interface DepartureRawMaterial {
@@ -217,6 +237,9 @@ export interface DepartureRawMaterial {
     regDate: number;
     createdBy: string;
     createdByUid: string;
+    canceledBy?: string;
+    canceldByUid?: string;
+    canceledDate?: number;
 }
 
 export interface TicketProduct {
@@ -228,6 +251,44 @@ export interface TicketProduct {
     regDate: number;
     createdBy: string;
     createdByUid: string;
+    canceledBy?: string;
+    canceldByUid?: string;
+    canceledDate?: number;
+}
+
+export interface Transfer {
+    id: string;
+    correlative: string;
+    origin: Store;
+    destination: Store;
+    serialList: Array<SerialNumber>;
+    transferList: Array<TransferList>;
+    status: string;
+    source: string;
+    regDate: number;
+    createdBy: string;
+    createdByUid: string;
+    approvedBy?: string;
+    approvedByUid?: string;
+    approvedDate?: number;
+    canceledBy?: string;
+    canceldByUid?: string;
+    canceledDate?: number;
+    carriedBy?: string;
+    carriedByUid?: string;
+    carriedDate?: number;
+}
+
+export interface TransferList {
+    product: Product;
+    serialList: Array<SerialNumber>;
+  }
+
+export interface TransferItem {
+    id: string;
+    item: Product | RawMaterial;
+    serie: number;
+    regDate: number;
 }
 
 export interface Provider {

@@ -14,6 +14,14 @@
                     </td>
                 </ng-container>
 
+                <ng-container matColumnDef="color">
+                    <th mat-header-cell style="padding:0px 8px"  *matHeaderCellDef mat-sort-header>Color
+                    </th>
+                    <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                        {{raw.color}}
+                    </td>
+                </ng-container>
+
                 <ng-container matColumnDef="status">
                     <th mat-header-cell style="padding:0px 8px"  *matHeaderCellDef mat-sort-header>Estado
                     </th>
@@ -26,11 +34,11 @@
                     <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
                     <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                         <mat-menu #rawMenu="matMenu">
-                            <button mat-menu-item (click)="changeStatus(raw)">
+                            <button mat-menu-item (click)="changeStatus(raw)" [disabled]="raw.status === 'Traslado'">
                                 <mat-icon class="ms-icons-color">edit_attributes</mat-icon> Cambiar estado
                             </button>
-                            <button mat-menu-item (click)="transferProduct(raw)">
-                                <mat-icon class="ms-icons-color">local_shipping</mat-icon> Trasladar
+                            <button mat-menu-item (click)="changeColor(raw)">
+                                <mat-icon class="ms-icons-color">style</mat-icon> Cambiar color
                             </button>
                         </mat-menu>
                         <button mat-icon-button [matMenuTriggerFor]="rawMenu">

@@ -38,6 +38,9 @@ export class MenuComponent implements OnInit, OnDestroy {
       production: false,
       materials: false,
       finishedProducts: false
+    },
+    logistic: {
+      transfers: false
     }
   }
 
@@ -57,6 +60,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       productionRawMaterialsButton: false,
       productionFinishedProductsButton: false,
       logisticSection: false,
+      logisticTransfersButton: false,
       regDate: 0
     };
 
@@ -141,6 +145,9 @@ export class MenuComponent implements OnInit, OnDestroy {
         production: false,
         materials: false,
         finishedProducts: false
+      },
+      logistic: {
+        transfers: false
       }
     }
   }
@@ -257,13 +264,21 @@ export class MenuComponent implements OnInit, OnDestroy {
       }
     }
 
+    if (this.permits.logisticSection) {
+      switch (route) {
+        case '/main/logistic/transfers':
+          this.selectedTab.setValue(2);
+          this.cleanButtons();
+          this.buttonOptions.logistic.transfers = true;
+          coincidence = true;
+          break;
+      }
+    }
+
     if (!coincidence) {
-      console.log('route');
       this.selectedTab.setValue(0);
       this.router.navigate(['/main']);
     }
-
-    console.log(route);
   }
 
 }
