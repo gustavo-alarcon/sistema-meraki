@@ -59,4 +59,8 @@ export class StoresShowSerialsComponent implements OnInit, OnDestroy {
     })
   }
 
+  sellSerial(product: SerialNumber): void {
+    // 
+  }
+
 }
