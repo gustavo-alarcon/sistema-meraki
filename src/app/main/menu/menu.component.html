@@ -117,9 +117,14 @@
                     <div style="display:flex">
                         <div>
                             <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.logistic.receptions}"
+                                routerLink="logistic/receptions" [disabled]="!permits.logisticReceptionsButton">
+                                <mat-icon class="ms-icons-color">play_for_work</mat-icon> Recepciones
+                            </button><br>
+                            <button class="w3-small" mat-button
                                 [ngClass]="{'ms-button-selected': buttonOptions.logistic.transfers}"
                                 routerLink="logistic/transfers" [disabled]="!permits.logisticTransfersButton">
-                                <mat-icon class="ms-icons-color">local_shipping</mat-icon> Translados
+                                <mat-icon class="ms-icons-color">local_shipping</mat-icon> Traslados
                             </button><br>
                         </div>
                     </div>

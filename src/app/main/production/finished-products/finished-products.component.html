@@ -103,7 +103,7 @@
                                     matTooltip="Ordenar tabla por stock" matTooltipPosition="above"
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Stock</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
-                                    {{raw.stock | number : '2.'}}
+                                    {{(raw.stock - serialNumbersInTransfering[raw.id] - serialNumbersSold[raw.id]) | number : '2.'}} <span *ngIf="serialNumbersInTransfering[raw.id]">({{serialNumbersInTransfering[raw.id] | number: '2.'}})</span>
                                 </td>
                             </ng-container>
 

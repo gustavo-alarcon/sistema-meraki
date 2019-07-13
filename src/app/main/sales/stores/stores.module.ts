@@ -6,11 +6,15 @@ import { StoresComponent } from './stores.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatAutocompleteModule, MatCheckboxModule, MatTooltipModule, MatDividerModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSnackBarModule, MatProgressSpinnerModule, MatProgressBarModule, MatMenuModule, MatSelectModule } from '@angular/material';
 import { StoresCreateConfirmComponent } from './stores-create-confirm/stores-create-confirm.component';
+import { StoresShowSerialsComponent } from './stores-show-serials/stores-show-serials.component';
+import { StoresChangeStatusConfirmComponent } from './stores-change-status-confirm/stores-change-status-confirm.component';
 
 @NgModule({
   declarations: [
     StoresComponent,
-    StoresCreateConfirmComponent
+    StoresCreateConfirmComponent,
+    StoresShowSerialsComponent,
+    StoresChangeStatusConfirmComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +40,9 @@ import { StoresCreateConfirmComponent } from './stores-create-confirm/stores-cre
     MatSelectModule
   ],
   entryComponents: [
-    StoresCreateConfirmComponent
+    StoresCreateConfirmComponent,
+    StoresShowSerialsComponent,
+    StoresChangeStatusConfirmComponent
   ]
 })
 export class StoresModule { }

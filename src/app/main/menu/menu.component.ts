@@ -40,7 +40,8 @@ export class MenuComponent implements OnInit, OnDestroy {
       finishedProducts: false
     },
     logistic: {
-      transfers: false
+      transfers: false,
+      receptions: false
     }
   }
 
@@ -61,6 +62,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       productionFinishedProductsButton: false,
       logisticSection: false,
       logisticTransfersButton: false,
+      logisticReceptionsButton: false,
       regDate: 0
     };
 
@@ -147,7 +149,8 @@ export class MenuComponent implements OnInit, OnDestroy {
         finishedProducts: false
       },
       logistic: {
-        transfers: false
+        transfers: false,
+        receptions: false
       }
     }
   }
@@ -270,6 +273,13 @@ export class MenuComponent implements OnInit, OnDestroy {
           this.selectedTab.setValue(2);
           this.cleanButtons();
           this.buttonOptions.logistic.transfers = true;
+          coincidence = true;
+          break;
+
+        case '/main/logistic/receptions':
+          this.selectedTab.setValue(2);
+          this.cleanButtons();
+          this.buttonOptions.logistic.receptions = true;
           coincidence = true;
           break;
       }

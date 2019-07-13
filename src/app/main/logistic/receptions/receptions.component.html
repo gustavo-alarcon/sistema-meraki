@@ -7,17 +7,13 @@
             <div class="w3-col s12 m10 l10">
                 <div>
                     <span class="mat-title ms-font-montserrat ms-color-11" style="font-weight: 900">
-                        <mat-icon class="ms-icons-color" style="vertical-align:middle">local_shipping</mat-icon>
-                        Logística <mat-icon style="vertical-align:middle">keyboard_arrow_right</mat-icon> Traslados
+                        <mat-icon class="ms-icons-color" style="vertical-align:middle">play_for_work</mat-icon>
+                        Logística <mat-icon style="vertical-align:middle">keyboard_arrow_right</mat-icon> Recepciones
                     </span>
                 </div>
                 <div>
-                    <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
-                        (click)="createTransfer()">
-                        <mat-icon>add_circle</mat-icon> Crear
-                    </button>
                     <button mat-button style="margin:0em 0.2em 1em 0.2em" disabled>
-                        <mat-icon>local_shipping</mat-icon> {{dbs.transfers.length | number: '2.0'}} Transferencias
+                        <mat-icon>play_for_work</mat-icon> {{dbs.receptions.length | number: '2.0'}} Recepciones
                     </button>
                     <span style="margin-right:1em">
                         <mat-form-field autocomplete="off" color="accent">
@@ -81,10 +77,10 @@
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Estado</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <span style="padding: 8px 8px; border-radius: 10px" [ngClass]="{'w3-amber': raw.status === 'Solicitado',
-                                                    'w3-red': raw.status === 'Rechazado',
-                                                    'w3-green': raw.status === 'Aprobado',
-                                                    'w3-black': raw.status === 'Anulado',
-                                                    'w3-purple': raw.status === 'Recibido'}">{{raw.status}}</span>
+                                                        'w3-red': raw.status === 'Rechazado',
+                                                        'w3-green': raw.status === 'Aprobado',
+                                                        'w3-black': raw.status === 'Anulado',
+                                                        'w3-purple': raw.status === 'Recibido'}">{{raw.status}}</span>
                                 </td>
                             </ng-container>
 
@@ -99,30 +95,16 @@
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <mat-menu #rawMenu="matMenu">
-                                        <button mat-menu-item *ngIf="raw.status === 'Solicitado'"
-                                            (click)="approveTransfer(raw)">
-                                            <mat-icon class="ms-icons-color">check_circle</mat-icon> Aprobar
-                                        </button>
-                                        <button mat-menu-item
-                                            *ngIf="(raw.status === 'Solicitado' || raw.status === 'Aprobado') && raw.source === 'sales'"
-                                            (click)="rejectTransfer(raw)">
-                                            <mat-icon class="ms-icons-color">cancel</mat-icon> Rechazar
-                                        </button>
-                                        <button mat-menu-item *ngIf="raw.status === 'Rechazado' || raw.status === 'Anulado'"
-                                            (click)="restoreTransfer(raw)">
-                                            <mat-icon class="ms-icons-color">history</mat-icon> Restaurar
-                                        </button>
                                         <button mat-menu-item *ngIf="raw.status === 'Aprobado'"
-                                            (click)="stopTransfer(raw)">
-                                            <mat-icon class="ms-icons-color">pan_tool</mat-icon> Detener
+                                            (click)="receiveTransfer(raw)">
+                                            <mat-icon class="ms-icons-color">assignment_turned_in</mat-icon> Recibir
                                         </button>
-                                        <button mat-menu-item
-                                            *ngIf="(raw.status === 'Solicitado' || raw.status === 'Aprobado') && raw.source === 'logistic'"
+                                        <button mat-menu-item *ngIf="raw.status === 'Solicitado'"
                                             (click)="cancelTransfer(raw)">
                                             <mat-icon class="ms-icons-color">cancel</mat-icon> Anular
                                         </button>
                                     </mat-menu>
-                                    <button mat-icon-button [matMenuTriggerFor]="rawMenu" [disabled]="raw.status === 'Recibido'">
+                                    <button mat-icon-button [matMenuTriggerFor]="rawMenu" [disabled]="raw.status === 'Anulado' || raw.status === 'Recahzado' || raw.status === 'Recibido'">
                                         <mat-icon>more_vert</mat-icon>
                                     </button>
                                 </td>

@@ -23,6 +23,7 @@ export class FinishedProductsComponent implements OnInit, OnDestroy {
   filteredFinishedProducts: Array<Product> = [];
 
   serialNumbersInTransfering: object = {};
+  serialNumbersSold: object = {};
 
   displayedColumns: string[] = ['index', 'code', 'name', 'category', 'description', 'correlative', 'stock', 'sale', 'actions'];
 
@@ -51,20 +52,23 @@ export class FinishedProductsComponent implements OnInit, OnDestroy {
               this.serialNumbersInTransfering = {};
               res.forEach(product => {
                 let transferCount = 0;
+                let soldCount = 0;
                 this.dbs.finishedProductsCollection
-                .doc(product.id)
-                .collection<SerialNumber>('products')
-                .get().forEach(snapshots => {
-                  snapshots.forEach(serial => {
-                    if(serial.data()['status'] === 'Traslado'){
-                      transferCount++;
-                    }
+                  .doc(product.id)
+                  .collection<SerialNumber>('products')
+                  .get().forEach(snapshots => {
+                    snapshots.forEach(serial => {
+                      if (serial.data()['status'] === 'Traslado') {
+                        transferCount++;
+                      } else if (serial.data()['status'] === 'Vendido') {
+                        soldCount++;
+                      }
+                    });
+                    this.serialNumbersInTransfering[product.id] = transferCount;
+                    this.serialNumbersSold[product.id] = soldCount;
                   });
-                  this.serialNumbersInTransfering[product.id] = transferCount;
-                });
               });
             }
-            console.log(this.serialNumbersInTransfering);
           })
         )
         .subscribe(res => {

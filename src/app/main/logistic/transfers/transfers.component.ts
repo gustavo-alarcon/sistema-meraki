@@ -51,7 +51,7 @@ export class TransfersComponent implements OnInit {
   filterData(ref: string) {
     ref = ref.toLowerCase();
     this.filteredTransfers = this.dbs.transfers.filter(option =>
-      ('OR' + option.correlative).toLowerCase().includes(ref) ||
+      ('TR' + option.correlative).toLowerCase().includes(ref) ||
       option.origin.name.toLowerCase().includes(ref) ||
       option.destination.name.toLowerCase().includes(ref) ||
       option.status.toLowerCase().includes(ref));

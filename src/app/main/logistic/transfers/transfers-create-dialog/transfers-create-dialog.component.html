@@ -59,8 +59,8 @@
                         <mat-autocomplete #serialNumberAuto="matAutocomplete" [displayWith]="showSerialNumber"
                             (optionSelected)="selectedSerialNumber($event)">
                             <ng-container *ngFor="let item of filteredSerialNumbers | async; let i = index ">
-                                <mat-option [value]="item" *ngIf="!selectedSerials[currentSerialIndex][i] && !(item.status === 'Traslado')">
-                                    #{{item.serie | number: '2.'}} | {{item.name}}
+                                <mat-option [value]="item" *ngIf="!selectedSerials[currentSerialIndex][i] && !(item.status === 'Traslado') && !(item.status === 'Vendido')">
+                                    #{{item.serie | number: '2.'}} | {{item.status}}
                                 </mat-option>
                             </ng-container>
                         </mat-autocomplete>

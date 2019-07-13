@@ -157,32 +157,56 @@ export class DatabaseService {
   public dataTransfers = new BehaviorSubject<Transfer[]>([]);
   public currentDataTransfers = this.dataTransfers.asObservable();
 
+  /**
+   * Receptions
+   */
+  receptionsCollection: AngularFirestoreCollection<Transfer>;
+  receptions: Array<Transfer> = [];
+
+  public dataReceptions = new BehaviorSubject<Transfer[]>([]);
+  public currentDataReceptions = this.dataReceptions.asObservable();
+
 
 
   constructor(
     public af: AngularFirestore,
     public auth: AuthService
   ) {
+
+    let date = new Date();
+    let fromMonth = date.getMonth();
+    let fromYear = date.getFullYear();
+
+    let from = new Date(fromYear, fromMonth, 1).valueOf();
+
+    let toMonth = (fromMonth + 1) % 12;
+    let toYear = fromYear;
+
+    if (fromMonth + 1 >= 13) {
+      toYear++;
+    }
+
+    let to = new Date(toYear, toMonth, 1).valueOf();
+
     this.auth.currentDataPermit.subscribe(res => {
       if (res.name) {
         this.getUsers();
-        this.getRequirements(true);
+        this.getRequirements(true, from, to);
         this.getRequirementsCorrelative();
-        this.getOrders(true);
+        this.getOrders(true, from, to);
         this.getOrdersCorrelative();
         this.getStores();
-        this.getRawMaterials(true);
+        this.getRawMaterials();
         this.getCategories();
         this.getUnits();
-        this.getProductionOrders(true);
+        this.getProductionOrders(true, from, to);
         this.getProductionOrdersCorrelative();
-        this.getTickets(true);
-        this.getDepartures(true);
+        this.getTickets(true, from, to);
+        this.getDepartures(true, from, to);
         this.getFinishedProducts();
-        this.getColors();
-        this.getTransfers(true);
+        this.getTransfers(true, from, to);
         this.getTransfersCorrelative();
-
+        this.getReceptions(true, from, to);
       }
     })
 
@@ -294,13 +318,8 @@ export class DatabaseService {
 
   // *************************************** PRODUCTION *****************************************
 
-  getRawMaterials(all: boolean, from?: number, to?: number): void {
-    if (all) {
-      this.rawMaterialsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/rawMaterials`, ref => ref.orderBy('regDate', 'desc'));
-    } else {
-      this.rawMaterialsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/rawMaterials`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
-    }
-
+  getRawMaterials(): void {
+    this.rawMaterialsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/rawMaterials`, ref => ref.orderBy('regDate', 'desc'));
     this.rawMaterialsCollection.valueChanges()
       .pipe(
         map(res => {
@@ -426,23 +445,6 @@ export class DatabaseService {
       });
   }
 
-  getColors(): void {
-    this.colorsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/colors`, ref => ref.orderBy('regDate', 'desc'));
-    this.colorsCollection.valueChanges()
-      .pipe(
-        map(res => {
-          res.forEach((element, index) => {
-            element['index'] = index;
-          });
-          return res;
-        })
-      )
-      .subscribe(res => {
-        this.colors = res;
-        this.dataColors.next(res);
-      });
-  }
-
   /***************************LOGISTIC ********************************** */
   getTransfers(all: boolean, from?: number, to?: number): void {
     if (all) {
@@ -472,6 +474,41 @@ export class DatabaseService {
       .subscribe(res => {
         this.transferCorrelative = res;
         this.dataTransferCorrelative.next(res);
+      })
+  }
+
+  getReceptions(all: boolean, from?: number, to?: number): void {
+    this.receptionsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/transfers`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
+    this.receptionsCollection
+      .valueChanges()
+      .pipe(
+        map(res => {
+          try {
+            if (all) {
+              return res;
+            } else {
+              let filteredList: Array<Transfer> = [];
+
+              res.forEach(reception => {
+                if (reception.origin.supervisor.uid === this.auth.userInteriores.uid ||
+                  reception.createdByUid === this.auth.userInteriores.uid) {
+                  filteredList.push(reception);
+                }
+              });
+
+              return filteredList;
+            }
+          } catch (error) {
+            console.log('getReceptions', error)
+          }
+        }),
+        map(res => {
+          return res.sort((a,b)=>b['regDate']-a['regDate']);
+        })
+      )
+      .subscribe(res => {
+        this.receptions = res;
+        this.dataReceptions.next(res);
       })
   }
 

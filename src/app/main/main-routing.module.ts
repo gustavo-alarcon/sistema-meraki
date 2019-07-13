@@ -51,7 +51,10 @@ const routes: Routes = [
         path: 'logistic/transfers',
         loadChildren: () => import('./logistic/transfers/transfers.module').then(mod => mod.TransfersModule)
       },
-      
+      {
+        path: 'logistic/receptions',
+        loadChildren: () => import('./logistic/receptions/receptions.module').then(mod => mod.ReceptionsModule)
+      },
     ]
   },
   

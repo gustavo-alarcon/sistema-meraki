@@ -114,14 +114,12 @@
                                 </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="colors">
+                            <ng-container matColumnDef="description">
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
                                     matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
-                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Color</th>
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Descripción</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
-                                    <ul style="padding:0px 0px">
-                                        <li>{{raw.colors}}</li>
-                                    </ul>
+                                    {{raw.description}}
                                 </td>
                             </ng-container>
 
@@ -139,7 +137,7 @@
                                     matTooltip="Ordenar tabla por stock" matTooltipPosition="above"
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Stock</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
-                                    {{raw.stock | number : '2.'}}
+                                        {{(raw.stock - serialNumbersInTransfering[raw.id] - serialNumbersSold[raw.id]) | number : '2.'}} <span *ngIf="serialNumbersInTransfering[raw.id]">({{serialNumbersInTransfering[raw.id] | number: '2.'}})</span>
                                 </td>
                             </ng-container>
 
@@ -156,25 +154,8 @@
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <mat-menu #rawMenu="matMenu">
-                                        <button mat-menu-item (click)="showRawMaterialList(raw)"
-                                            *ngIf="raw.rawMaterialList">
-                                            <mat-icon class="ms-icons-color">assignment</mat-icon> Mostrar receta
-                                        </button>
-                                        <button mat-menu-item (click)="assignRawMaterialList(raw)"
-                                            *ngIf="!raw.rawMaterialList" disabled>
-                                            <mat-icon class="ms-icons-color">assignment</mat-icon> Asignar receta
-                                        </button>
-                                        <button mat-menu-item (click)="addStock(raw)">
-                                            <mat-icon class="ms-icons-color">add_circle</mat-icon> Agregar stock
-                                        </button>
                                         <button mat-menu-item (click)="showProducts(raw)">
                                             <mat-icon class="ms-icons-color">money</mat-icon> Productos n/s
-                                        </button>
-                                        <button mat-menu-item (click)="editFinishedProduct(raw)">
-                                            <mat-icon class="ms-icons-color">edit</mat-icon> Editar
-                                        </button>
-                                        <button mat-menu-item (click)="deleteFinishedProduct(raw)">
-                                            <mat-icon class="ms-icons-color">delete</mat-icon> Borrar
                                         </button>
                                     </mat-menu>
                                     <button mat-icon-button [matMenuTriggerFor]="rawMenu">

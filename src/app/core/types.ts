@@ -25,6 +25,7 @@ export interface Permit {
     productionFinishedProductsButton: boolean;
     logisticSection: boolean;
     logisticTransfersButton: boolean;
+    logisticReceptionsButton: boolean;
     regDate: number;
 }
 
