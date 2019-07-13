@@ -1,0 +1,16 @@
+<h2 class="ms-font-montserrat mat-title" mat-dialog-title>
+    <mat-icon class="ms-icons-color" style="vertical-align:middle">style</mat-icon> Cambiar color
+</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+    <mat-progress-bar mode="indeterminate" style="margin-bottom:0.5em" *ngIf="uploading"></mat-progress-bar>
+
+    <mat-form-field class="w3-margin-bottom" appearance="outline">
+        <mat-label>Color</mat-label>
+        <input matInput type="text" [formControl]="color" placeholder="Escribir..." autocomplete="off">
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions class="w3-margin-bottom">
+    <button mat-stroked-button color="warn" class="w3-margin-right" mat-dialog-close>No</button>
+    <button mat-raised-button color="primary" (click)="change()">Cambiar</button>
+</mat-dialog-actions>

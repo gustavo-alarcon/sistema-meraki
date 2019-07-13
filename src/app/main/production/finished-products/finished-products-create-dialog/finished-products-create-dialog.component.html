@@ -12,7 +12,8 @@
                     <mat-divider class="w3-margin-bottom"></mat-divider>
                     <mat-form-field class="w3-margin-bottom" appearance="outline">
                         <mat-label>Nombre</mat-label>
-                        <input matInput type="text" formControlName="name" placeholder="¿Qué nombre tendrá el producto?" autocomplete="off">
+                        <input matInput type="text" formControlName="name" placeholder="¿Qué nombre tendrá el producto?"
+                            autocomplete="off">
                         <mat-progress-bar mode="indeterminate" *ngIf="duplicate.nameLoading">
                         </mat-progress-bar>
                         <mat-hint *ngIf="!duplicate.name">Requerido *</mat-hint>
@@ -21,7 +22,8 @@
                     </mat-form-field><br>
                     <mat-form-field class="w3-margin-bottom" appearance="outline">
                         <mat-label>Código</mat-label>
-                        <input matInput type="text" formControlName="code" placeholder="¿Qué codigo tiene el producto?" autocomplete="off">
+                        <input matInput type="text" formControlName="code" placeholder="¿Qué codigo tiene el producto?"
+                            autocomplete="off">
                         <mat-progress-bar mode="indeterminate" *ngIf="duplicate.codeLoading">
                         </mat-progress-bar>
                         <mat-hint *ngIf="!duplicate.code">Requerido *</mat-hint>
@@ -30,7 +32,8 @@
                     </mat-form-field><br>
                     <mat-form-field class="w3-margin-bottom" appearance="outline">
                         <mat-label>Correlativo</mat-label>
-                        <input matInput type="number" formControlName="correlative" placeholder="¿Con qué número empezamos?" autocomplete="off">
+                        <input matInput type="number" formControlName="correlative"
+                            placeholder="¿Con qué número empezamos?" autocomplete="off">
                         <mat-hint *ngIf="!duplicate.code">Requerido *</mat-hint>
                     </mat-form-field><br>
                 </div>
@@ -59,14 +62,8 @@
                         <mat-error *ngIf="!dataFormGroup.valid">Seleccione una categoría *</mat-error>
                     </mat-form-field><br>
                     <mat-form-field class="w3-margin-bottom" appearance="outline">
-                        <mat-label>Color</mat-label>
-                        <input matInput type="text" formControlName="colors" [matAutocomplete]="colorsAuto"
-                            placeholder="Escriba...">
-                        <mat-autocomplete #colorsAuto="matAutocomplete">
-                            <mat-option *ngFor="let color of filteredColors | async" [value]="color.name">
-                                {{color.name}}
-                            </mat-option>
-                        </mat-autocomplete>
+                        <mat-label>Descripción</mat-label>
+                        <input matInput type="text" formControlName="description" placeholder="Escriba...">
                         <mat-hint>Requerido *</mat-hint>
                         <mat-error *ngIf="!dataFormGroup.valid">Seleccione un color *</mat-error>
                     </mat-form-field><br>

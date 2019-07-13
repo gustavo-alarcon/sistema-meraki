@@ -80,14 +80,12 @@
                                 </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="colors">
+                            <ng-container matColumnDef="description">
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
                                     matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
-                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Color</th>
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Descripción</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
-                                    <ul style="padding:0px 0px">
-                                        <li>{{raw.colors}}</li>
-                                    </ul>
+                                    {{raw.description}}
                                 </td>
                             </ng-container>
 

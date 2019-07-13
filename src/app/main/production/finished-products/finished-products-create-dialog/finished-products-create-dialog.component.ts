@@ -51,13 +51,6 @@ export class FinishedProductsCreateDialogComponent implements OnInit, OnDestroy 
         map(name => name ? this.dbs.categories.filter(option => option['name'].toLowerCase().includes(name) && option.source === 'product') : this.dbs.categories)
       );
 
-    this.filteredColors = this.dataFormGroup.get('colors').valueChanges
-      .pipe(
-        startWith<any>(''),
-        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-        map(name => name ? this.dbs.colors.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.colors)
-      );
-
     const name$ =
       this.dataFormGroup.get('name').valueChanges
         .pipe(
@@ -122,7 +115,7 @@ export class FinishedProductsCreateDialogComponent implements OnInit, OnDestroy 
       correlative: [null, [Validators.required]],
       stock: [null, [Validators.required]],
       category: [null, [Validators.required]],
-      colors: [null, [Validators.required]],
+      description: [null, [Validators.required]],
       sale: [null, [Validators.required]],
     })
   }
