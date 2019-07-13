@@ -20,6 +20,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   openedNotifications: boolean = false;
   salesOpenedFlag: boolean = false;
   productionOpenedFlag: boolean = false;
+  logisticOpenedFlag: boolean = false;
 
   loadingRouteConfig: boolean;
 
@@ -177,6 +178,14 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   productionClosed(): void {
     this.productionOpenedFlag = false;
+  }
+
+  logisticOpened(): void {
+    this.logisticOpenedFlag = true;
+  }
+
+  logisticClosed(): void {
+    this.logisticOpenedFlag = false;
   }
 
   checkRoute(route: string): void {
