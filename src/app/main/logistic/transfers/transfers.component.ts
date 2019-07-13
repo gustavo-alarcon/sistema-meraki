@@ -63,7 +63,9 @@ export class TransfersComponent implements OnInit {
   }
 
   showSerialList(serialList: Array<SerialNumber>): void {
-    this.dialog.open(TransfersShowSerialListComponent)
+    this.dialog.open(TransfersShowSerialListComponent, {
+      data: serialList
+    })
   }
 
   approveTransfer(transfer: Transfer): void {

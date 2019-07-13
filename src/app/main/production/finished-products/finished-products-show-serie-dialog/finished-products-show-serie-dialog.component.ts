@@ -65,8 +65,4 @@ export class FinishedProductsShowSerieDialogComponent implements OnInit, OnDestr
     })
   }
 
-  transferProduct(product: SerialNumber): void {
-
-  }
-
 }
