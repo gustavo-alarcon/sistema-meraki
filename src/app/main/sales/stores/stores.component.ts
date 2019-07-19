@@ -85,22 +85,28 @@ export class StoresComponent implements OnInit {
           tap(res => {
             if (res) {
               this.serialNumbersInTransfering = {};
+              this.serialNumbersSold = {};
               res.forEach(product => {
                 let transferCount = 0;
                 let soldCount = 0;
-                this.dbs.finishedProductsCollection
+                this.dbs.storesCollection
+                  .doc(this.currentStore.id)
+                  .collection<Product>('products')
                   .doc(product.id)
-                  .collection<SerialNumber>('products')
+                  .collection('products')
                   .get().forEach(snapshots => {
                     snapshots.forEach(serial => {
                       if (serial.data()['status'] === 'Traslado') {
                         transferCount++;
-                      } else if (serial.data()['status'] === 'Vendido') {
+                      }
+                      if (serial.data()['status'] === 'Vendido') {
                         soldCount++;
                       }
                     });
                     this.serialNumbersInTransfering[product.id] = transferCount;
                     this.serialNumbersSold[product.id] = soldCount;
+                    console.log('TR', transferCount);
+                    console.log('SL', soldCount);
                   });
               });
             }

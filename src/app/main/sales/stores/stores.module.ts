@@ -8,13 +8,15 @@ import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, Mat
 import { StoresCreateConfirmComponent } from './stores-create-confirm/stores-create-confirm.component';
 import { StoresShowSerialsComponent } from './stores-show-serials/stores-show-serials.component';
 import { StoresChangeStatusConfirmComponent } from './stores-change-status-confirm/stores-change-status-confirm.component';
+import { StoresSellDialogComponent } from './stores-sell-dialog/stores-sell-dialog.component';
 
 @NgModule({
   declarations: [
     StoresComponent,
     StoresCreateConfirmComponent,
     StoresShowSerialsComponent,
-    StoresChangeStatusConfirmComponent
+    StoresChangeStatusConfirmComponent,
+    StoresSellDialogComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +44,8 @@ import { StoresChangeStatusConfirmComponent } from './stores-change-status-confi
   entryComponents: [
     StoresCreateConfirmComponent,
     StoresShowSerialsComponent,
-    StoresChangeStatusConfirmComponent
+    StoresChangeStatusConfirmComponent,
+    StoresSellDialogComponent
   ]
 })
 export class StoresModule { }

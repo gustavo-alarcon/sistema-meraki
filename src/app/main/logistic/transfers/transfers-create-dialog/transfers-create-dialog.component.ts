@@ -17,7 +17,7 @@ export class TransfersCreateDialogComponent implements OnInit, OnDestroy {
 
   dataFormGroup: FormGroup;
 
-  displayedColumns: string[] = ['serie', 'name', 'status', 'actions'];
+  displayedColumns: string[] = ['serie', 'name', 'color', 'status', 'actions'];
   dataSource = new MatTableDataSource();
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;

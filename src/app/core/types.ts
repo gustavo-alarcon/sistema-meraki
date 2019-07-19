@@ -23,6 +23,7 @@ export interface Permit {
     productionProductionOrdersButton: boolean;
     productionRawMaterialsButton: boolean;
     productionFinishedProductsButton: boolean;
+    productionFinishedProductsTableSale: boolean;
     logisticSection: boolean;
     logisticTransfersButton: boolean;
     logisticReceptionsButton: boolean;
@@ -248,6 +249,28 @@ export interface TicketProduct {
     OPCorrelative: string;
     product: Product;
     quantity: number;
+    source: string;
+    regDate: number;
+    createdBy: string;
+    createdByUid: string;
+    canceledBy?: string;
+    canceldByUid?: string;
+    canceledDate?: number;
+}
+
+export interface DepartureProduct {
+    id: string;
+    document: string;
+    documentCorrelative: string;
+    product: Product;
+    serie: number;
+    color: string;
+    quantity: number;
+    price: number;
+    discount: number;
+    customerType: string;
+    dni: number;
+    phone: number;
     source: string;
     regDate: number;
     createdBy: string;

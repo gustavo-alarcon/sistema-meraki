@@ -5,10 +5,17 @@
 <mat-dialog-content class="w3-margin-top">
     <form [formGroup]="dataFormGroup">
         <mat-form-field class="w3-margin-right" appearance="outline">
-            <mat-label>Orde de Producción</mat-label>
-            <input matInput type="number" min="0" step="1" formControlName="OPCorrelative" placeholder="Número de OP ..."
-                autocomplete="off">
+            <mat-label>Orden de Producción</mat-label>
+            <input matInput type="text" formControlName="OPCorrelative" [matAutocomplete]="autoOP"
+                placeholder="Número de OP ..." autocomplete="off">
             <mat-hint>Requerido *</mat-hint>
+            <mat-autocomplete #autoOP="matAutocomplete" [displayWith]="showOP">
+                <ng-container *ngFor="let item of filteredProductionOrders | async">
+                    <mat-option [value]="item">
+                        OP{{item.correlative}}
+                    </mat-option>
+                </ng-container>
+            </mat-autocomplete>
         </mat-form-field><br>
 
         <mat-form-field class="w3-margin-right" appearance="outline">

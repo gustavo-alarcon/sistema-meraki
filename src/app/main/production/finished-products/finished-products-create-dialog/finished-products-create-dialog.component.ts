@@ -28,7 +28,9 @@ export class FinishedProductsCreateDialogComponent implements OnInit, OnDestroy 
   }
 
   filteredCategories: Observable<Category[]>
-  filteredColors: Observable<Color[]>
+
+  selectedFile1 = null;
+  imageSrc1: string | ArrayBuffer;
 
   subscriptions: Array<Subscription> = [];
 
@@ -118,6 +120,26 @@ export class FinishedProductsCreateDialogComponent implements OnInit, OnDestroy 
       description: [null, [Validators.required]],
       sale: [null, [Validators.required]],
     })
+  }
+
+  onFileSelected1(event): void {
+    if (event.target.files[0].type === 'image/png' || event.target.files[0].type === 'image/jpeg') {
+      this.selectedFile1 = event.target.files[0];
+
+      if (event.target.files && event.target.files[0]) {
+        const file = event.target.files[0];
+
+        const reader = new FileReader();
+        reader.onload = e => this.imageSrc1 = reader.result;
+
+        reader.readAsDataURL(file);
+      }
+    } else {
+      this.snackbar.open("Seleccione una imagen en formato png o jpeg", "Cerrar", {
+        duration: 6000
+      })
+    }
+
   }
 
   create(): void {

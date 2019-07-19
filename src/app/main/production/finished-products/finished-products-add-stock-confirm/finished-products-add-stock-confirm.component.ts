@@ -55,7 +55,7 @@ export class FinishedProductsAddStockConfirmComponent implements OnInit {
                 name: this.data.product.name,
                 code: this.data.product.code,
                 status: 'Acabado',
-                location: 'Taller',
+                location: 'Productos acabados',
                 regDate: Date.now(),
                 createdBy: this.auth.userInteriores.displayName,
                 createdByUid: this.auth.userInteriores.uid,

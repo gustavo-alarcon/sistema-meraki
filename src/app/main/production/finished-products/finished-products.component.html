@@ -107,7 +107,7 @@
                                 </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="sale">
+                            <ng-container matColumnDef="sale" *ngIf="auth.permit.productionFinishedProductsTableSale">
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
                                     matTooltip="Ordenar tabla por precio de venta" matTooltipPosition="above"
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Venta</th>

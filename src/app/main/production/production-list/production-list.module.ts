@@ -21,11 +21,15 @@ import {  MatInputModule,
           MatProgressSpinnerModule,
           MatProgressBarModule,
           MatMenuModule} from '@angular/material';
+import { ProductionListProduceOpeConfirmComponent } from './production-list-produce-ope-confirm/production-list-produce-ope-confirm.component';
+import { ProductionListEditOrderConfirmComponent } from './production-list-edit-order-confirm/production-list-edit-order-confirm.component';
 
 
 @NgModule({
   declarations: [
-    ProductionListComponent
+    ProductionListComponent,
+    ProductionListProduceOpeConfirmComponent,
+    ProductionListEditOrderConfirmComponent
   ],
   imports: [
     CommonModule,
@@ -48,6 +52,10 @@ import {  MatInputModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
     MatMenuModule
+  ],
+  entryComponents: [
+    ProductionListProduceOpeConfirmComponent,
+    ProductionListEditOrderConfirmComponent
   ]
 })
 export class ProductionListModule { }

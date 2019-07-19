@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Product, Color } from 'src/app/core/types';
-import { of, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { RequirementFormSaveDialogComponent } from './requirement-form-save-dialog/requirement-form-save-dialog.component';
+import { startWith, map } from 'rxjs/operators';
+import { DatabaseService } from 'src/app/core/database.service';
 
 @Component({
   selector: 'app-requirements-form',
@@ -23,27 +25,26 @@ export class RequirementsFormComponent implements OnInit {
 
   selectedFile3 = null;
   selectedFile4 = null;
-
-  products: Array<Product> = [
-  ]
-
-  colors: Array<Color> = [
-    { id: 'aaa', name: 'Wengue', regDate: 0 },
-    { id: 'aaa', name: 'Caramelo', regDate: 0 },
-    { id: 'aaa', name: 'Nogal', regDate: 0 },
-  ]
-
-  productList: Observable<Product[]> = of(this.products);
-  colorList: Observable<Color[]> = of(this.colors);
+  
+  filteredFinishedProducts: Observable<Product[]>;
 
   constructor(
     private fb: FormBuilder,
+    public dbs: DatabaseService,
     private snackbar: MatSnackBar,
     private dialog: MatDialog
   ) { }
 
   ngOnInit() {
     this.createForm();
+
+    this.filteredFinishedProducts =
+    this.dataFormGroup.get('product').valueChanges
+      .pipe(
+        startWith<any>(''),
+        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+        map(name => name ? this.dbs.finishedProducts.filter(option => option.name.toLowerCase().includes(name)) : this.dbs.finishedProducts)
+      )
   }
 
   createForm(): void {
@@ -57,10 +58,6 @@ export class RequirementsFormComponent implements OnInit {
 
   showProduct(product: Product): string | null {
     return product ? product.name : null;
-  }
-
-  showColor(color: Color): string | null {
-    return color ? color.name : null;
   }
 
   clean(): void {

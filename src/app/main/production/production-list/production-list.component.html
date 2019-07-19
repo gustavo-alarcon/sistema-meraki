@@ -85,9 +85,7 @@
                                     matTooltip="Ordenar tabla por color" matTooltipPosition="above"
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Color</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
-                                    <ul>
-                                        <li *ngFor="let c of raw.color">{{c.name}}</li>
-                                    </ul>
+                                    {{raw.color}}
                                 </td>
                             </ng-container>
 
@@ -142,7 +140,7 @@
                                     Estado</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <span style="padding: 8px 8px; border-radius: 10px"
-                                        [ngClass]="{'w3-amber': raw.status === 'Configurando', 'w3-red': raw.status === 'Cancelado', 'w3-green': raw.status === 'Finalizado', 'w3-purple': raw.status === 'Produciendo'}">{{raw.status}}</span>
+                                        [ngClass]="{'w3-amber': raw.status === 'Configurando', 'w3-red': raw.status === 'Cancelado', 'w3-green': raw.status === 'Acabado', 'w3-purple': raw.status === 'Produciendo'}">{{raw.status}}</span>
                                 </td>
                             </ng-container>
 
@@ -166,8 +164,12 @@
                                         <button mat-menu-item (click)="printProductionOrder(req)">
                                             <mat-icon class="ms-icons-color">print</mat-icon> Imprimir
                                         </button>
-                                        <button mat-menu-item (click)="cancelProduction(req)"
+                                        <button mat-menu-item (click)="editProduction(req)"
                                             *ngIf="req.status === 'Configurando'">
+                                            <mat-icon class="ms-icons-color">edit</mat-icon> Editar
+                                        </button>
+                                        <button mat-menu-item (click)="cancelProduction(req)"
+                                            *ngIf="req.status === 'Configurando' || req.status === 'Produciendo'">
                                             <mat-icon class="ms-icons-color">block</mat-icon> Cancelar
                                         </button>
                                         <button mat-menu-item (click)="finalizeProduction(req)"

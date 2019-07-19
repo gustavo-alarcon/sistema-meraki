@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from "@angular/fire/firestore";
-import { Requirement, Correlative, Product, Color, RawMaterial, Category, Unit, ProductionOrder, TicketRawMaterial, DepartureRawMaterial, Store, User, Transfer } from './types';
+import { Requirement, Correlative, Product, Color, RawMaterial, Category, Unit, ProductionOrder, TicketRawMaterial, DepartureRawMaterial, Store, User, Transfer, DepartureProduct } from './types';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
@@ -142,10 +142,10 @@ export class DatabaseService {
   /**
    * DEPARTURES
    */
-  departuresCollection: AngularFirestoreCollection<DepartureRawMaterial>;
-  departures: Array<DepartureRawMaterial> = [];
+  departuresCollection: AngularFirestoreCollection<DepartureRawMaterial | DepartureProduct>;
+  departures: Array<DepartureRawMaterial | DepartureProduct> = [];
 
-  public dataDepartures = new BehaviorSubject<DepartureRawMaterial[]>([]);
+  public dataDepartures = new BehaviorSubject<(DepartureRawMaterial | DepartureProduct)[]>([]);
   public currentDataDepartures = this.dataDepartures.asObservable();
 
   /**

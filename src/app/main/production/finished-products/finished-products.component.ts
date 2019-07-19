@@ -10,6 +10,7 @@ import { FinishedProductsDeleteConfirmComponent } from './finished-products-dele
 import { FinishedProductsAddStockDialogComponent } from './finished-products-add-stock-dialog/finished-products-add-stock-dialog.component';
 import { FinishedProductsEditDialogComponent } from './finished-products-edit-dialog/finished-products-edit-dialog.component';
 import { tap } from 'rxjs/operators';
+import { AuthService } from 'src/app/core/auth.service';
 
 @Component({
   selector: 'app-finished-products',
@@ -37,12 +38,28 @@ export class FinishedProductsComponent implements OnInit, OnDestroy {
 
   constructor(
     public dbs: DatabaseService,
+    public auth: AuthService,
     private dialog: MatDialog
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+
+    const permit$ =
+      this.auth.currentDataPermit
+        .subscribe(res => {
+          if (res) {
+            if (res.productionFinishedProductsTableSale) {
+              this.displayedColumns = ['index', 'code', 'name', 'category', 'description', 'correlative', 'stock', 'sale', 'actions'];
+            } else {
+              this.displayedColumns = ['index', 'code', 'name', 'category', 'description', 'correlative', 'stock', 'actions'];
+            }
+          }
+        });
+
+    this.subscriptions.push(permit$);
 
     const finishedProduct$ =
       this.dbs.currentDataFinishedProducts

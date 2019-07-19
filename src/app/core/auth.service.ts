@@ -14,7 +14,27 @@ export class AuthService {
   // *********** USER PERMITS - (START) ***************************
   // -------------------------- PERMITS --------------------------------------
   public permitDocument: AngularFirestoreDocument<Permit>;
-  public permit: Permit = null;
+  public permit: Permit =
+    {
+      id: '',
+      name: '',
+      salesSection: false,
+      salesRequirementsButton: false,
+      salesOrdersButton: false,
+      salesShoppingButton: false,
+      salesStoresButton: false,
+      productionSection: false,
+      productionRequirementsButton: false,
+      productionOrdersButton: false,
+      productionProductionOrdersButton: false,
+      productionRawMaterialsButton: false,
+      productionFinishedProductsButton: false,
+      productionFinishedProductsTableSale: false,
+      logisticSection: false,
+      logisticTransfersButton: false,
+      logisticReceptionsButton: false,
+      regDate: 0
+    };
 
   public dataPermit = new BehaviorSubject<Permit>(
     {
@@ -31,6 +51,7 @@ export class AuthService {
       productionProductionOrdersButton: false,
       productionRawMaterialsButton: false,
       productionFinishedProductsButton: false,
+      productionFinishedProductsTableSale: false,
       logisticSection: false,
       logisticTransfersButton: false,
       logisticReceptionsButton: false,

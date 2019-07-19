@@ -61,6 +61,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       productionProductionOrdersButton: false,
       productionRawMaterialsButton: false,
       productionFinishedProductsButton: false,
+      productionFinishedProductsTableSale: false,
       logisticSection: false,
       logisticTransfersButton: false,
       logisticReceptionsButton: false,

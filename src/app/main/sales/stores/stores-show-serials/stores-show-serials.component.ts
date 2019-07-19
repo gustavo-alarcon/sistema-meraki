@@ -5,6 +5,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { DatabaseService } from 'src/app/core/database.service';
 import { Product, SerialNumber, Store } from 'src/app/core/types';
 import { StoresChangeStatusConfirmComponent } from '../stores-change-status-confirm/stores-change-status-confirm.component';
+import { StoresSellDialogComponent } from '../stores-sell-dialog/stores-sell-dialog.component';
 
 @Component({
   selector: 'app-stores-show-serials',
@@ -55,12 +56,18 @@ export class StoresShowSerialsComponent implements OnInit, OnDestroy {
 
   changeStatus(product: SerialNumber): void {
     this.dialog.open(StoresChangeStatusConfirmComponent, {
-      data: this.data
+      data: product
     })
   }
 
-  sellSerial(product: SerialNumber): void {
-    // 
+  sellSerial(serial: SerialNumber): void {
+    this.dialog.open(StoresSellDialogComponent, {
+      data: {
+        product: this.data.product,
+        store: this.data.store,
+        serial: serial
+      }
+    })
   }
 
 }

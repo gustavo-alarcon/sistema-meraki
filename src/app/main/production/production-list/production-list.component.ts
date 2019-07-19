@@ -1,9 +1,13 @@
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ProductionOrder } from 'src/app/core/types';
+import { ProductionOrder, Product } from 'src/app/core/types';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { DatabaseService } from 'src/app/core/database.service';
+import { AuthService } from 'src/app/core/auth.service';
+import { ProductionListProduceOpeConfirmComponent } from './production-list-produce-ope-confirm/production-list-produce-ope-confirm.component';
+import { ProductionListEditOrderConfirmComponent } from './production-list-edit-order-confirm/production-list-edit-order-confirm.component';
 
 @Component({
   selector: 'app-production-list',
@@ -21,28 +25,30 @@ export class ProductionListComponent implements OnInit, OnDestroy {
 
   dataSource = new MatTableDataSource();
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   subscriptions: Array<Subscription> = [];
 
   constructor(
     public dbs: DatabaseService,
+    public auth: AuthService,
     private dialog: MatDialog,
+    private af: AngularFirestore,
     private snackbar: MatSnackBar
   ) { }
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort  = this.sort;
+    this.dataSource.sort = this.sort;
 
     const raw$ =
-    this.dbs.currentDataProductionOrders.subscribe(res => {
-      if(res) {
-        this.filteredProductionOrders = res;
-        this.dataSource.data = res;
-      }
-    });
+      this.dbs.currentDataProductionOrders.subscribe(res => {
+        if (res) {
+          this.filteredProductionOrders = res;
+          this.dataSource.data = res;
+        }
+      });
 
     this.subscriptions.push(raw$);
   }
@@ -58,7 +64,6 @@ export class ProductionListComponent implements OnInit, OnDestroy {
       ('OR' + option.ORCorrelative).toLowerCase().includes(ref) ||
       ('OPe' + option.OPeCorrelative).toLowerCase().includes(ref) ||
       option.product.name.toLowerCase().includes(ref) ||
-      (option.document.name + '' + option.documentCorrelative).toLowerCase().includes(ref) ||
       option.quantity.toString().includes(ref) ||
       option.status.toString().includes(ref) ||
       option.createdBy.toString().includes(ref));
@@ -69,16 +74,122 @@ export class ProductionListComponent implements OnInit, OnDestroy {
 
   }
 
-  startProduction(): void {
+  startProduction(order: ProductionOrder): void {
+    if (order.OPeCorrelative) {
+      this.dialog.open(ProductionListProduceOpeConfirmComponent, {
+        data: order
+      });
+    } else {
+      this.dbs.productionOrdersCollection
+        .doc(order.id)
+        .update({ status: 'Produciendo' })
+        .then(() => {
+          this.snackbar.open(`Orden de producción #${order.correlative} en proceso!`, 'Cerrar', {
+            duration: 6000
+          });
+        })
+        .catch(err => {
+          this.snackbar.open(`Parece que hubo un error iniciando la producción`, 'Cerrar', {
+            duration: 6000
+          });
+          console.log(err);
+        })
+    }
 
   }
 
-  cancelProduction(): void {
-
+  editProduction(order: ProductionOrder): void {
+    this.dialog.open(ProductionListEditOrderConfirmComponent, {
+      data: order
+    });
   }
 
-  finalizeProduction(): void {
+  cancelProduction(order: ProductionOrder): void {
+    this.dbs.productionOrdersCollection
+      .doc(order.id)
+      .update({ status: 'Cancelado' })
+      .then(() => {
+        this.snackbar.open(`Orden de producción #${order.correlative} cancelada!`, 'Cerrar', {
+          duration: 6000
+        });
+      })
+      .catch(err => {
+        this.snackbar.open(`Parece que hubo un error cancelando la producción`, 'Cerrar', {
+          duration: 6000
+        });
+        console.log(err);
+      })
+  }
 
+  finalizeProduction(order: ProductionOrder): void {
+    this.dbs.productionOrdersCollection
+      .doc(order.id)
+      .update({ status: 'Acabado' })
+      .then(() => {
+        let transaction =
+          this.af.firestore.runTransaction(t => {
+            return t.get(this.dbs.finishedProductsCollection.doc<Product>(order.product.id).ref)
+              .then(doc => {
+
+                const ticketsRef = this.af.firestore.collection(this.dbs.ticketsCollection.ref.path).doc();
+
+                const correlative = doc.data().correlative;
+                const newStock = doc.data().stock + order.quantity;
+
+                const initSerie = correlative + 1;
+                const finalSerie = correlative + order.quantity;
+
+                for (let serie = initSerie; serie <= finalSerie; serie++) {
+                  const productsRef = this.af.firestore.collection(this.dbs.finishedProductsCollection.doc(order.product.id).ref.path + '/products').doc();
+                  t.set(productsRef, {
+                    id: productsRef.id,
+                    serie: serie,
+                    productId: order.product.id,
+                    name: order.product.name,
+                    code: order.product.code,
+                    status: 'Acabado',
+                    location: 'Productos acabados',
+                    regDate: Date.now(),
+                    createdBy: this.auth.userInteriores.displayName,
+                    createdByUid: this.auth.userInteriores.uid,
+                    modifiedBy: '',
+                    modifiedByUid: '',
+                    customerDisplayName: '',
+                    customerDocumentNumber: ''
+                  });
+                }
+
+                t.update(this.dbs.finishedProductsCollection.doc(order.product.id).ref, {
+                  stock: newStock,
+                  correlative: finalSerie
+                });
+
+
+                t.set(ticketsRef, {
+                  id: ticketsRef.id,
+                  OPCorrelative: order.correlative,
+                  product: order.product,
+                  quantity: order.quantity,
+                  source: 'production orders',
+                  status: 'Grabado',
+                  regDate: Date.now(),
+                  createdBy: this.auth.userInteriores.displayName,
+                  createdByUid: this.auth.userInteriores.uid,
+                });
+
+              });
+          }).then(() => {
+            this.snackbar.open(`Orden de producción #${order.correlative} finalizada!`, 'Cerrar', {
+              duration: 6000
+            });
+          })
+      })
+      .catch(err => {
+        this.snackbar.open(`Parece que hubo un error iniciando la producción`, 'Cerrar', {
+          duration: 6000
+        });
+        console.log(err);
+      })
   }
 
   previewProductionOrder(): void {
@@ -86,7 +197,7 @@ export class ProductionListComponent implements OnInit, OnDestroy {
   }
 
   printProductionOrder(): void {
-    
+
   }
 
 }

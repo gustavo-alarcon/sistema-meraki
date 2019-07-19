@@ -60,14 +60,11 @@
                             (optionSelected)="selectedSerialNumber($event)">
                             <ng-container *ngFor="let item of filteredSerialNumbers | async; let i = index ">
                                 <mat-option [value]="item" *ngIf="!selectedSerials[currentSerialIndex][i] && !(item.status === 'Traslado') && !(item.status === 'Vendido')">
-                                    #{{item.serie | number: '2.'}} | {{item.status}}
+                                    #{{item.serie | number: '2.'}} | {{item.color}}
                                 </mat-option>
                             </ng-container>
                         </mat-autocomplete>
                     </mat-form-field><br>
-                    <!-- <button class="w3-block" mat-raised-button color="primary" (click)="addProduct()">
-                        <mat-icon>add_circle</mat-icon> Agregar
-                    </button> -->
                 </div>
             </div>
         </div>
@@ -87,6 +84,14 @@
                         </th>
                         <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                             {{raw.name}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="color">
+                        <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef mat-sort-header>Color
+                        </th>
+                        <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                            {{raw.color}}
                         </td>
                     </ng-container>
 
