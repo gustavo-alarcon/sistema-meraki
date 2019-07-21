@@ -3,6 +3,9 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { DatabaseService } from 'src/app/core/database.service';
 import { MatSnackBar, MatDialogRef } from '@angular/material';
 import { AuthService } from 'src/app/core/auth.service';
+import { Observable } from 'rxjs';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-finished-products-create-confirm',
@@ -13,17 +16,22 @@ export class FinishedProductsCreateConfirmComponent implements OnInit {
 
   uploading: boolean = false;
 
+  uploadPercent1: Observable<number>;
+  uploading1: boolean = false;
+
   flags = {
     created: false,
+    image: false,
     serie: false
   }
 
   constructor(
     public dbs: DatabaseService,
     public auth: AuthService,
+    private storage: AngularFireStorage,
     private snackbar: MatSnackBar,
     private dialogRef: MatDialogRef<FinishedProductsCreateConfirmComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: { form: any, image: any }
   ) { }
 
   ngOnInit() {
@@ -54,44 +62,74 @@ export class FinishedProductsCreateConfirmComponent implements OnInit {
         ref.update({ id: ref.id, correlative: finalSerie })
           .then(() => {
 
-            for (let serie = initSerie; serie <= finalSerie; serie++) {
-              ref.collection('products')
-                .add(
-                  {
-                    id: '',
-                    productId: ref.id,
-                    name: this.data['form']['name'],
-                    code: this.data['form']['code'],
-                    serie: serie,
-                    color: '',
-                    status: 'Acabado',
-                    location: 'Productos acabados',
-                    regDate: Date.now(),
-                    createdBy: this.auth.userInteriores.displayName,
-                    createdByUid: this.auth.userInteriores.uid,
-                    modifiedBy: '',
-                    modifiedByUid: '',
-                    customerDisplayName: '',
-                    customerDocumentNumber: '',
-                    customerDate: null
-                  }
-                ).then(refSerie => {
-                  refSerie.update({ id: refSerie.id })
-                }).catch(err => {
-                  this.uploading = false;
-                  this.snackbar.open('Hubo un error creando los números de serie', 'Cerrar', {
-                    duration: 6000
-                  });
-                  console.log(err);
+            this.flags.created = true;
+
+            if (this.data.image) {
+              this.uploading1 = true;
+              const file = this.data.image;
+              const filePath = `/Productos acabados/${Date.now()}_${file.name}`;
+              const fileRef = this.storage.ref(filePath);
+              const task = this.storage.upload(filePath, file);
+
+              this.uploadPercent1 = task.percentageChanges();
+
+              task.snapshotChanges().pipe(
+                finalize(() => {
+                  const downloadURL = fileRef.getDownloadURL();
+
+                  downloadURL.subscribe(url => {
+                    if (url) {
+
+                      ref.update({ image: url })
+                        .then(() => {
+                          this.flags.image = true;
+
+                          for (let serie = initSerie; serie <= finalSerie; serie++) {
+                            ref.collection('products')
+                              .add(
+                                {
+                                  id: '',
+                                  productId: ref.id,
+                                  name: this.data['form']['name'],
+                                  code: this.data['form']['code'],
+                                  serie: serie,
+                                  color: '',
+                                  status: 'Acabado',
+                                  location: 'Productos acabados',
+                                  regDate: Date.now(),
+                                  createdBy: this.auth.userInteriores.displayName,
+                                  createdByUid: this.auth.userInteriores.uid,
+                                  modifiedBy: '',
+                                  modifiedByUid: '',
+                                  customerDisplayName: '',
+                                  customerDocumentNumber: '',
+                                  customerDate: null
+                                }
+                              ).then(refSerie => {
+                                refSerie.update({ id: refSerie.id })
+                              }).catch(err => {
+                                this.uploading = false;
+                                this.snackbar.open('Hubo un error creando los números de serie', 'Cerrar', {
+                                  duration: 6000
+                                });
+                                console.log(err);
+                              })
+                          }
+
+                          this.uploading = false;
+                          this.flags.serie = true;
+                          this.snackbar.open('Nuevo producto creado!', 'Cerrar', {
+                            duration: 6000
+                          });
+                          this.dialogRef.close(true);
+                        })
+                    }
+                  })
                 })
+              )
+                .subscribe()
             }
 
-            this.uploading = false;
-            this.flags.serie = true;
-            this.snackbar.open('Nuevo producto creado!', 'Cerrar', {
-              duration: 6000
-            });
-            this.dialogRef.close(true);
           })
 
       })

@@ -146,7 +146,8 @@ export class FinishedProductsCreateDialogComponent implements OnInit, OnDestroy 
     if (this.dataFormGroup.valid) {
       this.dialog.open(FinishedProductsCreateConfirmComponent, {
         data: {
-          form: this.dataFormGroup.value
+          form: this.dataFormGroup.value,
+          image: this.selectedFile1
         }
       }).afterClosed().subscribe(res => {
         if (res) {

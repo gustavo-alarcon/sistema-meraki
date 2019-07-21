@@ -26,7 +26,7 @@ export class FinishedProductsComponent implements OnInit, OnDestroy {
   serialNumbersInTransfering: object = {};
   serialNumbersSold: object = {};
 
-  displayedColumns: string[] = ['index', 'code', 'name', 'category', 'description', 'correlative', 'stock', 'sale', 'actions'];
+  displayedColumns: string[] = ['index', 'code', 'name', 'category', 'description', 'image', 'correlative', 'stock', 'sale', 'actions'];
 
 
   dataSource = new MatTableDataSource();
@@ -52,9 +52,9 @@ export class FinishedProductsComponent implements OnInit, OnDestroy {
         .subscribe(res => {
           if (res) {
             if (res.productionFinishedProductsTableSale) {
-              this.displayedColumns = ['index', 'code', 'name', 'category', 'description', 'correlative', 'stock', 'sale', 'actions'];
+              this.displayedColumns = ['index', 'code', 'name', 'category', 'description', 'image', 'correlative', 'stock', 'sale', 'actions'];
             } else {
-              this.displayedColumns = ['index', 'code', 'name', 'category', 'description', 'correlative', 'stock', 'actions'];
+              this.displayedColumns = ['index', 'code', 'name', 'category', 'description', 'image', 'correlative', 'stock', 'actions'];
             }
           }
         });

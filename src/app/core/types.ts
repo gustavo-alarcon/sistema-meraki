@@ -62,6 +62,7 @@ export interface Product {
     code: string;
     category: string;
     description: string;
+    image: string;
     correlative: number;
     stock: number;
     rawMaterialList?: RawMaterialList;
