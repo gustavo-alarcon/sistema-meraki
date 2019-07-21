@@ -27,8 +27,11 @@ export class FinishedProductsEditDialogComponent implements OnInit, OnDestroy {
     codeLoading: false,
   }
 
-  filteredCategories: Observable<Category[]>
-  filteredColors: Observable<Color[]>
+  filteredCategories: Observable<Category[]>;
+  filteredColors: Observable<Color[]>;
+
+  selectedFile1 = null;
+  imageSrc1: string | ArrayBuffer;
 
   subscriptions: Array<Subscription> = [];
 
@@ -116,7 +119,29 @@ export class FinishedProductsEditDialogComponent implements OnInit, OnDestroy {
       category: [this.data.category, [Validators.required]],
       description: [this.data.description, [Validators.required]],
       sale: [this.data.sale, [Validators.required]],
-    })
+    });
+
+    this.imageSrc1 = this.data.image;
+  }
+
+  onFileSelected1(event): void {
+    if (event.target.files[0].type === 'image/png' || event.target.files[0].type === 'image/jpeg') {
+      this.selectedFile1 = event.target.files[0];
+
+      if (event.target.files && event.target.files[0]) {
+        const file = event.target.files[0];
+
+        const reader = new FileReader();
+        reader.onload = e => this.imageSrc1 = reader.result;
+
+        reader.readAsDataURL(file);
+      }
+    } else {
+      this.snackbar.open("Seleccione una imagen en formato png o jpeg", "Cerrar", {
+        duration: 6000
+      })
+    }
+
   }
 
   edit(): void {
@@ -124,7 +149,8 @@ export class FinishedProductsEditDialogComponent implements OnInit, OnDestroy {
       this.dialog.open(FinishedProductsEditConfirmComponent, {
         data: {
           product: this.data,
-          form: this.dataFormGroup.value
+          form: this.dataFormGroup.value,
+          image: this.selectedFile1
         }
       }).afterClosed().subscribe(res => {
         if (res) {
