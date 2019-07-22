@@ -123,6 +123,17 @@
                                 </td>
                             </ng-container>
 
+                            <ng-container matColumnDef="image">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Imagen</th>
+                                <td mat-cell style="padding:8px 8px" *matCellDef="let raw">
+                                    <a [href]="raw.image" target="_blank" style="cursor:pointer">
+                                        <img [src]="raw.image || '../../../assets/images/no-image.png'"
+                                            style="width:100px; height:75px"
+                                            class="mat-elevation-z4 w3-hover-shadow">
+                                    </a>
+                                </td>
+                            </ng-container>
+
                             <ng-container matColumnDef="correlative">
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
                                     matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"

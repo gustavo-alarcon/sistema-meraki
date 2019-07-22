@@ -29,7 +29,7 @@ export class StoresComponent implements OnInit {
   currentProductList: Array<Product>;
   currentStore: Store;
 
-  displayedColumns: string[] = ['index', 'code', 'name', 'category', 'description', 'correlative', 'stock', 'sale', 'actions'];
+  displayedColumns: string[] = ['index', 'code', 'name', 'category', 'description', 'image', 'correlative', 'stock', 'sale', 'actions'];
 
 
   dataSource = new MatTableDataSource();
