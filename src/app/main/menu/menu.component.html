@@ -58,6 +58,13 @@
                                 <mat-icon class="ms-icons-color">assignment</mat-icon> Pedidos
                             </button><br>
                         </div>
+                        <div class="w3-margin-right">
+                            <button mat-button class="w3-small"
+                                [ngClass]="{'ms-button-selected': buttonOptions.sales.quotations}"
+                                routerLink="sales/quotations" [disabled]="!permits.salesQuotationsButton">
+                                <mat-icon class="ms-icons-color">book</mat-icon> Cotizaciones
+                            </button><br>
+                        </div>
                         <div class="w3-border-left w3-border-lightgray w3-margin-right">
                             <button mat-button class="w3-small"
                                 [ngClass]="{'ms-button-selected': buttonOptions.sales.sales}"
@@ -89,6 +96,11 @@
                             </button><br>
                         </div>
                         <div class="w3-margin-right">
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.production.quotations}"
+                                routerLink="production/quotations" [disabled]="!permits.productionQuotationsButton">
+                                <mat-icon class="ms-icons-color">book</mat-icon> Cotizaciones
+                            </button><br>
                             <button class="w3-small" mat-button
                                 [ngClass]="{'ms-button-selected': buttonOptions.production.production}"
                                 routerLink="production/production"
@@ -152,16 +164,14 @@
                         </mat-panel-title>
                     </mat-expansion-panel-header>
 
-                    <button mat-button
-                        class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
                         [ngClass]="{'ms-button-selected': buttonOptions.sales.requirements}"
                         routerLink="sales/requirements/form" style="text-align:left;border-radius:0px 0px 0px 0px"
                         (click)="toggleSideMenu()" *ngIf="permits.salesRequirementsButton">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">assignment
                         </mat-icon> Requerimiento
                     </button>
-                    <button mat-button
-                        class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
                         [ngClass]="{'ms-button-selected': buttonOptions.sales.orders}" routerLink="sales/orders/form"
                         style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
                         *ngIf="permits.salesOrdersButton">
@@ -169,18 +179,15 @@
                             assignment_turned_in
                         </mat-icon> Pedidos
                     </button>
-                    <button mat-button
-                        class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
-                        [ngClass]="{'ms-button-selected': buttonOptions.sales.sales}"
-                        routerLink="sales/sales" style="text-align:left;border-radius:0px 0px 0px 0px"
-                        (click)="toggleSideMenu()" *ngIf="permits.salesShoppingButton">
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.sales.sales}" routerLink="sales/sales"
+                        style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
+                        *ngIf="permits.salesShoppingButton">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">shopping_cart
                         </mat-icon> Ventas
                     </button>
-                    <button mat-button
-                        class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
-                        [ngClass]="{'ms-button-selected': buttonOptions.sales.stores}"
-                        routerLink="sales/stores"
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.sales.stores}" routerLink="sales/stores"
                         style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
                         (click)="toggleSideMenu()" *ngIf="permits.salesStoresButton">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">store
@@ -190,8 +197,9 @@
 
                 </mat-expansion-panel>
                 <mat-expansion-panel style="width:15em; box-shadow:none; border-radius:0px 0px 0px 0px"
-                    class="w3-border-top w3-border-light-grey" [ngClass]="{'ms-expansion-panel-menu':productionOpenedFlag}"
-                    (opened)="productionOpened()" (closed)="productionClosed()">
+                    class="w3-border-top w3-border-light-grey"
+                    [ngClass]="{'ms-expansion-panel-menu':productionOpenedFlag}" (opened)="productionOpened()"
+                    (closed)="productionClosed()">
                     <mat-expansion-panel-header *ngIf="permits.productionSection">
                         <mat-panel-title style="font-weight:500"
                             [ngClass]="{'ms-expansion-panel-title':productionOpenedFlag}">
@@ -200,16 +208,14 @@
                         </mat-panel-title>
                     </mat-expansion-panel-header>
 
-                    <button mat-button
-                        class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
                         [ngClass]="{'ms-button-selected': buttonOptions.production.requirements}"
                         routerLink="production/requirements" style="text-align:left;border-radius:0px 0px 0px 0px"
                         (click)="toggleSideMenu()" *ngIf="permits.productionRequirementsButton">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">assignment
                         </mat-icon> Requerimiento
                     </button>
-                    <button mat-button
-                        class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
                         [ngClass]="{'ms-button-selected': buttonOptions.production.orders}"
                         routerLink="production/orders" style="text-align:left;border-radius:0px 0px 0px 0px"
                         (click)="toggleSideMenu()" *ngIf="permits.productionOrdersButton">
@@ -217,24 +223,21 @@
                             assignment_turned_in
                         </mat-icon> Pedidos
                     </button>
-                    <button mat-button
-                        class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
                         [ngClass]="{'ms-button-selected': buttonOptions.production.production}"
                         routerLink="production/production" style="text-align:left;border-radius:0px 0px 0px 0px"
                         (click)="toggleSideMenu()" *ngIf="permits.productionProductionOrdersButton">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">build
                         </mat-icon> Producción
                     </button>
-                    <button mat-button
-                        class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
                         [ngClass]="{'ms-button-selected': buttonOptions.production.materials}"
                         routerLink="production/raw-material" style="text-align:left;border-radius:0px 0px 0px 0px"
                         (click)="toggleSideMenu()" *ngIf="permits.productionRawMaterialsButton">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">view_module
                         </mat-icon> Materia prima
                     </button>
-                    <button mat-button
-                        class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
                         [ngClass]="{'ms-button-selected': buttonOptions.production.finishedProducts}"
                         routerLink="production/finished-products"
                         style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
@@ -246,8 +249,9 @@
 
                 </mat-expansion-panel>
                 <mat-expansion-panel style="width:15em; box-shadow:none; border-radius:0px 0px 0px 0px"
-                    class="w3-border-top w3-border-light-grey" [ngClass]="{'ms-expansion-panel-menu':logisticOpenedFlag}"
-                    (opened)="logisticOpened()" (closed)="logisticClosed()">
+                    class="w3-border-top w3-border-light-grey"
+                    [ngClass]="{'ms-expansion-panel-menu':logisticOpenedFlag}" (opened)="logisticOpened()"
+                    (closed)="logisticClosed()">
                     <mat-expansion-panel-header *ngIf="permits.logisticSection">
                         <mat-panel-title style="font-weight:500"
                             [ngClass]="{'ms-expansion-panel-title':logisticOpenedFlag}">
@@ -256,16 +260,14 @@
                         </mat-panel-title>
                     </mat-expansion-panel-header>
 
-                    <button mat-button
-                        class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
                         [ngClass]="{'ms-button-selected': buttonOptions.logistic.receptions}"
                         routerLink="logistic/receptions" style="text-align:left;border-radius:0px 0px 0px 0px"
                         (click)="toggleSideMenu()" *ngIf="permits.logisticReceptionsButton">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">play_for_work
                         </mat-icon> Recepciones
                     </button>
-                    <button mat-button
-                        class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
                         [ngClass]="{'ms-button-selected': buttonOptions.logistic.transfers}"
                         routerLink="logistic/transfers"
                         style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"

@@ -7,18 +7,17 @@
             <div class="w3-col s12 m10 l10">
                 <div>
                     <span class="mat-title ms-font-montserrat ms-color-11" style="font-weight: 900">
-                        <mat-icon class="ms-icons-color" style="vertical-align:middle">assignment</mat-icon>
-                        Producción <mat-icon style="vertical-align:middle">keyboard_arrow_right</mat-icon>
-                        Pedidos
+                        <mat-icon class="ms-icons-color" style="vertical-align:middle">book</mat-icon>
+                        Ventas <mat-icon style="vertical-align:middle">keyboard_arrow_right</mat-icon> Cotizaciones
                     </span>
                 </div>
                 <div>
-                    <!-- <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
-                        (click)="createRawMaterial()">
+                    <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
+                        (click)="createQuotation()">
                         <mat-icon>add_circle</mat-icon> Crear
-                    </button> -->
+                    </button>
                     <button mat-button style="margin:0em 0.2em 1em 0.2em" disabled>
-                        <mat-icon>assignment</mat-icon> {{dbs.orders.length | number: '2.0'}} Requerimientos
+                        <mat-icon>book</mat-icon> {{dbs.quotations.length | number: '2.0'}} Cotizaciones
                     </button>
                     <span style="margin-right:1em">
                         <mat-form-field autocomplete="off" color="accent">
@@ -46,59 +45,48 @@
                     <div style=" overflow:auto">
                         <table mat-table [dataSource]="dataSource" matSort style="width:100%">
 
-                            <ng-container matColumnDef="correlative" sticky>
+                            <ng-container matColumnDef="correlative">
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
-                                    matTooltip="Ordenar tabla por correlativo" matTooltipPosition="above"
-                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
-                                    Correlativo</th>
-                                <td mat-cell style="padding:0px 8px" *matCellDef="let order">
-                                    {{'OPe' + order.correlative}}
+                                    matTooltip="Ordenar tabla por código" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Correlativo</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{'COT' + raw.correlative}}
                                 </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="quotation">
+                            <ng-container matColumnDef="regDate">
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
-                                    matTooltip="Ordenar tabla por cotización" matTooltipPosition="above"
-                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
-                                    Cotización</th>
-                                <td mat-cell style="padding:0px 8px" *matCellDef="let order">
-                                    {{order.quotationCorrelative ? ('COT' + order.quotationCorrelative) : '---'}}
+                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Fecha</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.regDate | date: 'dd/MM/yyyy'}}
                                 </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="document">
+                            <ng-container matColumnDef="description">
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
-                                    matTooltip="Ordenar tabla por documento" matTooltipPosition="above"
-                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
-                                    Documento</th>
-                                <td mat-cell style="padding:0px 8px" *matCellDef="let order">
-                                    {{order.document.name}}-{{order.documentCorrelative}}
+                                    matTooltip="Ordenar tabla por nombre" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Descripcion</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.description}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="deliveryDate">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Fecha de entrega</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.deliveryDate | date: 'dd/MM/yyyy'}}
                                 </td>
                             </ng-container>
 
                             <ng-container matColumnDef="quantity">
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
-                                    matTooltip="Ordenar tabla por cantidad" matTooltipPosition="above"
-                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
-                                    Cantidad</th>
-                                <td mat-cell style="padding:0px 8px" *matCellDef="let req">
-                                    {{req.quantity | number : '2.2'}}
-                                </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="deliveryDate">
-                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>
-                                    Fecha de entrega</th>
-                                <td mat-cell style="padding:0px 8px" *matCellDef="let order">
-                                    {{order.deliveryDate | date : "dd/MM/yyyy"}}
-                                </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="description">
-                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>
-                                    Descripción</th>
-                                <td mat-cell style="padding:0px 8px" *matCellDef="let order">
-                                    {{order.description}}
+                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Cantidad</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.quantity}}
                                 </td>
                             </ng-container>
 
@@ -130,30 +118,32 @@
                                 </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="createdBy">
-                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
-                                    matTooltip="Ordenar tabla por solicitante" matTooltipPosition="above"
-                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
-                                    Solicitado por</th>
-                                <td mat-cell style="padding:0px 8px" *matCellDef="let req">
-                                    {{req.createdBy}}
-                                </td>
-                            </ng-container>
-
                             <ng-container matColumnDef="actions" stickyEnd>
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
-                                <td mat-cell style="padding:0px 8px" *matCellDef="let order">
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let req">
                                     <mat-menu #reqMenu="matMenu">
-                                        <button mat-menu-item (click)="previewOrder(order)">
-                                            <mat-icon>description</mat-icon> Vista previa
+                                        <button mat-menu-item (click)="previewQuotation(req)">
+                                            <mat-icon class="ms-icons-color">description</mat-icon> Vista previa
                                         </button>
-                                        <button mat-menu-item (click)="printOrder(order)">
-                                            <mat-icon>print</mat-icon> Imprimir
+                                        <button mat-menu-item (click)="printQuotation(req)">
+                                            <mat-icon class="ms-icons-color">print</mat-icon> Imprimir
                                         </button>
-                                        <button mat-menu-item (click)="generateProductionOrder(order)"
-                                            *ngIf="order.status === 'Enviado'">
-                                            <mat-icon>build</mat-icon> Generar OP
+                                        <button mat-menu-item (click)="editQuotation(req)"
+                                            [disabled]="req.status !== 'Enviado'">
+                                            <mat-icon class="ms-icons-color">edit</mat-icon> Editar
                                         </button>
+                                        <button mat-menu-item (click)="cancelQuotation(req)"
+                                            *ngIf="req.status === 'Enviado'">
+                                            <mat-icon class="ms-icons-color">cancel</mat-icon> Anular
+                                        </button>
+                                        <button mat-menu-item (click)="restoreQuotation(req)"
+                                            *ngIf="req.status === 'Anulado'">
+                                            <mat-icon class="ms-icons-color">history</mat-icon> Restaurar
+                                        </button>
+                                        <!-- <button mat-menu-item (click)="generateOPe(req)"
+                                            *ngIf="req.status === 'Aprobado'">
+                                            <mat-icon class="ms-icons-color">check_circle</mat-icon> Generar OPe
+                                        </button> -->
                                     </mat-menu>
                                     <button mat-icon-button [matMenuTriggerFor]="reqMenu">
                                         <mat-icon>more_vert</mat-icon>

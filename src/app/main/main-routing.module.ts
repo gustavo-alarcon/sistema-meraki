@@ -20,6 +20,10 @@ const routes: Routes = [
         loadChildren: () => import('./sales/orders/orders.module').then(mod => mod.OrdersModule)
       },
       {
+        path: 'sales/quotations',
+        loadChildren: () => import('./sales/quotations/quotations.module').then(mod => mod.QuotationsModule)
+      },
+      {
         path: 'sales/shopping',
         loadChildren: () => import('./sales/shopping/shopping.module').then(mod => mod.ShoppingModule)
       },
@@ -42,6 +46,10 @@ const routes: Routes = [
       {
         path: 'production/production',
         loadChildren: () => import('./production/production-list/production-list.module').then(mod => mod.ProductionListModule)
+      },
+      {
+        path: 'production/quotations',
+        loadChildren: () => import('./production/prod-quotations/prod-quotations.module').then(mod => mod.ProdQuotationsModule)
       },
       {
         path: 'production/finished-products',

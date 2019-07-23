@@ -7,11 +7,26 @@
 
     <form [formGroup]="dataFormGroup">
         <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
+            <mat-label>Referencie una <b>cotización</b></mat-label>
+            <input matInput type="text" [matAutocomplete]="quotationAuto" placeholder="Escriba..."
+                formControlName="quotation">
+            <mat-autocomplete #quotationAuto="matAutocomplete"
+                                [displayWith]="showQuotation"
+                                (optionSelected)="selectedQuotation($event)">
+                <mat-option *ngFor="let quotation of filteredQuotations | async" [value]="quotation">
+                    COT{{quotation.correlative}}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-hint>requerido *</mat-hint>
+            <mat-error *ngIf="!dataFormGroup.valid">Seleccione un documento *</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
             <mat-label>Seleccione un <b>documento</b></mat-label>
             <input matInput type="text" [matAutocomplete]="documentAuto" placeholder="Escriba..."
                 formControlName="document">
             <mat-autocomplete #documentAuto="matAutocomplete" [displayWith]="showDocument">
-                <mat-option *ngFor="let document of documentList | async" [value]="document">
+                <mat-option *ngFor="let document of filteredDocuments | async" [value]="document">
                     {{document.name}}
                 </mat-option>
             </mat-autocomplete>
@@ -21,7 +36,8 @@
 
         <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
             <mat-label>Número correlativo</mat-label>
-            <input matInput type="number" min="0" step="1" formControlName="documentCorrelative" placeholder="Escriba...">
+            <input matInput type="number" min="0" step="1" formControlName="documentCorrelative"
+                placeholder="Escriba...">
             <mat-hint>requerido *</mat-hint>
         </mat-form-field>
 

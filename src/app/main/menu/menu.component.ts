@@ -30,6 +30,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     sales: {
       requirements: false,
       orders: false,
+      quotations: false,
       sales: false,
       stores: false,
     },
@@ -37,6 +38,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       requirements: false,
       orders: false,
       production: false,
+      quotations: false,
       materials: false,
       finishedProducts: false
     },
@@ -53,12 +55,14 @@ export class MenuComponent implements OnInit, OnDestroy {
       salesSection: false,
       salesRequirementsButton: false,
       salesOrdersButton: false,
+      salesQuotationsButton: false,
       salesShoppingButton: false,
       salesStoresButton: false,
       productionSection: false,
       productionRequirementsButton: false,
       productionOrdersButton: false,
       productionProductionOrdersButton: false,
+      productionQuotationsButton: false,
       productionRawMaterialsButton: false,
       productionFinishedProductsButton: false,
       productionFinishedProductsTableSale: false,
@@ -124,6 +128,7 @@ export class MenuComponent implements OnInit, OnDestroy {
           if (event.url !== '/main') {
             this.auth.saveLastRoute(event.url);
             this.checkRoute(event.url);
+            console.log(event.url);
           }
 
         }
@@ -140,6 +145,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       sales: {
         requirements: false,
         orders: false,
+        quotations: false,
         sales: false,
         stores: false,
       },
@@ -147,6 +153,7 @@ export class MenuComponent implements OnInit, OnDestroy {
         requirements: false,
         orders: false,
         production: false,
+        quotations: false,
         materials: false,
         finishedProducts: false
       },
@@ -208,6 +215,13 @@ export class MenuComponent implements OnInit, OnDestroy {
           coincidence = true;
           break;
 
+        case '/main/sales/quotations':
+          this.selectedTab.setValue(0);
+          this.cleanButtons();
+          this.buttonOptions.sales.quotations = true;
+          coincidence = true;
+          break;
+
         case '/main/sales/orders/form':
           this.selectedTab.setValue(0);
           this.cleanButtons();
@@ -258,6 +272,13 @@ export class MenuComponent implements OnInit, OnDestroy {
           this.selectedTab.setValue(1);
           this.cleanButtons();
           this.buttonOptions.production.production = true;
+          coincidence = true;
+          break;
+
+        case '/main/production/quotations':
+          this.selectedTab.setValue(1);
+          this.cleanButtons();
+          this.buttonOptions.production.quotations = true;
           coincidence = true;
           break;
 

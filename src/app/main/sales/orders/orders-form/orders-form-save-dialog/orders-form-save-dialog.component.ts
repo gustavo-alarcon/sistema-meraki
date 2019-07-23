@@ -120,6 +120,7 @@ export class OrdersFormSaveDialogComponent implements OnInit, OnDestroy {
             id: `OPe${newCorrelative}`,
             correlative: newCorrelative,
             status: 'Enviado',
+            quotationCorrelative: this.data['form']['quotation']['correlative'],
             document: this.data['form']['document'],
             documentCorrelative: this.data['form']['documentCorrelative'],
             deliveryDate: this.data['form']['deliveryDate'].valueOf(),

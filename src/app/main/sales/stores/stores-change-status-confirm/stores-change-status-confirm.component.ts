@@ -21,7 +21,8 @@ export class StoresChangeStatusConfirmComponent implements OnInit {
     'Mantenimiento',
     'Separado',
     'Vendido',
-    'Garantía'
+    'Garantía',
+    'Concesión'
   ]
 
   constructor(

@@ -105,8 +105,6 @@ export class StoresComponent implements OnInit {
                     });
                     this.serialNumbersInTransfering[product.id] = transferCount;
                     this.serialNumbersSold[product.id] = soldCount;
-                    console.log('TR', transferCount);
-                    console.log('SL', soldCount);
                   });
               });
             }

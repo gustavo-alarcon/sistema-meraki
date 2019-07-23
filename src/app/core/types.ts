@@ -15,12 +15,14 @@ export interface Permit {
     salesSection: boolean;
     salesRequirementsButton: boolean;
     salesOrdersButton: boolean;
+    salesQuotationsButton: boolean;
     salesShoppingButton: boolean;
     salesStoresButton: boolean;
     productionSection: boolean;
     productionRequirementsButton: boolean;
     productionOrdersButton: boolean;
     productionProductionOrdersButton: boolean;
+    productionQuotationsButton: boolean;
     productionRawMaterialsButton: boolean;
     productionFinishedProductsButton: boolean;
     productionFinishedProductsTableSale: boolean;
@@ -103,7 +105,7 @@ export interface Document {
     id: string;
     name: string;
     serie: number;
-    correlative?: number;
+    correlative: number;
     regDate: number;
 }
 
@@ -112,8 +114,28 @@ export interface Order {
     correlative: number;
     ORCorrelative?: number;
     OPeCorrelative?: number;
+    quotationCorrelative?: number;
     document: Document;
     documentCorrelative: string;
+    deliveryDate: number;
+    status: string;
+    quantity: number;
+    description: string;
+    image1: string;
+    image2: string;
+    file1: string;
+    file2: string;
+    regDate: number;
+    createdBy: string;
+    createdByUid: string;
+    approvedBy?: string;
+    approvedByUid?: string;
+    approvedDate?: number;
+}
+
+export interface Quotation {
+    id: string;
+    correlative: number;
     deliveryDate: number;
     status: string;
     quantity: number;

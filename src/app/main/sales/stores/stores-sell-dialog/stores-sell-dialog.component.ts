@@ -17,6 +17,13 @@ export class StoresSellDialogComponent implements OnInit {
 
   dataFormGroup: FormGroup;
 
+  paymentTypes = [
+    'TARJETA VISA',
+    'TARJETA MASTERCARD',
+    'TARJETA ESTILOS',
+    'EFECTIVO'
+  ]
+
   constructor(
     public dbs: DatabaseService,
     public auth: AuthService,

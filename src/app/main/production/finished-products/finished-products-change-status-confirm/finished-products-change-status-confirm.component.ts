@@ -21,7 +21,8 @@ export class FinishedProductsChangeStatusConfirmComponent implements OnInit {
     'Mantenimiento',
     'Separado',
     'Vendido',
-    'Garantía'
+    'Garantía',
+    'Concesión'
   ]
 
   constructor(

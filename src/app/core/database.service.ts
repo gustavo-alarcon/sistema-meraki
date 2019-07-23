@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from "@angular/fire/firestore";
-import { Requirement, Correlative, Product, Color, RawMaterial, Category, Unit, ProductionOrder, TicketRawMaterial, DepartureRawMaterial, Store, User, Transfer, DepartureProduct } from './types';
+import { Requirement, Correlative, Product, Color, RawMaterial, Category, Unit, ProductionOrder, TicketRawMaterial, DepartureRawMaterial, Store, User, Transfer, DepartureProduct, Quotation, Document } from './types';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
@@ -27,6 +27,12 @@ export class DatabaseService {
   public dataOrderCorrelative = new BehaviorSubject<Correlative>(null);
   public currentDataOrderCorrelative = this.dataOrderCorrelative.asObservable();
 
+  quotationsCorrelativeDocument: AngularFirestoreDocument<Correlative>;
+  quotationsCorrelative: Correlative = null;
+
+  public dataQuotationsCorrelative = new BehaviorSubject<Correlative>(null);
+  public currentDataQuotationsCorrelative = this.dataQuotationsCorrelative.asObservable();
+
   productionOrdersCorrelativeDocument: AngularFirestoreDocument<Correlative>;
   productionOrdersCorrelative: Correlative = null;
 
@@ -49,6 +55,15 @@ export class DatabaseService {
   public currentDataUsers = this.dataUsers.asObservable();
 
   /**
+   * DOCUMENTS
+   */
+  documentsCollection: AngularFirestoreCollection<Document>;
+  documents: Array<Document> = []
+
+  public dataDocuments = new BehaviorSubject<Document[]>([]);
+  public currentDataDocuments = this.dataDocuments.asObservable();
+
+  /**
    * ORDERS
    */
   ordersCollection: AngularFirestoreCollection<Requirement>;
@@ -65,6 +80,15 @@ export class DatabaseService {
 
   public dataRequirements = new BehaviorSubject<Requirement[]>([]);
   public currentDataRequirements = this.dataRequirements.asObservable();
+
+  /**
+   * QUOTATIONS
+   */
+  quotationsCollection: AngularFirestoreCollection<Quotation>;
+  quotations: Array<Quotation> = [];
+
+  public dataQuotations = new BehaviorSubject<Quotation[]>([]);
+  public currentDataQuotations = this.dataQuotations.asObservable();
 
   /**
    * PRODUCTION ORDERS
@@ -191,10 +215,13 @@ export class DatabaseService {
     this.auth.currentDataPermit.subscribe(res => {
       if (res.name) {
         this.getUsers();
+        this.getDocuments();
         this.getRequirements(true, from, to);
         this.getRequirementsCorrelative();
         this.getOrders(true, from, to);
         this.getOrdersCorrelative();
+        this.getQuotations(true, from, to);
+        this.getQuotationsCorrelative();
         this.getStores();
         this.getRawMaterials();
         this.getCategories();
@@ -226,6 +253,23 @@ export class DatabaseService {
       .subscribe(res => {
         this.users = res;
         this.dataUsers.next(res);
+      })
+  }
+
+  getDocuments(): void {
+    this.documentsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/documents`, ref => ref.orderBy('regDate', 'desc'));
+    this.documentsCollection.valueChanges()
+      .pipe(
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = index;
+          });
+          return res;
+        })
+      )
+      .subscribe(res => {
+        this.documents = res;
+        this.dataDocuments.next(res);
       })
   }
 
@@ -281,6 +325,28 @@ export class DatabaseService {
       })
   }
 
+  getQuotations(all: boolean, from?: number, to?: number): void {
+    if (all) {
+      this.quotationsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/quotations`, ref => ref.orderBy('regDate', 'desc'));
+    } else {
+      this.quotationsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/quotations`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
+    }
+
+    this.quotationsCollection.valueChanges()
+      .pipe(
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = index;
+          });
+          return res;
+        })
+      )
+      .subscribe(res => {
+        this.quotations = res;
+        this.dataQuotations.next(res);
+      })
+  }
+
   getRequirementsCorrelative(): void {
     this.requirementCorrelativeDocument = this.af.doc(`db/${this.auth.userInteriores.db}/correlatives/OR`);
     this.requirementCorrelativeDocument.valueChanges()
@@ -296,6 +362,15 @@ export class DatabaseService {
       .subscribe(res => {
         this.orderCorrelative = res;
         this.dataOrderCorrelative.next(res);
+      })
+  }
+
+  getQuotationsCorrelative(): void {
+    this.quotationsCorrelativeDocument = this.af.doc(`db/${this.auth.userInteriores.db}/correlatives/COT`);
+    this.quotationsCorrelativeDocument.valueChanges()
+      .subscribe(res => {
+        this.quotationsCorrelative = res;
+        this.dataQuotationsCorrelative.next(res);
       })
   }
 
