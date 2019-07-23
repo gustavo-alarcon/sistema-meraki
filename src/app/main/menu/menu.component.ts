@@ -33,6 +33,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       quotations: false,
       sales: false,
       stores: false,
+      checkStock: false
     },
     production: {
       requirements: false,
@@ -58,6 +59,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       salesQuotationsButton: false,
       salesShoppingButton: false,
       salesStoresButton: false,
+      salesCheckStockButton: false,
       productionSection: false,
       productionRequirementsButton: false,
       productionOrdersButton: false,
@@ -148,6 +150,7 @@ export class MenuComponent implements OnInit, OnDestroy {
         quotations: false,
         sales: false,
         stores: false,
+        checkStock: false
       },
       production: {
         requirements: false,
@@ -240,6 +243,13 @@ export class MenuComponent implements OnInit, OnDestroy {
           this.selectedTab.setValue(0);
           this.cleanButtons();
           this.buttonOptions.sales.sales = true;
+          coincidence = true;
+          break;
+
+        case '/main/sales/check-stock':
+          this.selectedTab.setValue(0);
+          this.cleanButtons();
+          this.buttonOptions.sales.checkStock = true;
           coincidence = true;
           break;
 

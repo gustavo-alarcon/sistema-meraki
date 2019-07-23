@@ -18,6 +18,7 @@ export interface Permit {
     salesQuotationsButton: boolean;
     salesShoppingButton: boolean;
     salesStoresButton: boolean;
+    salesCheckStockButton: boolean;
     productionSection: boolean;
     productionRequirementsButton: boolean;
     productionOrdersButton: boolean;

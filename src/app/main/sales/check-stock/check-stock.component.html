@@ -1,0 +1,144 @@
+<div style="min-height:100vh; background:rgba(230, 230, 250, 0.5)">
+    <div class="animated fadeInUpBig w3-margin-bottom" style="padding:16px">
+        <div class="w3-row w3-margin-bottom">
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+            <div class="w3-col s12 m10 l10">
+                <div>
+                    <span class="mat-title ms-font-montserrat ms-color-11" style="font-weight: 900">
+                        <mat-icon class="ms-icons-color" style="vertical-align:middle">search</mat-icon>
+                        Ventas <mat-icon style="vertical-align:middle">keyboard_arrow_right</mat-icon> Consultar stock
+                    </span>
+                </div>
+                <div style="margin-top:8px">
+                    <mat-form-field autocomplete="off" appearance="outline" class="w3-block">
+                        <mat-label>Buscar Código</mat-label>
+                        <input matInput type="text" [formControl]="product"
+                            placeholder="Escriba código del producto que esta buscando" [matAutocomplete]="productAuto"
+                            autocomplete="off">
+                        <mat-autocomplete #productAuto="matAutocomplete" [displayWith]="showProduct" (optionSelected)="selectedProduct($event)">
+                            <mat-option *ngFor="let product of filteredProducts | async" [value]="product">
+                                {{product.code}} | {{product.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <span style="margin-right:1em">
+                        <button mat-button style="margin:0em 0.2em 1em 0.2em" disabled>
+                            <mat-icon>local_offer</mat-icon> {{results.length | number: '2.0'}} Resultados
+                        </button>
+                        <mat-form-field autocomplete="off" color="accent">
+                            <mat-label>Filtrar</mat-label>
+                            <mat-icon matPrefix style="margin-right:0.5em; vertical-align:text-bottom">filter_list
+                            </mat-icon>
+                            <input matInput type="text" placeholder="Escriba ..."
+                                (input)="filterData($event.target.value)" autocomplete="off">
+                        </mat-form-field>
+                    </span>
+                </div>
+                <mat-divider></mat-divider>
+            </div>
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+        </div>
+
+        <div class="w3-row">
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+            <div class="w3-col s12 m10 l10">
+                <div class="mat-elevation-z8">
+                    <mat-progress-bar mode="indeterminate" *ngIf="searching"></mat-progress-bar>
+                    <div style=" overflow:auto">
+                        <table mat-table [dataSource]="dataSource" matSort style="width:100%">
+
+                            <ng-container matColumnDef="index" sticky>
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>N°</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw; let i = index">
+                                    {{i + 1}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="location">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por ubicación" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Ubicación</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.location}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="serie">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por serie" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Serie</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.serie}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="code">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por código" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Código</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.code}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="color">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por color" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Color</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.color}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por estado" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                                    Estado</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let req">
+                                    {{req.status}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="actions" stickyEnd>
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    <mat-menu #rawMenu="matMenu">
+                                        <button mat-menu-item (click)="transferProduct(raw)">
+                                            <mat-icon class="ms-icons-color">local_shipping</mat-icon> Trasladar
+                                        </button>
+                                        <button mat-menu-item (click)="sellProduct(raw)">
+                                            <mat-icon class="ms-icons-color">shopping_cart</mat-icon> Vender
+                                        </button>
+                                        <button mat-menu-item (click)="takeProduct(raw)">
+                                            <mat-icon class="ms-icons-color">loyalty</mat-icon> Separar
+                                        </button>
+                                    </mat-menu>
+                                    <button mat-icon-button [matMenuTriggerFor]="rawMenu">
+                                        <mat-icon>more_vert</mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                        </table>
+                    </div>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                </div>
+            </div>
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -67,14 +67,14 @@
                         </div>
                         <div class="w3-border-left w3-border-lightgray w3-margin-right">
                             <button mat-button class="w3-small"
-                                [ngClass]="{'ms-button-selected': buttonOptions.sales.sales}"
-                                routerLink="sales/shopping" [disabled]="!permits.salesShoppingButton">
-                                <mat-icon class="ms-icons-color">shopping_cart</mat-icon> Ventas
+                                [ngClass]="{'ms-button-selected': buttonOptions.sales.stores}"
+                                routerLink="sales/stores" [disabled]="!permits.salesStoresButton">
+                                <mat-icon class="ms-icons-color">store</mat-icon> Tiendas
                             </button><br>
                             <button mat-button class="w3-small"
-                                [ngClass]="{'ms-button-selected': buttonOptions.sales.stores}" routerLink="sales/stores"
-                                [disabled]="!permits.salesStoresButton">
-                                <mat-icon class="ms-icons-color">store</mat-icon> Tiendas
+                                [ngClass]="{'ms-button-selected': buttonOptions.sales.check}" routerLink="sales/check-stock"
+                                [disabled]="!permits.salesCheckStockButton">
+                                <mat-icon class="ms-icons-color">search</mat-icon> Consultar
                             </button><br>
                         </div>
                     </div>
@@ -165,6 +165,13 @@
                     </mat-expansion-panel-header>
 
                     <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.sales.quotations}"
+                        routerLink="sales/quotations" style="text-align:left;border-radius:0px 0px 0px 0px"
+                        (click)="toggleSideMenu()" *ngIf="permits.salesQuotationsButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">book
+                        </mat-icon> Cotizaciones
+                    </button>
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
                         [ngClass]="{'ms-button-selected': buttonOptions.sales.requirements}"
                         routerLink="sales/requirements/form" style="text-align:left;border-radius:0px 0px 0px 0px"
                         (click)="toggleSideMenu()" *ngIf="permits.salesRequirementsButton">
@@ -180,18 +187,18 @@
                         </mat-icon> Pedidos
                     </button>
                     <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
-                        [ngClass]="{'ms-button-selected': buttonOptions.sales.sales}" routerLink="sales/sales"
-                        style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
-                        *ngIf="permits.salesShoppingButton">
-                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">shopping_cart
-                        </mat-icon> Ventas
-                    </button>
-                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
                         [ngClass]="{'ms-button-selected': buttonOptions.sales.stores}" routerLink="sales/stores"
-                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
+                        style="text-align:left;border-radius:0px 0px 0px 0px"
                         (click)="toggleSideMenu()" *ngIf="permits.salesStoresButton">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">store
                         </mat-icon> Tiendas
+                    </button>
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.sales.sales}" routerLink="sales/check-stock"
+                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em" (click)="toggleSideMenu()"
+                        *ngIf="permits.salesShoppingButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">search
+                        </mat-icon> Consultar stock
                     </button>
                     <p class="w3-margin-bottom"></p>
 
@@ -208,6 +215,13 @@
                         </mat-panel-title>
                     </mat-expansion-panel-header>
 
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.production.quotations}"
+                        routerLink="production/quotations" style="text-align:left;border-radius:0px 0px 0px 0px"
+                        (click)="toggleSideMenu()" *ngIf="permits.productionQuotationsButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">book
+                        </mat-icon> Cotizaciones
+                    </button>
                     <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
                         [ngClass]="{'ms-button-selected': buttonOptions.production.requirements}"
                         routerLink="production/requirements" style="text-align:left;border-radius:0px 0px 0px 0px"

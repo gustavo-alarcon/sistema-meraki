@@ -28,6 +28,10 @@ const routes: Routes = [
         loadChildren: () => import('./sales/shopping/shopping.module').then(mod => mod.ShoppingModule)
       },
       {
+        path: 'sales/check-stock',
+        loadChildren: () => import('./sales/check-stock/check-stock.module').then(mod => mod.CheckStockModule)
+      },
+      {
         path: 'sales/stores',
         loadChildren: () => import('./sales/stores/stores.module').then(mod => mod.StoresModule)
       },
