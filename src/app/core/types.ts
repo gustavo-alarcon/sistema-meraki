@@ -48,9 +48,13 @@ export interface SerialNumber {
     createdByUid: string;
     modifiedBy?: string;
     modifiedByUid?: string;
+    modifiedDate?: number;
     customerDisplayName?: string;
     customerDocumentNumber?: string;
     customerDate?: number;
+    takedBy?: string;
+    takedByUid?: string;
+    takedDate?: number;
 }
 
 export interface Color {
@@ -284,7 +288,7 @@ export interface TicketProduct {
 
 export interface DepartureProduct {
     id: string;
-    document: string;
+    document: Document;
     documentCorrelative: string;
     product: Product;
     serie: number;
@@ -292,7 +296,8 @@ export interface DepartureProduct {
     quantity: number;
     price: number;
     discount: number;
-    customerType: string;
+    paymentType: string;
+    location?: string | Store;
     dni: number;
     phone: number;
     source: string;
@@ -310,7 +315,7 @@ export interface Transfer {
     origin: Store;
     destination: Store;
     serialList: Array<SerialNumber>;
-    transferList: Array<TransferList>;
+    transferList?: Array<TransferList>;
     status: string;
     source: string;
     regDate: number;

@@ -5,6 +5,10 @@ import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar } fro
 import { Subscription, Observable } from 'rxjs';
 import { DatabaseService } from 'src/app/core/database.service';
 import { map } from 'rxjs/operators';
+import { CheckStockSellDialogComponent } from './check-stock-sell-dialog/check-stock-sell-dialog.component';
+import { CheckStockTransferDialogComponent } from './check-stock-transfer-dialog/check-stock-transfer-dialog.component';
+import { AuthService } from 'src/app/core/auth.service';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-check-stock',
@@ -35,6 +39,8 @@ export class CheckStockComponent implements OnInit {
 
   constructor(
     public dbs: DatabaseService,
+    public auth: AuthService,
+    private af: AngularFirestore,
     private dialog: MatDialog,
     private snackbar: MatSnackBar
   ) { }
@@ -47,8 +53,8 @@ export class CheckStockComponent implements OnInit {
     this.filteredProducts =
       this.product.valueChanges
         .pipe(
-          map(value => typeof value === 'string' ? value : value.code),
-          map(code => code ? this.dbs.finishedProducts.filter(option => option.code.includes(code)) : this.dbs.finishedProducts)
+          map(value => typeof value === 'string' ? value.toLowerCase() : null),
+          map(value => value ? this.dbs.finishedProducts.filter(option => option.code.toLowerCase().includes(value) || option.name.toLowerCase().includes(value)) : this.dbs.finishedProducts)
         )
   }
 
@@ -76,7 +82,7 @@ export class CheckStockComponent implements OnInit {
               .subscribe(res => {
                 if (res) {
                   res.forEach(serial => {
-                    if (serial.code === this.product.value['code'] && !(serial.status === 'Vendido' || serial.status === 'Mantenimiento')) {
+                    if (serial.code === this.product.value['code'] && !(serial.status === 'Vendido')) {
                       this.results.push(serial);
                       this.dataSource.data = this.results;
                     }
@@ -93,7 +99,7 @@ export class CheckStockComponent implements OnInit {
         .subscribe(res => {
           if (res) {
             res.forEach(serial => {
-              if (serial.code === this.product.value['code'] && !(serial.status === 'Vendido' || serial.status === 'Mantenimiento')) {
+              if (serial.code === this.product.value['code'] && !(serial.status === 'Vendido')) {
                 this.results.push(serial);
                 this.dataSource.data = this.results;
               }
@@ -112,15 +118,78 @@ export class CheckStockComponent implements OnInit {
     this.searchProduct();
   }
 
-  transferProduct(product: Product): void {
-
+  transferProduct(serial: SerialNumber): void {
+    this.dialog.open(CheckStockTransferDialogComponent, {
+      data: {
+        serial: serial,
+        product: this.product.value
+      }
+    }).afterClosed().subscribe(res => {
+      if (res) {
+        this.searchProduct()
+      }
+    });
   }
 
-  sellProduct(product: Product): void {
-
+  sellProduct(serial: SerialNumber): void {
+    this.dialog.open(CheckStockSellDialogComponent, {
+      data: {
+        serial: serial,
+        product: this.product.value
+      }
+    }).afterClosed().subscribe(res => {
+      if (res) {
+        this.searchProduct()
+      }
+    });
   }
 
-  takeProduct(product: Product): void {
+  takeProduct(serial: SerialNumber): void {
+    if (serial.location !== 'Productos acabados') {
+      let store = this.dbs.stores.filter(option => option.name === serial.location);
+      let serialRef =
+        this.dbs.storesCollection
+          .doc(store[0].id)
+          .collection('products')
+          .doc(serial.productId)
+          .collection('products')
+          .doc(serial.id);
+
+      let transaction =
+        this.af.firestore.runTransaction(t => {
+          return t.get(serialRef.ref)
+            .then(doc => {
+              t.update(doc.ref, {
+                status: 'Separado',
+                takedBy: this.auth.userInteriores.displayName,
+                takedByUid: this.auth.userInteriores.uid,
+                takedDate: Date.now()
+              });
+            })
+            .then(() => {
+              this.snackbar.open(`${serial.name} #${serial.serie} SEPARADO!`, 'Cerrar', {
+                duration: 6000
+              });
+            })
+            .catch(err => {
+              this.snackbar.open('Hubo un error separando el producto', 'Cerrar', {
+                duration: 6000
+              });
+              console.log(err);
+            })
+        }).then(() => {
+          this.searchProduct();
+        }).catch(err => {
+          this.snackbar.open('Transaction fails', 'Cerrar', {
+            duration: 6000
+          });
+          console.log(err);
+        })
+    } else {
+      this.snackbar.open('No puede separar un producto de taller, debe hacer una transferencia primero!', 'Cerrar', {
+        duration: 6000
+      });
+    }
 
   }
 

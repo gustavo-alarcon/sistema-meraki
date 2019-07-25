@@ -1,17 +1,18 @@
-import { SerialNumber, Product, DepartureProduct, Store } from './../../../../core/types';
 import { Component, OnInit, Inject } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DatabaseService } from 'src/app/core/database.service';
 import { AuthService } from 'src/app/core/auth.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
-import { debounceTime } from 'rxjs/operators';
+import { Product, Store, SerialNumber, DepartureProduct, Document } from 'src/app/core/types';
+import { debounceTime, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-stores-sell-dialog',
-  templateUrl: './stores-sell-dialog.component.html',
+  selector: 'app-check-stock-sell-dialog',
+  templateUrl: './check-stock-sell-dialog.component.html',
   styles: []
 })
-export class StoresSellDialogComponent implements OnInit {
+export class CheckStockSellDialogComponent implements OnInit {
 
   loading: boolean = false;
 
@@ -24,12 +25,14 @@ export class StoresSellDialogComponent implements OnInit {
     'EFECTIVO'
   ]
 
+  filteredDocuments: Observable<Document[]>;
+
   constructor(
     public dbs: DatabaseService,
     public auth: AuthService,
     public fb: FormBuilder,
-    private dialogRef: MatDialogRef<StoresSellDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { product: Product, store: Store, serial: SerialNumber },
+    private dialogRef: MatDialogRef<CheckStockSellDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { serial: SerialNumber, product: Product },
     private snackbar: MatSnackBar
   ) { }
 
@@ -48,6 +51,13 @@ export class StoresSellDialogComponent implements OnInit {
           this.dataFormGroup.get('discount').setValue(disc.toFixed(2));
         }
       });
+
+    this.filteredDocuments =
+    this.dataFormGroup.get('document').valueChanges
+      .pipe(
+        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+        map(name => name ? this.dbs.documents.filter(option => option.name.toLowerCase().includes(name)) : this.dbs.documents)
+      )
   }
 
   createForm(): void {
@@ -62,6 +72,10 @@ export class StoresSellDialogComponent implements OnInit {
     });
   }
 
+  showDocument(document: Document): string | null {
+    return document ? document.name : null;
+  }
+
   save(): void {
     this.loading = true;
     if (this.dataFormGroup.valid) {
@@ -71,7 +85,7 @@ export class StoresSellDialogComponent implements OnInit {
         documentCorrelative: this.dataFormGroup.value['documentCorrelative'],
         product: this.data.product,
         serie: this.data.serial.serie,
-        color: this.data.serial.color,
+        color: this.data.serial.color ? this.data.serial.color : null,
         quantity: 1,
         price: this.dataFormGroup.value['price'],
         discount: (this.dataFormGroup.value['price'] / this.data.product.sale) * 100,
@@ -79,6 +93,7 @@ export class StoresSellDialogComponent implements OnInit {
         dni: this.dataFormGroup.value['dni'],
         phone: this.dataFormGroup.value['phone'],
         source: 'store',
+        location: this.data.serial.location,
         regDate: Date.now(),
         createdBy: this.auth.userInteriores.displayName,
         createdByUid: this.auth.userInteriores.uid,
@@ -87,13 +102,17 @@ export class StoresSellDialogComponent implements OnInit {
         canceledDate: null
       }
 
+      console.log(data);
+
       this.dbs.departuresCollection
         .add(data)
         .then(ref => {
           ref.update({ id: ref.id })
             .then(() => {
+              const store = this.dbs.stores.filter(option => option.name === this.data.serial.location);
+              console.log(store);
               this.dbs.storesCollection
-                .doc(this.data.store.id)
+                .doc(store[0].id)
                 .collection('products')
                 .doc(this.data.product.id)
                 .collection('products')

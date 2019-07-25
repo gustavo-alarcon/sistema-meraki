@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { DatabaseService } from 'src/app/core/database.service';
 import { AuthService } from 'src/app/core/auth.service';
 import { MatSnackBar, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { SerialNumber } from 'src/app/core/types';
+import { SerialNumber, Store } from 'src/app/core/types';
 
 @Component({
   selector: 'app-stores-change-status-confirm',
@@ -30,28 +30,30 @@ export class StoresChangeStatusConfirmComponent implements OnInit {
     public auth: AuthService,
     private snackbar: MatSnackBar,
     private dialogRef: MatDialogRef<StoresChangeStatusConfirmComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: SerialNumber
+    @Inject(MAT_DIALOG_DATA) public data: {serial: SerialNumber, store: Store }
   ) { }
 
   ngOnInit() {
-    this.status.setValue(this.data.status);
+    this.status.setValue(this.data.serial.status);
   }
 
   change(): void {
     if (this.status.value) {
       this.uploading = true;
 
-      this.dbs.finishedProductsCollection
-        .doc(this.data.productId)
+      this.dbs.storesCollection
+        .doc(this.data.store.id)
         .collection('products')
-        .doc(this.data.id)
+        .doc(this.data.serial.productId)
+        .collection('products')
+        .doc(this.data.serial.id)
         .update({
           status: this.status.value,
           modifiedBy: this.auth.userInteriores.displayName,
           modifiedByUid: this.auth.userInteriores.uid
         }).then(() => {
           this.uploading = false;
-          this.snackbar.open(`${this.data.name} # ${this.data.serie} actualizado!`, 'Cerrar', {
+          this.snackbar.open(`${this.data.serial.name} # ${this.data.serial.serie} actualizado!`, 'Cerrar', {
             duration: 6000
           });
           this.dialogRef.close(true);

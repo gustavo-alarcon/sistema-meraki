@@ -54,10 +54,13 @@ export class StoresShowSerialsComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  changeStatus(product: SerialNumber): void {
+  changeStatus(serial: SerialNumber): void {
     this.dialog.open(StoresChangeStatusConfirmComponent, {
-      data: product
-    })
+      data: {
+        serial: serial,
+        store: this.data.store
+      }
+    });
   }
 
   sellSerial(serial: SerialNumber): void {

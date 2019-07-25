@@ -133,8 +133,6 @@ export class TransfersComponent implements OnInit {
       this.af.firestore.runTransaction(t => {
         return t.get(this.dbs.transfersCollection.doc(transfer.id).ref)
           .then(doc => {
-            console.log('serial', transfer.serialList);
-            console.log('user', transfer.approvedBy);
             if (transfer.approvedBy) {
               transfer.serialList.forEach(serial => {
                 if (transfer.origin.name === "Productos acabados") {
@@ -178,6 +176,40 @@ export class TransfersComponent implements OnInit {
           });
       }).then(() => {
         this.snackbar.open(`Traslado #${transfer.correlative} RESTAURADO!`, 'Cerrar', {
+          duration: 6000
+        });
+      })
+  }
+
+  rejectTransfer(transfer: Transfer): void {
+    let transaction =
+      this.af.firestore.runTransaction(t => {
+        return t.get(this.dbs.transfersCollection.doc(transfer.id).ref)
+          .then(doc => {
+            let serialRef;
+
+            if (transfer.origin.name === 'Productos acabados') {
+              serialRef =
+                this.dbs.finishedProductsCollection
+                  .doc(transfer.serialList[0].productId)
+                  .collection('products')
+                  .doc(transfer.serialList[0].id)
+            } else {
+              serialRef =
+                this.dbs.storesCollection
+                  .doc(transfer.origin.id)
+                  .collection('products')
+                  .doc(transfer.serialList[0].productId)
+                  .collection('products')
+                  .doc(transfer.serialList[0].id)
+            }
+
+            t.update(this.dbs.transfersCollection.doc(transfer.id).ref, { status: 'Rechazado' });
+            t.update(serialRef.ref, {status: 'Acabado'});
+
+          });
+      }).then(() => {
+        this.snackbar.open(`Traslado #${transfer.correlative} RECHAZADO!`, 'Cerrar', {
           duration: 6000
         });
       })

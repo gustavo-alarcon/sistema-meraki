@@ -72,7 +72,7 @@
                                 <mat-icon class="ms-icons-color">store</mat-icon> Tiendas
                             </button><br>
                             <button mat-button class="w3-small"
-                                [ngClass]="{'ms-button-selected': buttonOptions.sales.check}" routerLink="sales/check-stock"
+                                [ngClass]="{'ms-button-selected': buttonOptions.sales.checkStock}" routerLink="sales/check-stock"
                                 [disabled]="!permits.salesCheckStockButton">
                                 <mat-icon class="ms-icons-color">search</mat-icon> Consultar
                             </button><br>
@@ -194,9 +194,9 @@
                         </mat-icon> Tiendas
                     </button>
                     <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
-                        [ngClass]="{'ms-button-selected': buttonOptions.sales.sales}" routerLink="sales/check-stock"
+                        [ngClass]="{'ms-button-selected': buttonOptions.sales.checkStock}" routerLink="sales/check-stock"
                         style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em" (click)="toggleSideMenu()"
-                        *ngIf="permits.salesShoppingButton">
+                        *ngIf="permits.salesCheckStockButton">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">search
                         </mat-icon> Consultar stock
                     </button>
