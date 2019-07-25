@@ -49,7 +49,7 @@
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
                                     matTooltip="Ordenar tabla por código" matTooltipPosition="above"
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Correlativo</th>
-                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                <td mat-cell style="padding:0px 8px" class="w3-border-right w3-border-lightgray" *matCellDef="let raw">
                                     {{'COT' + raw.correlative}}
                                 </td>
                             </ng-container>
@@ -59,12 +59,12 @@
                                     matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Fecha</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
-                                    {{raw.regDate | date: 'dd/MM/yyyy'}}
+                                    {{raw.regDate | date: 'dd/MM/yyyy - hh:mm'}}
                                 </td>
                             </ng-container>
 
                             <ng-container matColumnDef="description">
-                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                <th mat-header-cell style="padding:0px 8px; min-width:300px" *matHeaderCellDef
                                     matTooltip="Ordenar tabla por nombre" matTooltipPosition="above"
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Descripcion</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
@@ -75,7 +75,8 @@
                             <ng-container matColumnDef="deliveryDate">
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
                                     matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
-                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Fecha de entrega</th>
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Fecha de entrega
+                                    solicitada</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     {{raw.deliveryDate | date: 'dd/MM/yyyy'}}
                                 </td>
@@ -114,7 +115,56 @@
                                     Estado</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let req">
                                     <span style="padding: 8px 8px; border-radius: 10px"
-                                        [ngClass]="{'w3-amber': req.status === 'Enviado', 'w3-red': req.status === 'Rechazado', 'w3-green': req.status === 'Aprobado', 'w3-black': req.status === 'Anulado'}">{{req.status}}</span>
+                                        [ngClass]="{'w3-amber': req.status === 'Enviado', 'w3-red': req.status === 'Rechazado', 'w3-green': req.status === 'Respondida', 'w3-black': req.status === 'Anulado', 'w3-purple': req.status === 'Referenciada'}">{{req.status}}</span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="orderReference">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Orden de pedido</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.orderReference ? ('OPe' + raw.orderReference) : '---'}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="recommendations">
+                                <th mat-header-cell style="padding:0px 8px; min-width:300px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Recomendaciones</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.recommendations ? raw.recommendations : '---'}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="import">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Costo</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.import ? (raw.import | currency : 'S/.') : '---'}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="proposedDate">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Fecha de entrega
+                                    propuesta</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.proposedDate ? (raw.proposedDate | date: 'dd/MM/yyyy') : '---'}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="quotationPDF">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Cotización PDF</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    <ul>
+                                        <li class="w3-small" *ngIf="raw.quotationPDF"><a [href]="raw.quotationPDF"
+                                                target="_blank">Imagen 1</a></li>
+                                    </ul>
                                 </td>
                             </ng-container>
 
@@ -129,7 +179,7 @@
                                             <mat-icon class="ms-icons-color">print</mat-icon> Imprimir
                                         </button>
                                         <button mat-menu-item (click)="editQuotation(req)"
-                                            [disabled]="req.status !== 'Enviado'">
+                                            *ngIf="req.status !== 'Referenciada' || req.status === 'Anulado'">
                                             <mat-icon class="ms-icons-color">edit</mat-icon> Editar
                                         </button>
                                         <button mat-menu-item (click)="cancelQuotation(req)"
@@ -140,10 +190,6 @@
                                             *ngIf="req.status === 'Anulado'">
                                             <mat-icon class="ms-icons-color">history</mat-icon> Restaurar
                                         </button>
-                                        <!-- <button mat-menu-item (click)="generateOPe(req)"
-                                            *ngIf="req.status === 'Aprobado'">
-                                            <mat-icon class="ms-icons-color">check_circle</mat-icon> Generar OPe
-                                        </button> -->
                                     </mat-menu>
                                     <button mat-icon-button [matMenuTriggerFor]="reqMenu">
                                         <mat-icon>more_vert</mat-icon>

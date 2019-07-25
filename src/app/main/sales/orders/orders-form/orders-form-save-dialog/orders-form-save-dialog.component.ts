@@ -5,7 +5,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { AuthService } from 'src/app/core/auth.service';
 import { DatabaseService } from 'src/app/core/database.service';
 import { AngularFirestoreDocument } from '@angular/fire/firestore';
-import { Correlative, Order } from './../../../../../core/types';
+import { Correlative, Order, Quotation } from './../../../../../core/types';
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { Observable, BehaviorSubject, Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -115,6 +115,7 @@ export class OrdersFormSaveDialogComponent implements OnInit, OnDestroy {
           let newCorrelative = doc.data().correlative + 1;
           this.currentCorrelative = newCorrelative;
           this.orderRef = this.dbs.ordersCollection.doc<Order>(`OPe${newCorrelative}`);
+          let quoteRef = this.dbs.quotationsCollection.doc<Quotation>(this.data['form']['quotation']['id']).ref;
 
           let data = {
             id: `OPe${newCorrelative}`,
@@ -127,10 +128,10 @@ export class OrdersFormSaveDialogComponent implements OnInit, OnDestroy {
             color: [],
             quantity: this.data['form']['quantity'],
             description: this.data['form']['description'],
-            image1: '',
-            image2: '',
-            file1: '',
-            file2: '',
+            image1: this.data['imageSrc1'],
+            image2: this.data['imageSrc2'],
+            file1: this.data['pdf1'],
+            file2: this.data['pdf2'],
             regDate: Date.now(),
             createdBy: this.auth.userInteriores.displayName,
             createdByUid: this.auth.userInteriores.uid
@@ -138,6 +139,7 @@ export class OrdersFormSaveDialogComponent implements OnInit, OnDestroy {
 
           t.set(this.orderRef.ref, data);
           t.update(this.dbs.orderCorrelativeDocument.ref, { correlative: newCorrelative });
+          t.update(quoteRef, {status: 'Referenciada', orderReference: newCorrelative});
         });
     }).then(() => {
       this.flags.created = true;

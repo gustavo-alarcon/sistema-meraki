@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { DatabaseService } from 'src/app/core/database.service';
 import { ProdQuotationsEditDialogComponent } from './prod-quotations-edit-dialog/prod-quotations-edit-dialog.component';
 import { AuthService } from 'src/app/core/auth.service';
+import { ProdQuotationsAnswerDialogComponent } from './prod-quotations-answer-dialog/prod-quotations-answer-dialog.component';
 
 @Component({
   selector: 'app-prod-quotations',
@@ -18,7 +19,7 @@ export class ProdQuotationsComponent implements OnInit, OnDestroy {
 
   filteredQuotations: Array<Quotation> = [];
 
-  displayedColumns: string[] = ['correlative', 'description', 'deliveryDate', 'quantity', 'files', 'status', 'createdBy', 'actions'];
+  displayedColumns: string[] = ['correlative', 'description', 'deliveryDate', 'quantity', 'files', 'status', 'orderReference', 'recommendations', 'proposedDate', 'import', 'quotationPDF', 'actions'];
 
 
   dataSource = new MatTableDataSource();
@@ -103,26 +104,14 @@ export class ProdQuotationsComponent implements OnInit, OnDestroy {
       })
   }
 
-  approveQuotation(quote: Quotation): void {
-    this.dbs.quotationsCollection
-      .doc(quote.id)
-      .update({
-        status: 'Aprobado',
-        approvedBy: this.auth.userInteriores.displayName,
-        approvedByUid: this.auth.userInteriores.uid,
-        approvedDate: Date.now()
-      })
-      .then(() => {
-        this.snackbar.open(`Cotización #${quote.correlative} Aprobada`, 'Cerrar', {
-          duration: 10000
-        });
-      })
-      .catch(err => {
-        this.snackbar.open(`Hubo un error aprobando la cotización #${quote.correlative}`, 'Cerrar', {
-          duration: 10000
-        });
-        console.log(err);
-      })
+  answerQuotation(quote: Quotation): void {
+    if (quote) {
+      this.dialog.open(ProdQuotationsAnswerDialogComponent, {
+        data: {
+          quote: quote
+        }
+      });
+    }
   }
 
   previewQuotation(quote: Quotation): void {

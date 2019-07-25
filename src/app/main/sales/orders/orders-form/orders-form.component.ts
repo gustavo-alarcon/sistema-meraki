@@ -27,6 +27,9 @@ export class OrdersFormComponent implements OnInit {
   selectedFile3 = null;
   selectedFile4 = null;
 
+  pdf1 = null;
+  pdf2 = null;
+
   minDate: Date = new Date();
 
   filteredDocuments: Observable<Document[]>;
@@ -50,7 +53,7 @@ export class OrdersFormComponent implements OnInit {
           let approved: Array<Quotation> = [];
           if (res) {
             res.forEach(option => {
-              if (option.status === 'Aprobado') {
+              if (option.status !== 'Referenciada') {
                 approved.push(option);
               }
             })
@@ -83,8 +86,10 @@ export class OrdersFormComponent implements OnInit {
 
   createForm(): void {
     this.dataFormGroup = this.fb.group({
-      quotation: [null, [Validators.required]],
+      quotation: null,
+      orderNote: [null, [Validators.required]],
       document: [null, [Validators.required]],
+      documentSerial: [null, [Validators.required]],
       documentCorrelative: [null, [Validators.required]],
       quantity: [null, [Validators.required]],
       deliveryDate: [null, [Validators.required]],
@@ -110,6 +115,9 @@ export class OrdersFormComponent implements OnInit {
 
       this.imageSrc1 = quote.image1;
       this.imageSrc2 = quote.image2;
+      this.pdf1 = quote.file1;
+      this.pdf2 = quote.file2;
+
     }
     
   }
@@ -132,7 +140,11 @@ export class OrdersFormComponent implements OnInit {
           image1: this.selectedFile1,
           image2: this.selectedFile2,
           file1: this.selectedFile3,
-          file2: this.selectedFile4
+          file2: this.selectedFile4,
+          imageSrc1: this.imageSrc1,
+          imageSrc2: this.imageSrc2,
+          pdf1: this.pdf1,
+          pdf2: this.pdf2
         }
       }).afterClosed().subscribe(res => {
         if (res) {

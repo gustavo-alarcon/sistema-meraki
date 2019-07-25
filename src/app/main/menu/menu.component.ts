@@ -130,7 +130,6 @@ export class MenuComponent implements OnInit, OnDestroy {
           if (event.url !== '/main') {
             this.auth.saveLastRoute(event.url);
             this.checkRoute(event.url);
-            console.log(event.url);
           }
 
         }

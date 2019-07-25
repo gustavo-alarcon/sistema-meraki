@@ -110,7 +110,7 @@ export class QuotationsEditDialogComponent implements OnInit, OnDestroy {
 
       if (this.selectedFile1) {
         const file = this.selectedFile1;
-        const filePath = `/Cotizaciones/${Date.now()}_${file.name}`;
+        const filePath = `/Cotizaciones/images/${Date.now()}_${file.name}`;
         const fileRef = this.storage.ref(filePath);
         const task = this.storage.upload(filePath, file);
 
@@ -135,7 +135,7 @@ export class QuotationsEditDialogComponent implements OnInit, OnDestroy {
 
       if (this.selectedFile2) {
         const file = this.selectedFile2;
-        const filePath = `/Cotizaciones/${Date.now()}_${file.name}`;
+        const filePath = `/Cotizaciones/images/${Date.now()}_${file.name}`;
         const fileRef = this.storage.ref(filePath);
         const task = this.storage.upload(filePath, file);
 
@@ -160,7 +160,7 @@ export class QuotationsEditDialogComponent implements OnInit, OnDestroy {
 
       if (this.selectedFile3) {
         const file = this.selectedFile3;
-        const filePath = `/Cotizaciones/${Date.now()}_${file.name}`;
+        const filePath = `/Cotizaciones/PDF/${Date.now()}_${file.name}`;
         const fileRef = this.storage.ref(filePath);
         const task = this.storage.upload(filePath, file);
 
@@ -185,7 +185,7 @@ export class QuotationsEditDialogComponent implements OnInit, OnDestroy {
 
       if (this.selectedFile4) {
         const file = this.selectedFile4;
-        const filePath = `/Cotizaciones/${Date.now()}_${file.name}`;
+        const filePath = `/Cotizaciones/PDF/${Date.now()}_${file.name}`;
         const fileRef = this.storage.ref(filePath);
         const task = this.storage.upload(filePath, file);
 

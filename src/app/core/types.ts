@@ -120,7 +120,9 @@ export interface Order {
     ORCorrelative?: number;
     OPeCorrelative?: number;
     quotationCorrelative?: number;
+    orderNote?: number;
     document: Document;
+    documentSerial?: number;
     documentCorrelative: string;
     deliveryDate: number;
     status: string;
@@ -143,12 +145,17 @@ export interface Quotation {
     correlative: number;
     deliveryDate: number;
     status: string;
+    orderReference?: number;
+    recommendations?: string;
+    import?: number;
+    proposedDate?: number;
     quantity: number;
     description: string;
     image1: string;
     image2: string;
     file1: string;
     file2: string;
+    quotationPDF?: string;
     regDate: number;
     createdBy: string;
     createdByUid: string;
