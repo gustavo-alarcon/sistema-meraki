@@ -17,6 +17,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatNativeDateModule } from '@angular/material';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { Ng2ImgMaxModule } from 'ng2-img-max';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatDialogModule,
     MatProgressBarModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    Ng2ImgMaxModule
   ],
   exports: [
     OrdersFormComponent

@@ -79,6 +79,10 @@
                         <img [src]="imageSrc1 || '../../../../assets/images/no-image.png'"
                             style="width:100px; height:75px; cursor:pointer" class="mat-elevation-z4 w3-hover-shadow"
                             (click)="fileInput1.click()">
+                        <mat-progress-bar mode="indeterminate" *ngIf="resizingImage1" style="width:100px">
+                        </mat-progress-bar>
+                        <span class="w3-small ms-color-11 ms-font-montserrat"
+                            *ngIf="resizingImage1">*comprimiendo</span>
                     </div>
 
                 </div>
@@ -91,5 +95,5 @@
 <mat-dialog-actions align="end">
     <button mat-stroked-button class="w3-margin-right" color="warn" mat-dialog-close>Cancelar</button>
     <button mat-raised-button class="w3-margin-right" color="primary" (click)="create()"
-        [disabled]="!dataFormGroup.valid || duplicate.name || duplicate.code">Crear</button>
+        [disabled]="!dataFormGroup.valid || duplicate.name || duplicate.code || resizingImage1">Crear</button>
 </mat-dialog-actions>

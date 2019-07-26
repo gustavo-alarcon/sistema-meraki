@@ -10,9 +10,8 @@
             <mat-label>Referencie una <b>cotización</b></mat-label>
             <input matInput type="text" [matAutocomplete]="quotationAuto" placeholder="Escriba..."
                 formControlName="quotation">
-            <mat-autocomplete #quotationAuto="matAutocomplete"
-                                [displayWith]="showQuotation"
-                                (optionSelected)="selectedQuotation($event)">
+            <mat-autocomplete #quotationAuto="matAutocomplete" [displayWith]="showQuotation"
+                (optionSelected)="selectedQuotation($event)">
                 <mat-option *ngFor="let quotation of filteredQuotations | async" [value]="quotation">
                     COT{{quotation.correlative}}
                 </mat-option>
@@ -21,8 +20,7 @@
 
         <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
             <mat-label>Nota de pedido</mat-label>
-            <input matInput type="number" min="0" step="1" formControlName="orderNote"
-                placeholder="Escriba...">
+            <input matInput type="number" min="0" step="1" formControlName="orderNote" placeholder="Escriba...">
             <mat-hint>requerido *</mat-hint>
         </mat-form-field>
 
@@ -41,8 +39,7 @@
 
         <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
             <mat-label>Número de serie</mat-label>
-            <input matInput type="number" min="0" step="1" formControlName="documentSerial"
-                placeholder="Escriba...">
+            <input matInput type="number" min="0" step="1" formControlName="documentSerial" placeholder="Escriba...">
             <mat-hint>requerido *</mat-hint>
         </mat-form-field>
 
@@ -79,12 +76,16 @@
                 <img [src]="imageSrc1 || '../../../../assets/images/no-image.png'"
                     style="width:100px; height:75px; cursor:pointer" class="mat-elevation-z4 w3-hover-shadow"
                     (click)="fileInput1.click()">
+                <mat-progress-bar mode="indeterminate" *ngIf="resizingImage1" style="width:100px"></mat-progress-bar>
+                <span class="w3-small ms-color-11 ms-font-montserrat" *ngIf="resizingImage1">*comprimiendo</span>
             </div>
             <div class="w3-half">
                 <input #fileInput2 style="display: none" type="file" (change)="onFileSelected2($event)">
                 <img [src]="imageSrc2 || '../../../../assets/images/no-image.png'"
                     style="width:100px; height:75px; cursor:pointer" class="mat-elevation-z4 w3-hover-shadow"
                     (click)="fileInput2.click()">
+                <mat-progress-bar mode="indeterminate" *ngIf="resizingImage2" style="width:100px"></mat-progress-bar>
+                <span class="w3-small ms-color-11 ms-font-montserrat" *ngIf="resizingImage2">*comprimiendo</span>
             </div>
         </div>
 
@@ -105,7 +106,7 @@
             <span class="ms-fill"></span>
             <button mat-stroked-button class="w3-margin-right" color="warn" (click)="clean()">Limpiar</button>
             <button mat-raised-button class="w3-margin-right" color="primary" (click)="save()"
-                [disabled]="!dataFormGroup.valid">Guardar</button>
+                [disabled]="!dataFormGroup.valid || resizingImage1 || resizingImage2">Guardar</button>
         </div>
 
     </form>

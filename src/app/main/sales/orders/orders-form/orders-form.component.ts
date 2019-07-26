@@ -8,6 +8,7 @@ import { OrdersFormSaveDialogComponent } from './orders-form-save-dialog/orders-
 import { ActivatedRoute } from '@angular/router';
 import { map, startWith } from 'rxjs/operators';
 import { DatabaseService } from 'src/app/core/database.service';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 @Component({
   selector: 'app-orders-form',
@@ -20,9 +21,11 @@ export class OrdersFormComponent implements OnInit {
 
   selectedFile1 = null;
   imageSrc1: string | ArrayBuffer;
+  resizingImage1: boolean = false;
 
   selectedFile2 = null;
   imageSrc2: string | ArrayBuffer;
+  resizingImage2: boolean = false;
 
   selectedFile3 = null;
   selectedFile4 = null;
@@ -41,7 +44,8 @@ export class OrdersFormComponent implements OnInit {
     private fb: FormBuilder,
     private snackbar: MatSnackBar,
     private dialog: MatDialog,
-    public dbs: DatabaseService
+    public dbs: DatabaseService,
+    private ng2ImgMax: Ng2ImgMaxService
   ) { }
 
   ngOnInit() {
@@ -160,7 +164,6 @@ export class OrdersFormComponent implements OnInit {
 
   onFileSelected1(event): void {
     if (event.target.files[0].type === 'image/png' || event.target.files[0].type === 'image/jpeg') {
-      this.selectedFile1 = event.target.files[0];
 
       if (event.target.files && event.target.files[0]) {
         const file = event.target.files[0];
@@ -170,6 +173,20 @@ export class OrdersFormComponent implements OnInit {
 
         reader.readAsDataURL(file);
       }
+
+      this.resizingImage1 = true;
+      this.ng2ImgMax.resizeImage(event.target.files[0], 10000, 426).subscribe(
+        result => {
+          this.selectedFile1 = new File([result], result.name);
+          console.log(':smiley: Oh si!');
+          this.resizingImage1 = false;
+        },
+        error => {
+          console.log('😢 Oh no!', error);
+          this.resizingImage1 = false;
+        }
+      );
+
     } else {
       this.snackbar.open("Seleccione una imagen en formato png o jpeg", "Cerrar", {
         duration: 6000
@@ -180,7 +197,6 @@ export class OrdersFormComponent implements OnInit {
 
   onFileSelected2(event): void {
     if (event.target.files[0].type === 'image/png' || event.target.files[0].type === 'image/jpeg') {
-      this.selectedFile2 = event.target.files[0];
 
       if (event.target.files && event.target.files[0]) {
         const file = event.target.files[0];
@@ -190,6 +206,20 @@ export class OrdersFormComponent implements OnInit {
 
         reader.readAsDataURL(file);
       }
+
+      this.resizingImage2 = true;
+      this.ng2ImgMax.resizeImage(event.target.files[0], 10000, 426).subscribe(
+        result => {
+          this.selectedFile2 = new File([result], result.name);
+          console.log('Oh si!');
+          this.resizingImage2 = false;
+        },
+        error => {
+          console.log('😢 Oh no!', error);
+          this.resizingImage2 = false;
+        }
+      );
+
     } else {
       this.snackbar.open("Seleccione una imagen en formato png o jpeg", "Cerrar", {
         duration: 6000

@@ -17,6 +17,7 @@ import { FinishedProductsEditConfirmComponent } from './finished-products-edit-c
 
 import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatAutocompleteModule, MatCheckboxModule, MatTooltipModule, MatDividerModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSnackBarModule, MatProgressSpinnerModule, MatProgressBarModule, MatMenuModule, MatSelectModule } from '@angular/material';
 import { FinishedProductsChangeColorConfirmComponent } from './finished-products-change-color-confirm/finished-products-change-color-confirm.component';
+import { Ng2ImgMaxModule } from 'ng2-img-max';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { FinishedProductsChangeColorConfirmComponent } from './finished-products
     MatProgressSpinnerModule,
     MatProgressBarModule,
     MatMenuModule,
-    MatSelectModule
+    MatSelectModule,
+    Ng2ImgMaxModule
   ],
   entryComponents: [
     FinishedProductsCreateDialogComponent,

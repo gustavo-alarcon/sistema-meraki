@@ -8,6 +8,7 @@ import { MatDialogRef, MatSnackBar, MatDialog } from '@angular/material';
 import { startWith, map, tap, debounceTime } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/auth.service';
 import { FinishedProductsCreateConfirmComponent } from '../finished-products-create-confirm/finished-products-create-confirm.component';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 @Component({
   selector: 'app-finished-products-create-dialog',
@@ -31,6 +32,7 @@ export class FinishedProductsCreateDialogComponent implements OnInit, OnDestroy 
 
   selectedFile1 = null;
   imageSrc1: string | ArrayBuffer;
+  resizingImage1: boolean = false;
 
   subscriptions: Array<Subscription> = [];
 
@@ -40,7 +42,8 @@ export class FinishedProductsCreateDialogComponent implements OnInit, OnDestroy 
     public auth: AuthService,
     private dialogRef: MatDialogRef<FinishedProductsCreateDialogComponent>,
     private snackbar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ng2ImgMax: Ng2ImgMaxService
   ) { }
 
   ngOnInit() {
@@ -124,7 +127,6 @@ export class FinishedProductsCreateDialogComponent implements OnInit, OnDestroy 
 
   onFileSelected1(event): void {
     if (event.target.files[0].type === 'image/png' || event.target.files[0].type === 'image/jpeg') {
-      this.selectedFile1 = event.target.files[0];
 
       if (event.target.files && event.target.files[0]) {
         const file = event.target.files[0];
@@ -134,6 +136,20 @@ export class FinishedProductsCreateDialogComponent implements OnInit, OnDestroy 
 
         reader.readAsDataURL(file);
       }
+
+      this.resizingImage1 = true;
+      this.ng2ImgMax.resizeImage(event.target.files[0], 10000, 800).subscribe(
+        result => {
+          this.selectedFile1 = new File([result], result.name);
+          console.log('Oh si!');
+          this.resizingImage1 = false;
+        },
+        error => {
+          console.log('😢 Oh no!', error);
+          this.resizingImage1 = false;
+        }
+      );
+
     } else {
       this.snackbar.open("Seleccione una imagen en formato png o jpeg", "Cerrar", {
         duration: 6000
