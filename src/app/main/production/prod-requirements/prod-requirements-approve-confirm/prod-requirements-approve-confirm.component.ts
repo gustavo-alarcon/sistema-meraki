@@ -53,7 +53,7 @@ export class ProdRequirementsApproveConfirmComponent implements OnInit {
                   ORCorrelative: this.data.req.correlative,
                   status: 'Configurando',
                   product: this.data.req.product,
-                  color: [this.data.req.color],
+                  color: this.data.req.color,
                   quantity: this.data.req.quantity,
                   description: this.data.req.description,
                   image1: this.data.req.image1,
@@ -64,7 +64,8 @@ export class ProdRequirementsApproveConfirmComponent implements OnInit {
                   createdBy: this.data.req.createdBy,
                   createdByUid: this.data.req.createdByUid,
                   approvedBy: this.auth.userInteriores.displayName,
-                  approvedByUid: this.auth.userInteriores.uid
+                  approvedByUid: this.auth.userInteriores.uid,
+                  approvedDate: Date.now()
                 };
 
                 t.set(productionOrderRef.ref, data);

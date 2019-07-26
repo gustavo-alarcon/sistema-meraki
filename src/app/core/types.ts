@@ -71,6 +71,7 @@ export interface Product {
     description: string;
     image: string;
     correlative: number;
+    initialStock: number;
     stock: number;
     rawMaterialList?: RawMaterialList;
     sale: number;
@@ -82,7 +83,7 @@ export interface Requirement {
     correlative: number;
     status: string;
     product: Product;
-    color: Color;
+    color: string;
     quantity: number;
     description: string;
     image1: string;
@@ -125,6 +126,7 @@ export interface Order {
     documentSerial?: number;
     documentCorrelative: string;
     deliveryDate: number;
+    proposedDate?: number;
     status: string;
     quantity: number;
     description: string;
@@ -227,12 +229,15 @@ export interface ProductionOrder {
     correlative: number;
     ORCorrelative?: number;
     OPeCorrelative?: number;
+    quotationCorrelative?: number;
+    orderNote?: number;
     product?: Product;
     document?: Document;
+    documentSerial?: number;
     documentCorrelative?: string;
     deliveryDate?: number;
     status: string;
-    color?: Array<Color>;
+    color?: string;
     quantity: number;
     description: string;
     image1: string;
@@ -245,6 +250,12 @@ export interface ProductionOrder {
     approvedBy?: string;
     approvedByUid?: string;
     approvedDate?: number;
+    startedBy?: string;
+    startedByUid?: string;
+    startedDate?: number;
+    finalizedBy?: string;
+    finalizedByUid?: string;
+    finalizedDate?: number;
 }
 
 export interface TicketRawMaterial {
@@ -332,11 +343,17 @@ export interface Transfer {
     approvedByUid?: string;
     approvedDate?: number;
     canceledBy?: string;
-    canceldByUid?: string;
+    canceledByUid?: string;
     canceledDate?: number;
     carriedBy?: string;
     carriedByUid?: string;
     carriedDate?: number;
+    receivedBy?: string;
+    receivedByUid?: string;
+    receivedDate?: number;
+    rejectedBy?: string;
+    rejectedByUid?: string;
+    rejectedDate?: number;
 }
 
 export interface TransferList {

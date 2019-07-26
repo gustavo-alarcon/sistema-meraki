@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequirementsFormRoutingModule } from './requirements-form-routing.module';
 import { RequirementsFormComponent } from './requirements-form.component';
 import { RequirementFormSaveDialogComponent } from './requirement-form-save-dialog/requirement-form-save-dialog.component';
+import { Ng2ImgMaxModule } from 'ng2-img-max';
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -34,7 +35,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatDividerModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    Ng2ImgMaxModule
   ],
   exports: [
     RequirementsFormComponent

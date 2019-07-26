@@ -68,22 +68,24 @@ export class FinishedProductsComponent implements OnInit, OnDestroy {
             if (res) {
               this.serialNumbersInTransfering = {};
               res.forEach(product => {
-                let transferCount = 0;
-                let soldCount = 0;
-                this.dbs.finishedProductsCollection
-                  .doc(product.id)
-                  .collection<SerialNumber>('products')
-                  .get().forEach(snapshots => {
-                    snapshots.forEach(serial => {
-                      if (serial.data()['status'] === 'Traslado') {
-                        transferCount++;
-                      } else if (serial.data()['status'] === 'Vendido') {
-                        soldCount++;
-                      }
+                if (product.id) {
+                  let transferCount = 0;
+                  let soldCount = 0;
+                  this.dbs.finishedProductsCollection
+                    .doc(product.id)
+                    .collection<SerialNumber>('products')
+                    .get().forEach(snapshots => {
+                      snapshots.forEach(serial => {
+                        if (serial.data()['status'] === 'Traslado') {
+                          transferCount++;
+                        } else if (serial.data()['status'] === 'Vendido') {
+                          soldCount++;
+                        }
+                      });
+                      this.serialNumbersInTransfering[product.id] = transferCount;
+                      this.serialNumbersSold[product.id] = soldCount;
                     });
-                    this.serialNumbersInTransfering[product.id] = transferCount;
-                    this.serialNumbersSold[product.id] = soldCount;
-                  });
+                }
               });
             }
           })
@@ -107,9 +109,7 @@ export class FinishedProductsComponent implements OnInit, OnDestroy {
     this.filteredFinishedProducts = this.dbs.finishedProducts.filter(option =>
       option.category.toLowerCase().includes(ref) ||
       option.code.toLowerCase().includes(ref) ||
-      option.name.toLowerCase().includes(ref) ||
-      option.stock.toString().includes(ref) ||
-      option.sale.toString().includes(ref));
+      option.name.toLowerCase().includes(ref));
     this.dataSource.data = this.filteredFinishedProducts;
   }
 

@@ -20,7 +20,7 @@ export class ProductionListComponent implements OnInit, OnDestroy {
 
   filteredProductionOrders: Array<ProductionOrder> = [];
 
-  displayedColumns: string[] = ['correlative', 'corr', 'product', 'document', 'color', 'quantity', 'files', 'description', 'deliveryDate', 'status', 'createdBy', 'actions'];
+  displayedColumns: string[] = ['correlative', 'regDate', 'corr', 'product', 'document', 'color', 'quantity', 'files', 'description', 'deliveryDate', 'status', 'createdBy', 'approvedBy', 'startedBy', 'finalizedBy', 'actions'];
 
 
   dataSource = new MatTableDataSource();
@@ -82,7 +82,12 @@ export class ProductionListComponent implements OnInit, OnDestroy {
     } else {
       this.dbs.productionOrdersCollection
         .doc(order.id)
-        .update({ status: 'Produciendo' })
+        .update({
+          status: 'Produciendo',
+          startedBy: this.auth.userInteriores.displayName,
+          startedByUid: this.auth.userInteriores.uid,
+          startedDate: Date.now()
+        })
         .then(() => {
           this.snackbar.open(`Orden de producción #${order.correlative} en proceso!`, 'Cerrar', {
             duration: 6000
@@ -124,7 +129,12 @@ export class ProductionListComponent implements OnInit, OnDestroy {
   finalizeProduction(order: ProductionOrder): void {
     this.dbs.productionOrdersCollection
       .doc(order.id)
-      .update({ status: 'Acabado' })
+      .update({
+        status: 'Acabado',
+        finalizedBy: this.auth.userInteriores.displayName,
+        finalizedByUid: this.auth.userInteriores.uid,
+        finalizedDate: Date.now()
+      })
       .then(() => {
         let transaction =
           this.af.firestore.runTransaction(t => {

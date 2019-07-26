@@ -20,7 +20,7 @@ export class TransfersComponent implements OnInit {
 
   filteredTransfers: Array<Transfer> = [];
 
-  displayedColumns: string[] = ['correlative', 'origin', 'destination', 'serialList', 'status', 'createdBy', 'actions'];
+  displayedColumns: string[] = ['correlative', 'origin', 'destination', 'serialList', 'status', 'createdBy', 'approvedBy', 'carriedBy', 'receivedBy', 'rejectedBy', 'canceledBy', 'actions'];
 
   dataSource = new MatTableDataSource();
 
@@ -38,6 +38,9 @@ export class TransfersComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    
     const transfer$ =
       this.dbs.currentDataTransfers
         .subscribe(res => {
@@ -158,7 +161,15 @@ export class TransfersComponent implements OnInit {
                 }
               });
             }
-            t.update(this.dbs.transfersCollection.doc(transfer.id).ref, { status: 'Anulado', approvedBy: '', approvedByUid: '', approvedDate: null });
+            t.update(this.dbs.transfersCollection.doc(transfer.id).ref, {
+              status: 'Anulado',
+              approvedBy: '',
+              approvedByUid: '',
+              approvedDate: null,
+              canceledBy: this.auth.userInteriores.displayName,
+              canceledByUid: this.auth.userInteriores.uid,
+              canceledDate: Date.now(),
+             });
           });
       }).then(() => {
         this.snackbar.open(`Traslado #${transfer.correlative} ANULADO!`, 'Cerrar', {
@@ -204,7 +215,12 @@ export class TransfersComponent implements OnInit {
                   .doc(transfer.serialList[0].id)
             }
 
-            t.update(this.dbs.transfersCollection.doc(transfer.id).ref, { status: 'Rechazado' });
+            t.update(this.dbs.transfersCollection.doc(transfer.id).ref, {
+              status: 'Rechazado',
+              rejectedBy: this.auth.userInteriores.displayName,
+              rejectedByUid: this.auth.userInteriores.uid,
+              rejectedDate: Date.now(),
+            });
             t.update(serialRef.ref, {status: 'Acabado'});
 
           });

@@ -32,6 +32,16 @@
                 </td>
             </ng-container>
 
+            <ng-container matColumnDef="regDate">
+                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por fecha"
+                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                    Fecha</th>
+                <td mat-cell style="padding:0px 8px" class="w3-center" *matCellDef="let req">
+                    <span>{{req.regDate | date : 'dd/MM/yyyy'}}</span><br>
+                    <span class="w3-small"><b> ({{req.regDate | date : 'hh:mm a'}})</b></span>
+                </td>
+            </ng-container>
+
             <ng-container matColumnDef="quotation">
                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por cotización"
                     matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
@@ -42,11 +52,11 @@
             </ng-container>
 
             <ng-container matColumnDef="document">
-                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por documento"
+                <th mat-header-cell style="padding:0px 8px; min-width:220px" *matHeaderCellDef matTooltip="Ordenar tabla por documento"
                     matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
                     Documento</th>
                 <td mat-cell style="padding:0px 8px" *matCellDef="let order">
-                    {{order.document.name}}-{{order.documentCorrelative}}
+                    {{order.document.name}}-{{order.documentSerial}}-{{order.documentCorrelative}}
                 </td>
             </ng-container>
 

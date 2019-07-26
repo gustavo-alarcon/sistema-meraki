@@ -19,7 +19,7 @@ export class ReceptionsComponent implements OnInit, OnDestroy {
 
   filteredReceptions: Array<Transfer> = [];
 
-  displayedColumns: string[] = ['correlative', 'origin', 'destination', 'serialList', 'status', 'createdBy', 'actions'];
+  displayedColumns: string[] = ['correlative', 'origin', 'destination', 'serialList', 'status', 'createdBy', 'carriedBy', 'actions'];
 
   dataSource = new MatTableDataSource();
 
@@ -37,6 +37,9 @@ export class ReceptionsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+
     const reception$ =
       this.dbs.currentDataReceptions
         .subscribe(res => {
@@ -67,12 +70,12 @@ export class ReceptionsComponent implements OnInit, OnDestroy {
     })
   }
 
-  async receiveTransfer(transfer: Transfer) {
+  receiveTransfer(transfer: Transfer) {
 
     let successCounter: number = 0;
     try {
       transfer.transferList.forEach(product => {
-        let transactionDestination = this.af.firestore.runTransaction(async t => {
+        let transactionDestination = this.af.firestore.runTransaction(t => {
           let productDestination: AngularFirestoreDocument;
           if (transfer.destination.name === 'Productos acabados') {
             productDestination = this.dbs.finishedProductsCollection.doc(product.product.id);
@@ -129,7 +132,12 @@ export class ReceptionsComponent implements OnInit, OnDestroy {
       });
 
       if (successCounter === transfer.transferList.length) {
-        this.dbs.transfersCollection.doc(transfer.id).update({ status: 'Recibido' });
+        this.dbs.transfersCollection.doc(transfer.id).update({
+          status: 'Recibido',
+          receivedBy: this.auth.userInteriores.displayName,
+          receivedByUid: this.auth.userInteriores.uid,
+          receivedDate: Date.now()
+        });
         this.snackbar.open(`Traslado #${transfer.correlative} RECIBIDO!`, 'Cerrar', {
           duration: 6000
         });

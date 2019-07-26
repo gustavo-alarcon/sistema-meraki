@@ -56,6 +56,16 @@
                                 </td>
                             </ng-container>
 
+                            <ng-container matColumnDef="regDate">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por fecha"
+                                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                                    Fecha</th>
+                                <td mat-cell style="padding:0px 8px" class="w3-center" *matCellDef="let req">
+                                    <span>{{req.regDate | date : 'dd/MM/yyyy'}}</span><br>
+                                    <span class="w3-small"><b> ({{req.regDate | date : 'hh:mm a'}})</b></span>
+                                </td>
+                            </ng-container>
+
                             <ng-container matColumnDef="product">
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
                                     matTooltip="Ordenar tabla por producto" matTooltipPosition="above"
@@ -72,7 +82,7 @@
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
                                     Color</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let req">
-                                    {{req.color.name}}
+                                    {{req.color}}
                                 </td>
                             </ng-container>
 

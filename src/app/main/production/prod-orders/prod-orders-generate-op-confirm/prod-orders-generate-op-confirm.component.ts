@@ -49,10 +49,13 @@ export class ProdOrdersGenerateOPConfirmComponent implements OnInit {
                   id: `OP${newCorrelative}`,
                   correlative: newCorrelative,
                   OPeCorrelative: this.data.order.correlative,
+                  quotationCorrelative: this.data.order.quotationCorrelative,
+                  orderNote: this.data.order.orderNote,
                   document: this.data.order.document,
+                  documentSerial: this.data.order.documentSerial,
                   documentCorrelative: this.data.order.documentCorrelative,
                   status: 'Configurando',
-                  color: [],
+                  color: '',
                   quantity: this.data.order.quantity,
                   description: this.data.order.description,
                   image1: this.data.order.image1,
@@ -60,7 +63,7 @@ export class ProdOrdersGenerateOPConfirmComponent implements OnInit {
                   file1: this.data.order.file1,
                   file2: this.data.order.file2,
                   regDate: Date.now(),
-                  deliveryDate: this.data.order.deliveryDate,
+                  deliveryDate: this.data.order.proposedDate ? this.data.order.proposedDate : this.data.order.deliveryDate,
                   createdBy: this.data.order.createdBy,
                   createdByUid: this.data.order.createdByUid,
                   approvedBy: this.auth.userInteriores.displayName,
@@ -74,14 +77,19 @@ export class ProdOrdersGenerateOPConfirmComponent implements OnInit {
                   duration: 6000
                 });
               });
-          });
-
-        this.flags.approved = true;
-        this.uploading = false;
-        this.snackbar.open(`Pedido #${this.data.order.correlative} aprobado!`, 'Cerrar', {
-          duration: 6000
-        });
-        this.dialogRef.close(true);
+          }).then(() => {
+            this.flags.approved = true;
+            this.uploading = false;
+            this.snackbar.open(`Pedido #${this.data.order.correlative} aprobado!`, 'Cerrar', {
+              duration: 6000
+            });
+            this.dialogRef.close(true);
+          }).catch(err => {
+            this.uploading = false;
+            this.snackbar.open(`Transaction fails!`, 'Cerrar', {
+              duration: 6000
+            });
+          })
       })
       .catch(err => {
         this.snackbar.open(`Hubo un error actualizando el documento`, 'Cerrar', {

@@ -108,13 +108,13 @@ export class ProductionListProduceOpeConfirmComponent implements OnInit, OnDestr
 
   createForm(): void {
     this.dataFormGroup = this.fb.group({
-      code: ['19P', [Validators.required]],
+      code: ['19P' + (this.data.orderNote ? this.data.orderNote : '---'), [Validators.required]],
       name: [null, [Validators.required]],
       correlative: 0,
       stock: 0,
       category: [null, [Validators.required]],
       description: null,
-      sale: [null, [Validators.required]],
+      sale: [0, [Validators.required]],
     })
   }
 
@@ -145,7 +145,10 @@ export class ProductionListProduceOpeConfirmComponent implements OnInit, OnDestr
               .doc(this.data.id)
               .update({
                 status: 'Produciendo',
-                product: finalData
+                product: finalData,
+                startedBy: this.auth.userInteriores.displayName,
+                startedByUid: this.auth.userInteriores.uid,
+                startedDate: Date.now()
               })
               .then(() => {
                 this.snackbar.open(`Orden de producción #${this.data.correlative} en proceso!`, 'Cerrar', {

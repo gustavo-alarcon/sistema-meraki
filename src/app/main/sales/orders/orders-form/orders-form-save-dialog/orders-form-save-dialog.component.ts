@@ -109,157 +109,165 @@ export class OrdersFormSaveDialogComponent implements OnInit, OnDestroy {
     this.uploading = true;
 
     let transaction =
-    this.af.firestore.runTransaction(t => {
-      return t.get(this.dbs.orderCorrelativeDocument.ref)
-        .then(doc => {
-          let newCorrelative = doc.data().correlative + 1;
-          this.currentCorrelative = newCorrelative;
-          this.orderRef = this.dbs.ordersCollection.doc<Order>(`OPe${newCorrelative}`);
-          let quoteRef = this.dbs.quotationsCollection.doc<Quotation>(this.data['form']['quotation']['id']).ref;
+      this.af.firestore.runTransaction(t => {
+        return t.get(this.dbs.orderCorrelativeDocument.ref)
+          .then(doc => {
+            let newCorrelative = doc.data().correlative + 1;
+            this.currentCorrelative = newCorrelative;
+            this.orderRef = this.dbs.ordersCollection.doc<Order>(`OPe${newCorrelative}`);
 
-          let data = {
-            id: `OPe${newCorrelative}`,
-            correlative: newCorrelative,
-            status: 'Enviado',
-            quotationCorrelative: this.data['form']['quotation']['correlative'],
-            document: this.data['form']['document'],
-            documentCorrelative: this.data['form']['documentCorrelative'],
-            deliveryDate: this.data['form']['deliveryDate'].valueOf(),
-            color: [],
-            quantity: this.data['form']['quantity'],
-            description: this.data['form']['description'],
-            image1: this.data['imageSrc1'],
-            image2: this.data['imageSrc2'],
-            file1: this.data['pdf1'],
-            file2: this.data['pdf2'],
-            regDate: Date.now(),
-            createdBy: this.auth.userInteriores.displayName,
-            createdByUid: this.auth.userInteriores.uid
-          };
+            if (this.data['form']['quotation']) {
+              let quoteRef = this.dbs.quotationsCollection.doc<Quotation>(this.data['form']['quotation']['id']).ref;
+              t.update(quoteRef, { status: 'Referenciada', orderReference: newCorrelative });
+            }
 
-          t.set(this.orderRef.ref, data);
-          t.update(this.dbs.orderCorrelativeDocument.ref, { correlative: newCorrelative });
-          t.update(quoteRef, {status: 'Referenciada', orderReference: newCorrelative});
+            let data = {
+              id: `OPe${newCorrelative}`,
+              correlative: newCorrelative,
+              status: 'Enviado',
+              quotationCorrelative: this.data['form']['quotation'] ? this.data['form']['quotation']['correlative'] : '',
+              document: this.data['form']['document'],
+              documentSerial: this.data['form']['documentSerial'],
+              documentCorrelative: this.data['form']['documentCorrelative'],
+              deliveryDate: this.data['form']['deliveryDate'].valueOf(),
+              color: [],
+              quantity: this.data['form']['quantity'],
+              description: this.data['form']['description'],
+              image1: this.data['imageSrc1'],
+              image2: this.data['imageSrc2'],
+              file1: this.data['pdf1'],
+              file2: this.data['pdf2'],
+              regDate: Date.now(),
+              createdBy: this.auth.userInteriores.displayName,
+              createdByUid: this.auth.userInteriores.uid
+            };
+
+            t.set(this.orderRef.ref, data);
+            t.update(this.dbs.orderCorrelativeDocument.ref, { correlative: newCorrelative });
+
+          });
+      }).then(() => {
+        this.flags.created = true;
+        this.storageUploading.next(true);
+
+        if (this.data['image1']) {
+          this.uploading1 = true;
+          const file = this.data['image1'];
+          const filePath = `/Ordenes de pedido/imágenes/${Date.now()}_${file.name}`;
+          const fileRef = this.storage.ref(filePath);
+          const task = this.storage.upload(filePath, file);
+
+          this.uploadPercent1 = task.percentageChanges();
+
+          task.snapshotChanges().pipe(
+            finalize(() => {
+              const downloadURL = fileRef.getDownloadURL();
+
+              downloadURL.subscribe(url => {
+                if (url) {
+                  this.orderRef
+                    .update({ image1: url })
+                    .then(() => {
+                      this.flags.upload1 = true;
+                      this.storageUploading.next(true);
+                    })
+                }
+              })
+            })
+          )
+            .subscribe()
+        }
+
+        if (this.data['image2']) {
+          this.uploading2 = true;
+          const file = this.data['image2'];
+          const filePath = `/Ordenes de pedido/imágenes/${Date.now()}_${file.name}`;
+          const fileRef = this.storage.ref(filePath);
+          const task = this.storage.upload(filePath, file);
+
+          this.uploadPercent2 = task.percentageChanges();
+
+          task.snapshotChanges().pipe(
+            finalize(() => {
+              const downloadURL = fileRef.getDownloadURL();
+
+              downloadURL.subscribe(url => {
+                if (url) {
+                  this.orderRef
+                    .update({ image2: url })
+                    .then(() => {
+                      this.flags.upload2 = true;
+                      this.storageUploading.next(true);
+                    })
+                }
+              })
+            })
+          )
+            .subscribe()
+        }
+
+        if (this.data['file1']) {
+          this.uploading3 = true;
+          const file = this.data['file1'];
+          const filePath = `/Ordenes de pedido/pdf/${Date.now()}_${file.name}`;
+          const fileRef = this.storage.ref(filePath);
+          const task = this.storage.upload(filePath, file);
+
+          this.uploadPercent3 = task.percentageChanges();
+
+          task.snapshotChanges().pipe(
+            finalize(() => {
+              const downloadURL = fileRef.getDownloadURL();
+
+              downloadURL.subscribe(url => {
+                if (url) {
+                  this.orderRef
+                    .update({ file1: url })
+                    .then(() => {
+                      this.flags.upload3 = true;
+                      this.storageUploading.next(true);
+                    })
+                }
+              })
+            })
+          )
+            .subscribe()
+        }
+
+        if (this.data['file2']) {
+          this.uploading4 = true;
+          const file = this.data['file2'];
+          const filePath = `/Ordenes de pedido/pdf/${Date.now()}_${file.name}`;
+          const fileRef = this.storage.ref(filePath);
+          const task = this.storage.upload(filePath, file);
+
+          this.uploadPercent4 = task.percentageChanges();
+
+          task.snapshotChanges().pipe(
+            finalize(() => {
+              const downloadURL = fileRef.getDownloadURL();
+
+              downloadURL.subscribe(url => {
+                if (url) {
+                  this.orderRef
+                    .update({ file2: url })
+                    .then(() => {
+                      this.flags.upload4 = true;
+                      this.storageUploading.next(true);
+                    })
+                }
+              })
+            })
+          )
+            .subscribe()
+        }
+
+      }).catch(err => {
+        this.snackbar.open('Hubo un error creando el pedido!', 'Cerrar', {
+          duration: 6000
         });
-    }).then(() => {
-      this.flags.created = true;
-      this.storageUploading.next(true);
-
-      if (this.data['image1']) {
-        this.uploading1 = true;
-        const file = this.data['image1'];
-        const filePath = `/Ordenes de pedido/imágenes/${Date.now()}_${file.name}`;
-        const fileRef = this.storage.ref(filePath);
-        const task = this.storage.upload(filePath, file);
-
-        this.uploadPercent1 = task.percentageChanges();
-
-        task.snapshotChanges().pipe(
-          finalize(() => {
-            const downloadURL = fileRef.getDownloadURL();
-
-            downloadURL.subscribe(url => {
-              if (url) {
-                this.orderRef
-                  .update({ image1: url })
-                  .then(() => {
-                    this.flags.upload1 = true;
-                    this.storageUploading.next(true);
-                  })
-              }
-            })
-          })
-        )
-          .subscribe()
-      }
-
-      if (this.data['image2']) {
-        this.uploading2 = true;
-        const file = this.data['image2'];
-        const filePath = `/Ordenes de pedido/imágenes/${Date.now()}_${file.name}`;
-        const fileRef = this.storage.ref(filePath);
-        const task = this.storage.upload(filePath, file);
-
-        this.uploadPercent2 = task.percentageChanges();
-
-        task.snapshotChanges().pipe(
-          finalize(() => {
-            const downloadURL = fileRef.getDownloadURL();
-
-            downloadURL.subscribe(url => {
-              if (url) {
-                this.orderRef
-                  .update({ image2: url })
-                  .then(() => {
-                    this.flags.upload2 = true;
-                    this.storageUploading.next(true);
-                  })
-              }
-            })
-          })
-        )
-          .subscribe()
-      }
-
-      if (this.data['file1']) {
-        this.uploading3 = true;
-        const file = this.data['file1'];
-        const filePath = `/Ordenes de pedido/pdf/${Date.now()}_${file.name}`;
-        const fileRef = this.storage.ref(filePath);
-        const task = this.storage.upload(filePath, file);
-
-        this.uploadPercent3 = task.percentageChanges();
-
-        task.snapshotChanges().pipe(
-          finalize(() => {
-            const downloadURL = fileRef.getDownloadURL();
-
-            downloadURL.subscribe(url => {
-              if (url) {
-                this.orderRef
-                  .update({ file1: url })
-                  .then(() => {
-                    this.flags.upload3 = true;
-                    this.storageUploading.next(true);
-                  })
-              }
-            })
-          })
-        )
-          .subscribe()
-      }
-
-      if (this.data['file2']) {
-        this.uploading4 = true;
-        const file = this.data['file2'];
-        const filePath = `/Ordenes de pedido/pdf/${Date.now()}_${file.name}`;
-        const fileRef = this.storage.ref(filePath);
-        const task = this.storage.upload(filePath, file);
-
-        this.uploadPercent4 = task.percentageChanges();
-
-        task.snapshotChanges().pipe(
-          finalize(() => {
-            const downloadURL = fileRef.getDownloadURL();
-
-            downloadURL.subscribe(url => {
-              if (url) {
-                this.orderRef
-                  .update({ file2: url })
-                  .then(() => {
-                    this.flags.upload4 = true;
-                    this.storageUploading.next(true);
-                  })
-              }
-            })
-          })
-        )
-          .subscribe()
-      }
-
-    }).catch(err => {
-      console.log('Transaction failure:', err);
-    });
+        console.log('Transaction failure:', err);
+      });
   }
 
 }

@@ -54,7 +54,11 @@ export class CheckStockComponent implements OnInit {
       this.product.valueChanges
         .pipe(
           map(value => typeof value === 'string' ? value.toLowerCase() : null),
-          map(value => value ? this.dbs.finishedProducts.filter(option => option.code.toLowerCase().includes(value) || option.name.toLowerCase().includes(value)) : this.dbs.finishedProducts)
+          map(value => value ? this.dbs.finishedProducts.filter(option => {
+            if(option.code && option.name){
+              return option.code.toLowerCase().includes(value) || option.name.toLowerCase().includes(value);
+            }
+          }) : this.dbs.finishedProducts)
         )
   }
 

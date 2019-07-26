@@ -19,7 +19,7 @@ export class QuotationsComponent implements OnInit, OnDestroy {
 
   filteredQuotations: Array<Quotation> = [];
 
-  displayedColumns: string[] = ['correlative', 'description', 'deliveryDate', 'quantity', 'files', 'status', 'orderReference', 'recommendations', 'proposedDate', 'import', 'quotationPDF', 'actions'];
+  displayedColumns: string[] = ['correlative', 'regDate', 'description', 'deliveryDate', 'quantity', 'files', 'status', 'orderReference', 'recommendations', 'proposedDate', 'import', 'quotationPDF', 'actions'];
 
 
   dataSource = new MatTableDataSource();

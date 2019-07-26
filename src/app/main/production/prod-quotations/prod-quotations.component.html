@@ -41,21 +41,22 @@
                     <div style=" overflow:auto">
                         <table mat-table [dataSource]="dataSource" matSort style="width:100%">
 
-                            <ng-container matColumnDef="correlative">
+                            <ng-container matColumnDef="correlative" sticky>
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
                                     matTooltip="Ordenar tabla por código" matTooltipPosition="above"
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Correlativo</th>
-                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                <td mat-cell style="padding:0px 8px" class="w3-border-right w3-border-lightgray" *matCellDef="let raw">
                                     {{'COT' + raw.correlative}}
                                 </td>
                             </ng-container>
 
                             <ng-container matColumnDef="regDate">
-                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
-                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
-                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Fecha</th>
-                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
-                                    {{raw.regDate | date: 'dd/MM/yyyy - hh:mm'}}
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por fecha"
+                                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                                    Fecha</th>
+                                <td mat-cell style="padding:0px 8px" class="w3-center" *matCellDef="let req">
+                                    <span>{{req.regDate | date : 'dd/MM/yyyy'}}</span><br>
+                                    <span class="w3-small"><b> ({{req.regDate | date : 'hh:mm'}})</b></span>
                                 </td>
                             </ng-container>
 
@@ -166,7 +167,7 @@
                             <ng-container matColumnDef="createdBy">
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
                                     matTooltip="Ordenar por creador" matTooltipPosition="above"
-                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Creado por</th>
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Solicitado por</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     {{raw.createdBy}}
                                 </td>

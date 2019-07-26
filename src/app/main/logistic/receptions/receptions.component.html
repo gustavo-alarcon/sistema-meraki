@@ -91,6 +91,18 @@
                                 </td>
                             </ng-container>
 
+                            <ng-container matColumnDef="carriedBy">
+                                <th mat-header-cell style="padding:0px 8px; min-width:150px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por solicitante" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                                    Llevado por</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    <span>{{raw.carriedBy ? raw.carriedBy : '---' }}</span><br>
+                                    <span *ngIf="raw.carriedDate">{{raw.carriedDate | date : 'dd/MM/yyyy'}}</span><br>
+                                    <span *ngIf="raw.carriedDate" class="w3-small"><b> ({{raw.carriedDate | date : 'hh:mm a'}})</b></span>
+                                </td>
+                            </ng-container>
+
                             <ng-container matColumnDef="actions" stickyEnd>
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">

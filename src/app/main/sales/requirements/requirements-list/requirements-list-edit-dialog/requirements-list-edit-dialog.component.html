@@ -18,15 +18,10 @@
         </mat-form-field><br>
 
         <mat-form-field class="w3-margin-right w3-margin-bottom" style="width:250px" appearance="outline">
-            <mat-label>Seleccione un <b>color</b></mat-label>
-            <input matInput type="text" [matAutocomplete]="colorAuto" placeholder="Escriba..." formControlName="color" autocomplete="off">
-            <mat-autocomplete #colorAuto="matAutocomplete" [displayWith]="showColor">
-                <mat-option *ngFor="let color of colorList | async" [value]="color">
-                    {{color.name}}
-                </mat-option>
-            </mat-autocomplete>
+            <mat-label>Asigne un <b>color</b></mat-label>
+            <input matInput type="text" placeholder="Escriba..." formControlName="color" autocomplete="off">
             <mat-hint>requerido *</mat-hint>
-            <mat-error *ngIf="!dataFormGroup.valid">Seleccione un color *</mat-error>
+            <mat-error *ngIf="!dataFormGroup.valid">Describa un color *</mat-error>
         </mat-form-field><br>
 
         <mat-form-field class="w3-margin-right w3-margin-bottom" style="width:250px" appearance="outline">

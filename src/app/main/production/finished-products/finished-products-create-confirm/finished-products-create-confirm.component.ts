@@ -44,11 +44,13 @@ export class FinishedProductsCreateConfirmComponent implements OnInit {
 
     const data = {
       id: '',
+      initialStock: this.data['form']['stock'],
       regDate: Date.now(),
       createdBy: this.auth.userInteriores.displayName,
       createdByUid: this.auth.userInteriores.uid,
-      lastUpdateBy: null,
-      lastUpdateByUid: null
+      lastUpdateBy: '',
+      lastUpdateByUid: '',
+      lastUpdateDate: null
     }
 
     const finalData = Object.assign(data, this.data['form']);
@@ -123,11 +125,25 @@ export class FinishedProductsCreateConfirmComponent implements OnInit {
                           });
                           this.dialogRef.close(true);
                         })
+                        .catch(err => {
+                          console.log(err);
+                          this.dialogRef.close(true);
+                          this.snackbar.open('Hubo un error agregando los números de serie!', 'Cerrar', {
+                            duration: 6000
+                          });
+                        })
                     }
                   })
                 })
               )
                 .subscribe()
+            } else {
+              this.uploading = false;
+              this.flags.serie = true;
+              this.snackbar.open('Nuevo producto creado!', 'Cerrar', {
+                duration: 6000
+              });
+              this.dialogRef.close(true);
             }
 
           })
