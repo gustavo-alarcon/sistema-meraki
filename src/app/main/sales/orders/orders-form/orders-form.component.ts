@@ -20,11 +20,11 @@ export class OrdersFormComponent implements OnInit {
   dataFormGroup: FormGroup;
 
   selectedFile1 = null;
-  imageSrc1: string | ArrayBuffer;
+  imageSrc1: string | ArrayBuffer = null;
   resizingImage1: boolean = false;
 
   selectedFile2 = null;
-  imageSrc2: string | ArrayBuffer;
+  imageSrc2: string | ArrayBuffer = null;
   resizingImage2: boolean = false;
 
   selectedFile3 = null;
@@ -117,10 +117,10 @@ export class OrdersFormComponent implements OnInit {
       this.dataFormGroup.get('quantity').setValue(quote.quantity);
       this.dataFormGroup.get('deliveryDate').setValue(new Date(quote.deliveryDate));
 
-      this.imageSrc1 = quote.image1;
-      this.imageSrc2 = quote.image2;
-      this.pdf1 = quote.file1;
-      this.pdf2 = quote.file2;
+      this.imageSrc1 = quote ? quote.image1 : null;
+      this.imageSrc2 = quote ? quote.image2 : null;
+      this.pdf1 = quote ? quote.file1 : null;
+      this.pdf2 = quote ? quote.file2 : null;
 
     }
     

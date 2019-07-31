@@ -63,6 +63,7 @@ export class CheckStockSellDialogComponent implements OnInit {
   createForm(): void {
     this.dataFormGroup = this.fb.group({
       document: [null, [Validators.required]],
+      documentSerial: [null, [Validators.required]],
       documentCorrelative: [null, [Validators.required]],
       price: [null, [Validators.required]],
       discount: [0, [Validators.required]],
@@ -82,6 +83,7 @@ export class CheckStockSellDialogComponent implements OnInit {
       const data: DepartureProduct = {
         id: '',
         document: this.dataFormGroup.value['document'],
+        documentSerial: this.dataFormGroup.value['documentSerial'],
         documentCorrelative: this.dataFormGroup.value['documentCorrelative'],
         product: this.data.product,
         serie: this.data.serial.serie,

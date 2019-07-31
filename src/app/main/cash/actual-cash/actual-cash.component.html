@@ -1,0 +1,184 @@
+<div style="min-height:100vh; background:rgba(230, 230, 250, 0.5)">
+    <div class="animated fadeInUpBig w3-margin-bottom" style="padding:16px">
+        <div class="w3-row w3-margin-bottom">
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+            <div class="w3-col s12 m10 l10">
+                <div>
+                    <span class="mat-title ms-font-montserrat ms-color-11" style="font-weight: 900">
+                        <mat-icon class="ms-icons-color" style="vertical-align:middle">account_balance_wallet</mat-icon>
+                        Caja <mat-icon style="vertical-align:middle">keyboard_arrow_right</mat-icon> Caja actual
+                    </span>
+                </div>
+                <div>
+                    <!-- <button mat-button style="margin:0em 0.2em 1em 0.2em" disabled>
+                        <mat-icon>view_module</mat-icon> {{dbs.currentOperations.length | number: '2.0'}} Existencias
+                    </button> -->
+                    <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
+                        (click)="openCash()">
+                        <mat-icon>attach_money</mat-icon> Abrir caja
+                    </button>
+
+                    <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
+                        (click)="closeCash()" *ngIf="currentCash ? currentCash.open : false">
+                        <mat-icon>money_off</mat-icon> Cerrar caja
+                    </button>
+
+                    <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
+                        (click)="seeTotal()">
+                        <mat-icon>list</mat-icon> Ver total
+                    </button>
+
+                    <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
+                        (click)="addMoney()">
+                        <mat-icon>add_circle</mat-icon> Agregar dinero
+                    </button>
+
+                    <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
+                        (click)="retriveMoney()">
+                        <mat-icon>remove_circle</mat-icon> Retirar dinero
+                    </button>
+
+                    <span style="margin:0px 1em 0px 1em">
+                        <mat-form-field autocomplete="off">
+                            <mat-label>Filtrar</mat-label>
+                            <mat-icon matPrefix style="margin-right:0.5em; vertical-align:text-bottom">filter_list
+                            </mat-icon>
+                            <input matInput type="text" placeholder="Escriba ..."
+                                (input)="filterData($event.target.value)" autocomplete="off">
+                        </mat-form-field>
+                    </span>
+                </div>
+                <mat-divider></mat-divider>
+            </div>
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+        </div>
+
+        <div class="w3-row">
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+            <div class="w3-col s12 m10 l10">
+                <div class="mat-elevation-z8">
+                    <!-- <div style=" overflow:auto">
+                        <table mat-table [dataSource]="dataSource" matSort style="width:100%">
+
+                            <ng-container matColumnDef="index" sticky>
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>N°</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw; let i = index">
+                                    {{raw.index + 1}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="code">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por código" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Código</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.code}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="name">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por nombre" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Nombre</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.name}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="category">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Categoría</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.category}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="brand">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Marca</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.brand}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="stock">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por stock" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Stock</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.stock | number : '2.2'}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="unit">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por unidad de medida" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>U. Medida</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.unit}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="purchase">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por precio de compra" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Compra</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.purchase | number : '.2' | currency : 'S/.'}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="sale">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por precio de venta" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Venta</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let product">
+                                    {{product.sale |  number : '.2' | currency : 'S/.'}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="actions" stickyEnd>
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    <mat-menu #rawMenu="matMenu">
+                                        <button mat-menu-item (click)="addStock(raw)">
+                                            <mat-icon class="ms-icons-color">add_circle</mat-icon> Agregar stock
+                                        </button>
+                                        <button mat-menu-item (click)="substractStock(raw)">
+                                            <mat-icon class="ms-icons-color">remove_circle</mat-icon> Restar stock
+                                        </button>
+                                        <button mat-menu-item (click)="editRawMaterial(raw)">
+                                            <mat-icon class="ms-icons-color">edit</mat-icon> Editar
+                                        </button>
+                                        <button mat-menu-item (click)="deleteRawMaterial(raw)">
+                                            <mat-icon class="ms-icons-color">delete</mat-icon> Borrar
+                                        </button>
+                                    </mat-menu>
+                                    <button mat-icon-button [matMenuTriggerFor]="rawMenu">
+                                        <mat-icon>more_vert</mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                        </table>
+                    </div>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
+                </div>
+            </div>
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>

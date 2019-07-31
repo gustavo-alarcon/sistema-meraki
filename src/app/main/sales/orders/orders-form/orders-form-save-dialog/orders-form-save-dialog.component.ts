@@ -65,6 +65,8 @@ export class OrdersFormSaveDialogComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.checkNumberOfFiles();
 
+    console.log(this.data);
+
     const storage$ =
       this.currentStorageUploading.subscribe(res => {
         if (res) {

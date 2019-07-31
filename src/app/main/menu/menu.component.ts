@@ -21,6 +21,8 @@ export class MenuComponent implements OnInit, OnDestroy {
   salesOpenedFlag: boolean = false;
   productionOpenedFlag: boolean = false;
   logisticOpenedFlag: boolean = false;
+  cashOpenedFlag: boolean = false;
+
 
   loadingRouteConfig: boolean;
 
@@ -46,6 +48,11 @@ export class MenuComponent implements OnInit, OnDestroy {
     logistic: {
       transfers: false,
       receptions: false
+    },
+    cash: {
+      actual: false,
+      previous: false,
+      manage: false
     }
   }
 
@@ -70,7 +77,12 @@ export class MenuComponent implements OnInit, OnDestroy {
       productionFinishedProductsTableSale: false,
       logisticSection: false,
       logisticTransfersButton: false,
+      logisticTransfersCompleteList: false,
       logisticReceptionsButton: false,
+      cashSection: false,
+      cashActualButton: false,
+      cashPreviousButton: false,
+      cashManageButton: false,
       regDate: 0
     };
 
@@ -162,6 +174,11 @@ export class MenuComponent implements OnInit, OnDestroy {
       logistic: {
         transfers: false,
         receptions: false
+      },
+      cash: {
+        actual: false,
+        previous: false,
+        manage: false
       }
     }
   }
@@ -196,6 +213,14 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   logisticClosed(): void {
     this.logisticOpenedFlag = false;
+  }
+
+  cashOpened(): void {
+    this.cashOpenedFlag = true;
+  }
+
+  cashClosed(): void {
+    this.cashOpenedFlag = false;
   }
 
   checkRoute(route: string): void {
@@ -320,6 +345,31 @@ export class MenuComponent implements OnInit, OnDestroy {
           this.selectedTab.setValue(2);
           this.cleanButtons();
           this.buttonOptions.logistic.receptions = true;
+          coincidence = true;
+          break;
+      }
+    }
+
+    if (this.permits.cashSection) {
+      switch (route) {
+        case '/main/cash/actual':
+          this.selectedTab.setValue(3);
+          this.cleanButtons();
+          this.buttonOptions.cash.actual = true;
+          coincidence = true;
+          break;
+
+        case '/main/cash/previous':
+          this.selectedTab.setValue(3);
+          this.cleanButtons();
+          this.buttonOptions.cash.previous = true;
+          coincidence = true;
+          break;
+
+        case '/main/cash/manage':
+          this.selectedTab.setValue(3);
+          this.cleanButtons();
+          this.buttonOptions.cash.manage = true;
           coincidence = true;
           break;
       }

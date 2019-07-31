@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from "@angular/fire/firestore";
-import { Requirement, Correlative, Product, Color, RawMaterial, Category, Unit, ProductionOrder, TicketRawMaterial, DepartureRawMaterial, Store, User, Transfer, DepartureProduct, Quotation, Document } from './types';
+import { Requirement, Correlative, Product, Color, RawMaterial, Category, Unit, ProductionOrder, TicketRawMaterial, DepartureRawMaterial, Store, User, Transfer, DepartureProduct, Quotation, Document, Cash } from './types';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
@@ -182,13 +182,22 @@ export class DatabaseService {
   public currentDataTransfers = this.dataTransfers.asObservable();
 
   /**
-   * Receptions
+   * RECEPTIONS
    */
   receptionsCollection: AngularFirestoreCollection<Transfer>;
   receptions: Array<Transfer> = [];
 
   public dataReceptions = new BehaviorSubject<Transfer[]>([]);
   public currentDataReceptions = this.dataReceptions.asObservable();
+
+  /**
+   * CASH LIST
+   */
+  cashListCollection: AngularFirestoreCollection<Cash>;
+  cashList: Array<Cash> = [];
+
+  public dataCashList = new BehaviorSubject<Cash[]>([]);
+  public currentDataCashList = this.dataCashList.asObservable();
 
 
 
@@ -231,9 +240,10 @@ export class DatabaseService {
         this.getTickets(true, from, to);
         this.getDepartures(true, from, to);
         this.getFinishedProducts();
-        this.getTransfers(true, from, to);
+        this.getTransfers(from, to);
         this.getTransfersCorrelative();
-        this.getReceptions(true, from, to);
+        this.getReceptions(from, to);
+        this.getCashList();
       }
     })
 
@@ -244,10 +254,16 @@ export class DatabaseService {
     this.usersCollection.valueChanges()
       .pipe(
         map(res => {
+          let filteredUsers: Array<User> = [];
+
           res.forEach((element, index) => {
             element['index'] = index;
+            if (element.db === this.auth.userInteriores.db) {
+              filteredUsers.push(element);
+            }
           });
-          return res;
+
+          return filteredUsers;
         })
       )
       .subscribe(res => {
@@ -521,20 +537,32 @@ export class DatabaseService {
   }
 
   /***************************LOGISTIC ********************************** */
-  getTransfers(all: boolean, from?: number, to?: number): void {
-    if (all) {
-      this.transfersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/transfers`, ref => ref.orderBy('regDate', 'desc'));
-    } else {
-      this.transfersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/transfers`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
-    }
-
+  getTransfers(from: number, to: number): void {
+    this.transfersCollection = this.af.collection<Transfer>(`db/${this.auth.userInteriores.db}/transfers`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
     this.transfersCollection.valueChanges()
       .pipe(
         map(res => {
-          res.forEach((element, index) => {
-            element['index'] = index;
-          });
-          return res;
+          try {
+            let filteredTransfers = [];
+
+            res.forEach((element, index) => {
+              element['index'] = index;
+              if ((this.auth.userInteriores.uid === element.destination.supervisor.uid) && !this.auth.permit.logisticTransfersCompleteList) {
+                filteredTransfers.push(element);
+              }
+            });
+
+            if (this.auth.permit.logisticTransfersCompleteList) {
+              return res;
+            } else {
+              return filteredTransfers;
+            }
+          } catch (error) {
+            console.log('getTransfers', error);
+          }
+        }),
+        map(res => {
+          return res.sort((a, b) => b['regDate'] - a['regDate']);
         })
       )
       .subscribe(res => {
@@ -552,25 +580,25 @@ export class DatabaseService {
       })
   }
 
-  getReceptions(all: boolean, from?: number, to?: number): void {
+  getReceptions(from: number, to: number): void {
     this.receptionsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/transfers`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
     this.receptionsCollection
       .valueChanges()
       .pipe(
         map(res => {
           try {
-            if (all) {
+            let filteredList: Array<Transfer> = [];
+
+            res.forEach((element, index) => {
+              element['index'] = index;
+              if ((this.auth.userInteriores.uid === element.destination.supervisor.uid || this.auth.userInteriores.uid === element.createdByUid) && !this.auth.permit.logisticTransfersCompleteList) {
+                filteredList.push(element);
+              }
+            });
+
+            if (this.auth.permit.logisticTransfersCompleteList) {
               return res;
             } else {
-              let filteredList: Array<Transfer> = [];
-
-              res.forEach(reception => {
-                if (reception.origin.supervisor.uid === this.auth.userInteriores.uid ||
-                  reception.createdByUid === this.auth.userInteriores.uid) {
-                  filteredList.push(reception);
-                }
-              });
-
               return filteredList;
             }
           } catch (error) {
@@ -578,13 +606,33 @@ export class DatabaseService {
           }
         }),
         map(res => {
-          return res.sort((a,b)=>b['regDate']-a['regDate']);
+          return res.sort((a, b) => b['regDate'] - a['regDate']);
         })
       )
       .subscribe(res => {
         this.receptions = res;
         this.dataReceptions.next(res);
       })
+  }
+
+  // ******************** CASH ****************
+  getCashList(): void {
+    this.cashListCollection = this.af.collection(`db/${this.auth.userInteriores.db}/cashList`, ref => ref.orderBy('location.name', 'asc'));
+    this.cashListCollection.valueChanges()
+      .pipe(
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = index;
+          });
+          return res;
+        })
+      )
+      .subscribe(res => {
+        if (res) {
+          this.cashList = res;
+          this.dataCashList.next(res);
+        }
+      });
   }
 
 }

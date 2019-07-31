@@ -67,6 +67,18 @@ const routes: Routes = [
         path: 'logistic/receptions',
         loadChildren: () => import('./logistic/receptions/receptions.module').then(mod => mod.ReceptionsModule)
       },
+      {
+        path: 'cash/actual',
+        loadChildren: () => import('./cash/actual-cash/actual-cash.module').then(mod => mod.ActualCashModule)
+      },
+      {
+        path: 'cash/previous',
+        loadChildren: () => import('./cash/previous-cash/previous-cash.module').then(mod => mod.PreviousCashModule)
+      },
+      {
+        path: 'cash/manage',
+        loadChildren: () => import('./cash/manage-cash/manage-cash.module').then(mod => mod.ManageCashModule)
+      },
     ]
   },
   

@@ -1,10 +1,11 @@
-import { SerialNumber, Product, DepartureProduct, Store } from './../../../../core/types';
+import { SerialNumber, Product, DepartureProduct, Store, Document } from './../../../../core/types';
 import { Component, OnInit, Inject } from '@angular/core';
 import { DatabaseService } from 'src/app/core/database.service';
 import { AuthService } from 'src/app/core/auth.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-stores-sell-dialog',
@@ -23,6 +24,8 @@ export class StoresSellDialogComponent implements OnInit {
     'TARJETA ESTILOS',
     'EFECTIVO'
   ]
+
+  filteredDocuments: Observable<Document[]>;
 
   constructor(
     public dbs: DatabaseService,
@@ -43,16 +46,23 @@ export class StoresSellDialogComponent implements OnInit {
       .subscribe(res => {
         if (res) {
           let disc = 0;
-          disc = 100 - (res * 100) / this.data.product.sale ;
-          console.log(disc);
+          disc = 100 - (res * 100) / this.data.product.sale;
           this.dataFormGroup.get('discount').setValue(disc.toFixed(2));
         }
       });
+
+    this.filteredDocuments =
+      this.dataFormGroup.get('document').valueChanges
+        .pipe(
+          map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+          map(name => name ? this.dbs.documents.filter(option => option.name.toLowerCase().includes(name)) : this.dbs.documents)
+        );
   }
 
   createForm(): void {
     this.dataFormGroup = this.fb.group({
       document: [null, [Validators.required]],
+      documentSerial: [null, [Validators.required]],
       documentCorrelative: [null, [Validators.required]],
       price: [null, [Validators.required]],
       discount: [0, [Validators.required]],
@@ -62,12 +72,17 @@ export class StoresSellDialogComponent implements OnInit {
     });
   }
 
+  showDocument(document: Document): string | null {
+    return document ? document.name : null;
+  }
+
   save(): void {
     this.loading = true;
     if (this.dataFormGroup.valid) {
       const data: DepartureProduct = {
         id: '',
         document: this.dataFormGroup.value['document'],
+        documentSerial: this.dataFormGroup.value['documentSerial'],
         documentCorrelative: this.dataFormGroup.value['documentCorrelative'],
         product: this.data.product,
         serie: this.data.serial.serie,

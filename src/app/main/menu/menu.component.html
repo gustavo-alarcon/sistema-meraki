@@ -67,13 +67,13 @@
                         </div>
                         <div class="w3-border-left w3-border-lightgray w3-margin-right">
                             <button mat-button class="w3-small"
-                                [ngClass]="{'ms-button-selected': buttonOptions.sales.stores}"
-                                routerLink="sales/stores" [disabled]="!permits.salesStoresButton">
+                                [ngClass]="{'ms-button-selected': buttonOptions.sales.stores}" routerLink="sales/stores"
+                                [disabled]="!permits.salesStoresButton">
                                 <mat-icon class="ms-icons-color">store</mat-icon> Tiendas
                             </button><br>
                             <button mat-button class="w3-small"
-                                [ngClass]="{'ms-button-selected': buttonOptions.sales.checkStock}" routerLink="sales/check-stock"
-                                [disabled]="!permits.salesCheckStockButton">
+                                [ngClass]="{'ms-button-selected': buttonOptions.sales.checkStock}"
+                                routerLink="sales/check-stock" [disabled]="!permits.salesCheckStockButton">
                                 <mat-icon class="ms-icons-color">search</mat-icon> Consultar
                             </button><br>
                         </div>
@@ -142,6 +142,31 @@
                     </div>
                 </div>
             </mat-tab>
+            <mat-tab label="Caja" [disabled]="!permits.cashSection">
+                <div class="w3-padding  w3-border-bottom w3-border-lightgray">
+                    <div style="display:flex">
+                        <div>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.cash.actual}" routerLink="cash/actual"
+                                [disabled]="!permits.cashActualButton">
+                                <mat-icon class="ms-icons-color">account_balance_wallet</mat-icon> Caja actual
+                            </button><br>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.cash.previous}"
+                                routerLink="cash/previous" [disabled]="!permits.cashPreviousButton">
+                                <mat-icon class="ms-icons-color">account_balance_wallet</mat-icon> Caja anterior
+                            </button><br>
+                        </div>
+                        <div class="w3-margin-right">
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.cash.manage}"
+                                routerLink="cash/manage" [disabled]="!permits.cashManageButton">
+                                <mat-icon class="ms-icons-color">local_atm</mat-icon> Administrar cajas
+                            </button><br>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
         </mat-tab-group>
     </div>
     <mat-progress-bar mode="indeterminate" *ngIf="loadingRouteConfig"></mat-progress-bar>
@@ -165,9 +190,9 @@
                     </mat-expansion-panel-header>
 
                     <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
-                        [ngClass]="{'ms-button-selected': buttonOptions.sales.quotations}"
-                        routerLink="sales/quotations" style="text-align:left;border-radius:0px 0px 0px 0px"
-                        (click)="toggleSideMenu()" *ngIf="permits.salesQuotationsButton">
+                        [ngClass]="{'ms-button-selected': buttonOptions.sales.quotations}" routerLink="sales/quotations"
+                        style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
+                        *ngIf="permits.salesQuotationsButton">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">book
                         </mat-icon> Cotizaciones
                     </button>
@@ -188,15 +213,16 @@
                     </button>
                     <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
                         [ngClass]="{'ms-button-selected': buttonOptions.sales.stores}" routerLink="sales/stores"
-                        style="text-align:left;border-radius:0px 0px 0px 0px"
-                        (click)="toggleSideMenu()" *ngIf="permits.salesStoresButton">
+                        style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
+                        *ngIf="permits.salesStoresButton">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">store
                         </mat-icon> Tiendas
                     </button>
                     <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
-                        [ngClass]="{'ms-button-selected': buttonOptions.sales.checkStock}" routerLink="sales/check-stock"
-                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em" (click)="toggleSideMenu()"
-                        *ngIf="permits.salesCheckStockButton">
+                        [ngClass]="{'ms-button-selected': buttonOptions.sales.checkStock}"
+                        routerLink="sales/check-stock"
+                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
+                        (click)="toggleSideMenu()" *ngIf="permits.salesCheckStockButton">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">search
                         </mat-icon> Consultar stock
                     </button>
@@ -288,6 +314,36 @@
                         (click)="toggleSideMenu()" *ngIf="permits.logisticTransfersButton">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">local_offer
                         </mat-icon> Traslados
+                    </button>
+                    <p class="w3-margin-bottom"></p>
+
+                </mat-expansion-panel>
+                <mat-expansion-panel style="width:15em; box-shadow:none; border-radius:0px 0px 0px 0px"
+                    class="w3-border-top w3-border-light-grey" [ngClass]="{'ms-expansion-panel-menu':cashOpenedFlag}"
+                    (opened)="cashOpened()" (closed)="cashClosed()">
+                    <mat-expansion-panel-header *ngIf="permits.cashSection">
+                        <mat-panel-title style="font-weight:500"
+                            [ngClass]="{'ms-expansion-panel-title':cashOpenedFlag}">
+                            <mat-icon style="vertical-align:middle; margin-right:0.3em">account_balance</mat-icon>
+                            Caja
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.cash.actual}" routerLink="cash/actual"
+                        style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
+                        *ngIf="permits.cashActualButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            account_balance_wallet
+                        </mat-icon> Caja actual
+                    </button>
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.cash.previous}" routerLink="cash/previous"
+                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
+                        (click)="toggleSideMenu()" *ngIf="permits.cashPreviousButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            account_balance_wallet
+                        </mat-icon> Caja anterior
                     </button>
                     <p class="w3-margin-bottom"></p>
 

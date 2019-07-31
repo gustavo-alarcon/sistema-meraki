@@ -50,7 +50,7 @@ export class ProdOrdersGenerateOPConfirmComponent implements OnInit {
                   correlative: newCorrelative,
                   OPeCorrelative: this.data.order.correlative,
                   quotationCorrelative: this.data.order.quotationCorrelative,
-                  orderNote: this.data.order.orderNote,
+                  orderNote: this.data.order.orderNote ? this.data.order.orderNote : 0,
                   document: this.data.order.document,
                   documentSerial: this.data.order.documentSerial,
                   documentCorrelative: this.data.order.documentCorrelative,
@@ -67,7 +67,8 @@ export class ProdOrdersGenerateOPConfirmComponent implements OnInit {
                   createdBy: this.data.order.createdBy,
                   createdByUid: this.data.order.createdByUid,
                   approvedBy: this.auth.userInteriores.displayName,
-                  approvedByUid: this.auth.userInteriores.uid
+                  approvedByUid: this.auth.userInteriores.uid,
+                  approvedDate: Date.now()
                 };
 
                 t.set(productionOrderRef.ref, data);
@@ -89,6 +90,7 @@ export class ProdOrdersGenerateOPConfirmComponent implements OnInit {
             this.snackbar.open(`Transaction fails!`, 'Cerrar', {
               duration: 6000
             });
+            console.log(err);
           })
       })
       .catch(err => {

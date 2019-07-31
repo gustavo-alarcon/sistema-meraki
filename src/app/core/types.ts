@@ -29,7 +29,12 @@ export interface Permit {
     productionFinishedProductsTableSale: boolean;
     logisticSection: boolean;
     logisticTransfersButton: boolean;
+    logisticTransfersCompleteList: boolean;
     logisticReceptionsButton: boolean;
+    cashSection: boolean;
+    cashActualButton: boolean;
+    cashPreviousButton: boolean;
+    cashManageButton: boolean;
     regDate: number;
 }
 
@@ -307,7 +312,8 @@ export interface TicketProduct {
 export interface DepartureProduct {
     id: string;
     document: Document;
-    documentCorrelative: string;
+    documentSerial: number;
+    documentCorrelative: number;
     product: Product;
     serie: number;
     color: string;
@@ -377,4 +383,17 @@ export interface Provider {
     regDate: number;
     createdBy: string;
     createdByUid: string;
+}
+
+export interface Cash {
+    id: string;
+    currentOwner: User;
+    name: string;
+    location: Store;
+    open: boolean;
+    password: string;
+    supervisor: User;
+    lastOpening: number;
+    lastClosure: number;
+    regDate: number;
 }

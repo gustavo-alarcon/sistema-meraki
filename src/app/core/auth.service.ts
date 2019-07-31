@@ -35,7 +35,12 @@ export class AuthService {
       productionFinishedProductsTableSale: false,
       logisticSection: false,
       logisticTransfersButton: false,
+      logisticTransfersCompleteList: false,
       logisticReceptionsButton: false,
+      cashSection: false,
+      cashActualButton: false,
+      cashPreviousButton: false,
+      cashManageButton: false,
       regDate: 0
     };
 
@@ -60,7 +65,12 @@ export class AuthService {
       productionFinishedProductsTableSale: false,
       logisticSection: false,
       logisticTransfersButton: false,
+      logisticTransfersCompleteList: false,
       logisticReceptionsButton: false,
+      cashSection: false,
+      cashActualButton: false,
+      cashPreviousButton: false,
+      cashManageButton: false,
       regDate: 0
     }
   );
