@@ -5,6 +5,9 @@ import { Cash } from 'src/app/core/types';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { ManageCashCreateDialogComponent } from './manage-cash-create-dialog/manage-cash-create-dialog.component';
+import { ManageCashEditDialogComponent } from './manage-cash-edit-dialog/manage-cash-edit-dialog.component';
+import { ManageCashDeleteConfirmComponent } from './manage-cash-delete-confirm/manage-cash-delete-confirm.component';
+import { AuthService } from 'src/app/core/auth.service';
 
 @Component({
   selector: 'app-manage-cash',
@@ -29,6 +32,7 @@ export class ManageCashComponent implements OnInit {
 
   constructor(
     public dbs: DatabaseService,
+    public auth: AuthService,
     private dialog: MatDialog
   ) { }
 
@@ -65,11 +69,27 @@ export class ManageCashComponent implements OnInit {
   }
 
   editCash(cash: Cash): void {
-
+    this.dialog.open(ManageCashEditDialogComponent, {
+      data: {
+        cash: cash
+      }
+    });
   }
 
   deleteCash(cash: Cash): void {
+    this.dialog.open(ManageCashDeleteConfirmComponent, {
+      data: {
+        cash: cash
+      }
+    })
+  }
 
+  goToCashReports(cash: Cash): void {
+    // go to component
+  }
+
+  setCash(cash: Cash): void {
+    // settings
   }
 
 }

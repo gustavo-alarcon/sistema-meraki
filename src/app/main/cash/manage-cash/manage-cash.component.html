@@ -131,13 +131,20 @@
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <mat-menu #rawMenu="matMenu">
-                                        <button mat-menu-item (click)="setCash(raw)">
+                                        <button mat-menu-item (click)="setCash(raw)"
+                                            *ngIf="auth.permit.cashManageSettingsAction">
                                             <mat-icon class="ms-icons-color">settings</mat-icon> Configurar
                                         </button>
-                                        <button mat-menu-item (click)="editCash(raw)">
+                                        <button mat-menu-item (click)="goToCashReports(raw)"
+                                            *ngIf="auth.permit.cashManageReportsAction">
+                                            <mat-icon class="ms-icons-color">description</mat-icon> Reportes
+                                        </button>
+                                        <button mat-menu-item (click)="editCash(raw)"
+                                            *ngIf="auth.permit.cashManageEditAction">
                                             <mat-icon class="ms-icons-color">edit</mat-icon> Editar
                                         </button>
-                                        <button mat-menu-item (click)="deleteCash(raw)">
+                                        <button mat-menu-item (click)="deleteCash(raw)"
+                                            *ngIf="auth.permit.cashManageDeleteAction">
                                             <mat-icon class="ms-icons-color">delete</mat-icon> Borrar
                                         </button>
                                     </mat-menu>

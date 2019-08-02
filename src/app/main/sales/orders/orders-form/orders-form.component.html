@@ -8,7 +8,7 @@
     <form [formGroup]="dataFormGroup">
         <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
             <mat-label>Referencie una <b>cotización</b></mat-label>
-            <input matInput type="text" [matAutocomplete]="quotationAuto" placeholder="Escriba..."
+            <input matInput type="text" [matAutocomplete]="quotationAuto" placeholder="Número de COT"
                 formControlName="quotation">
             <mat-autocomplete #quotationAuto="matAutocomplete" [displayWith]="showQuotation"
                 (optionSelected)="selectedQuotation($event)">
@@ -19,15 +19,15 @@
         </mat-form-field>
 
         <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
-            <mat-label>Nota de pedido</mat-label>
-            <input matInput type="number" min="0" step="1" formControlName="orderNote" placeholder="Escriba...">
+            <mat-label>Nota de <b>pedido</b></mat-label>
+            <input matInput type="number" min="0" step="1" formControlName="orderNote" placeholder="Número de pedido" autocomplete="off">
             <mat-hint>requerido *</mat-hint>
         </mat-form-field>
 
         <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
             <mat-label>Seleccione un <b>documento</b></mat-label>
-            <input matInput type="text" [matAutocomplete]="documentAuto" placeholder="Escriba..."
-                formControlName="document">
+            <input matInput type="text" [matAutocomplete]="documentAuto" placeholder="Nombre del documento"
+                formControlName="document" autocomplete="off">
             <mat-autocomplete #documentAuto="matAutocomplete" [displayWith]="showDocument">
                 <mat-option *ngFor="let document of filteredDocuments | async" [value]="document">
                     {{document.name}}
@@ -38,26 +38,26 @@
         </mat-form-field>
 
         <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
-            <mat-label>Número de serie</mat-label>
-            <input matInput type="number" min="0" step="1" formControlName="documentSerial" placeholder="Escriba...">
+            <mat-label>Número de <b>serie</b></mat-label>
+            <input matInput type="number" min="0" step="1" formControlName="documentSerial" placeholder="Serie de documento" autocomplete="off">
             <mat-hint>requerido *</mat-hint>
         </mat-form-field>
 
         <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
-            <mat-label>Número correlativo</mat-label>
+            <mat-label>Número <b>correlativo</b></mat-label>
             <input matInput type="number" min="0" step="1" formControlName="documentCorrelative"
-                placeholder="Escriba...">
+                placeholder="Correlativo de documento" autocomplete="off">
             <mat-hint>requerido *</mat-hint>
         </mat-form-field>
 
         <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
-            <mat-label>Cantidad</mat-label>
-            <input matInput type="number" min="0" step="1" formControlName="quantity" placeholder="Escriba...">
+            <mat-label><b>Cantidad</b></mat-label>
+            <input matInput type="number" min="0" step="1" formControlName="quantity" placeholder="0" autocomplete="off">
             <mat-hint>requerido *</mat-hint>
         </mat-form-field>
 
         <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
-            <mat-label>Fecha de entrega</mat-label>
+            <mat-label>Fecha de <b>entrega</b></mat-label>
             <input matInput [matDatepicker]="myDatepicker" [min]="minDate" formControlName="deliveryDate">
             <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #myDatepicker></mat-datepicker>
@@ -65,9 +65,9 @@
         </mat-form-field>
 
         <mat-form-field class="w3-margin-right w3-block" appearance="outline">
-            <mat-label>Descripción</mat-label>
-            <textarea matInput placeholder="Describa el requerimiento ..." cols="10" rows="5"
-                formControlName="description"></textarea>
+            <mat-label><b>Descripción</b></mat-label>
+            <textarea matInput placeholder="Describa el pedido ..." cols="10" rows="5"
+                formControlName="description" autocomplete="off"></textarea>
         </mat-form-field>
 
         <div class="w3-row-padding w3-margin-bottom">

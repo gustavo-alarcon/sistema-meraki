@@ -6,7 +6,8 @@ import { ProdRequirementsComponent } from './prod-requirements.component';
 import { ProdRequirementsRejectConfirmComponent } from './prod-requirements-reject-confirm/prod-requirements-reject-confirm.component';
 import { ProdRequirementsRestoreConfirmComponent } from './prod-requirements-restore-confirm/prod-requirements-restore-confirm.component';
 import { ProdRequirementsApproveConfirmComponent } from './prod-requirements-approve-confirm/prod-requirements-approve-confirm.component';
-import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatAutocompleteModule, MatCheckboxModule, MatTooltipModule, MatDividerModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSnackBarModule, MatProgressSpinnerModule, MatProgressBarModule, MatMenuModule } from '@angular/material';
+import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatAutocompleteModule, MatCheckboxModule, MatTooltipModule, MatDividerModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSnackBarModule, MatProgressSpinnerModule, MatProgressBarModule, MatMenuModule, MatDatepickerModule, MatNativeDateModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,8 @@ import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, Mat
   imports: [
     CommonModule,
     ProdRequirementsRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
@@ -33,7 +36,9 @@ import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, Mat
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
-    MatMenuModule
+    MatMenuModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   entryComponents: [
     ProdRequirementsRejectConfirmComponent,

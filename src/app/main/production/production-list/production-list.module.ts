@@ -20,7 +20,9 @@ import {  MatInputModule,
           MatSnackBarModule,
           MatProgressSpinnerModule,
           MatProgressBarModule,
-          MatMenuModule} from '@angular/material';
+          MatMenuModule,
+          MatNativeDateModule,
+          MatDatepickerModule} from '@angular/material';
 import { ProductionListProduceOpeConfirmComponent } from './production-list-produce-ope-confirm/production-list-produce-ope-confirm.component';
 import { ProductionListEditOrderConfirmComponent } from './production-list-edit-order-confirm/production-list-edit-order-confirm.component';
 
@@ -51,7 +53,9 @@ import { ProductionListEditOrderConfirmComponent } from './production-list-edit-
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
-    MatMenuModule
+    MatMenuModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   entryComponents: [
     ProductionListProduceOpeConfirmComponent,

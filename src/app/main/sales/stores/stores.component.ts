@@ -87,25 +87,27 @@ export class StoresComponent implements OnInit {
               this.serialNumbersInTransfering = {};
               this.serialNumbersSold = {};
               res.forEach(product => {
-                let transferCount = 0;
-                let soldCount = 0;
-                this.dbs.storesCollection
-                  .doc(this.currentStore.id)
-                  .collection<Product>('products')
-                  .doc(product.id)
-                  .collection('products')
-                  .get().forEach(snapshots => {
-                    snapshots.forEach(serial => {
-                      if (serial.data()['status'] === 'Traslado') {
-                        transferCount++;
-                      }
-                      if (serial.data()['status'] === 'Vendido') {
-                        soldCount++;
-                      }
+                if (product.id) {
+                  let transferCount = 0;
+                  let soldCount = 0;
+                  this.dbs.storesCollection
+                    .doc(this.currentStore.id)
+                    .collection<Product>('products')
+                    .doc(product.id)
+                    .collection('products')
+                    .get().forEach(snapshots => {
+                      snapshots.forEach(serial => {
+                        if (serial.data()['status'] === 'Traslado') {
+                          transferCount++;
+                        }
+                        if (serial.data()['status'] === 'Vendido') {
+                          soldCount++;
+                        }
+                      });
+                      this.serialNumbersInTransfering[product.id] = transferCount;
+                      this.serialNumbersSold[product.id] = soldCount;
                     });
-                    this.serialNumbersInTransfering[product.id] = transferCount;
-                    this.serialNumbersSold[product.id] = soldCount;
-                  });
+                }
               });
             }
           }),
@@ -137,7 +139,60 @@ export class StoresComponent implements OnInit {
         product: product,
         store: this.currentStore
       }
-    });
+    }).afterClosed().subscribe(res => {
+
+      const _product$ =
+        this.dbs.storesCollection
+          .doc<Store>(this.currentStore.id)
+          .collection<Product>('products')
+          .valueChanges()
+          .pipe(
+            tap(res => {
+              if (res) {
+                this.serialNumbersInTransfering = {};
+                this.serialNumbersSold = {};
+                res.forEach(product => {
+                  if (product.id) {
+                    let transferCount = 0;
+                    let soldCount = 0;
+                    this.dbs.storesCollection
+                      .doc(this.currentStore.id)
+                      .collection<Product>('products')
+                      .doc(product.id)
+                      .collection('products')
+                      .get().forEach(snapshots => {
+                        snapshots.forEach(serial => {
+                          if (serial.data()['status'] === 'Traslado') {
+                            transferCount++;
+                          }
+                          if (serial.data()['status'] === 'Vendido') {
+                            soldCount++;
+                          }
+                        });
+                        this.serialNumbersInTransfering[product.id] = transferCount;
+                        this.serialNumbersSold[product.id] = soldCount;
+                      });
+                  }
+                });
+              }
+            }),
+            map(res => {
+              res.forEach((element, index) => {
+                element['index'] = index;
+              });
+              return res;
+            })
+          )
+          .subscribe(res => {
+            if (res) {
+              this.filteredProducts = res;
+              this.referenceProducts = res;
+              this.dataSource.data = res;
+            }
+          });
+
+      this.subscriptions.push(_product$);
+    })
   }
 
 }

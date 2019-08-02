@@ -16,6 +16,18 @@
                         (click)="createTransfer()">
                         <mat-icon>add_circle</mat-icon> Crear
                     </button>
+
+                    <mat-form-field class="w3-margin-left">
+                        <input matInput [matDatepicker]="dateFilter" [formControl]="monthFormControl">
+                        <mat-datepicker-toggle matSuffix [for]="dateFilter"></mat-datepicker-toggle>
+                        <mat-datepicker #dateFilter startView='year'
+                            (monthSelected)="setMonthOfView($event, dateFilter)" disabled="false">
+                        </mat-datepicker>
+                        <mat-hint>
+                            <strong>Filtrar contenido por mes y año</strong>
+                        </mat-hint>
+                    </mat-form-field>
+
                     <button mat-button style="margin:0em 0.2em 1em 0.2em" disabled>
                         <mat-icon>local_shipping</mat-icon> {{dbs.transfers.length | number: '2.0'}} Transferencias
                     </button>
@@ -29,7 +41,8 @@
                         </mat-form-field>
                     </span>
                 </div>
-                <mat-divider></mat-divider>
+                <mat-divider style="margin-top:16px"></mat-divider>
+                <p class="ms-font-montserrat ms-color-11" style="font-weight:600">{{currentMonth}} {{currentYear}}</p>
             </div>
             <div class="w3-col s0 m1 l1">
                 <p></p>
@@ -96,7 +109,8 @@
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <span>{{raw.createdBy ? raw.createdBy : '---' }}</span><br>
                                     <span *ngIf="raw.regDate">{{raw.regDate | date : 'dd/MM/yyyy'}}</span><br>
-                                    <span *ngIf="raw.regDate" class="w3-small"><b> ({{raw.regDate | date : 'hh:mm a'}})</b></span>
+                                    <span *ngIf="raw.regDate" class="w3-small"><b>
+                                            ({{raw.regDate | date : 'hh:mm a'}})</b></span>
                                 </td>
                             </ng-container>
 
@@ -108,7 +122,8 @@
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <span>{{raw.approvedBy ? raw.approvedBy : '---' }}</span><br>
                                     <span *ngIf="raw.approvedDate">{{raw.approvedDate | date : 'dd/MM/yyyy'}}</span><br>
-                                    <span *ngIf="raw.approvedDate" class="w3-small"><b> ({{raw.approvedDate | date : 'hh:mm a'}})</b></span>
+                                    <span *ngIf="raw.approvedDate" class="w3-small"><b>
+                                            ({{raw.approvedDate | date : 'hh:mm a'}})</b></span>
                                 </td>
                             </ng-container>
 
@@ -120,7 +135,8 @@
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <span>{{raw.carriedBy ? raw.carriedBy : '---' }}</span><br>
                                     <span *ngIf="raw.carriedDate">{{raw.carriedDate | date : 'dd/MM/yyyy'}}</span><br>
-                                    <span *ngIf="raw.carriedDate" class="w3-small"><b> ({{raw.carriedDate | date : 'hh:mm a'}})</b></span>
+                                    <span *ngIf="raw.carriedDate" class="w3-small"><b>
+                                            ({{raw.carriedDate | date : 'hh:mm a'}})</b></span>
                                 </td>
                             </ng-container>
 
@@ -132,7 +148,8 @@
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <span>{{raw.receivedBy ? raw.receivedBy : '---' }}</span><br>
                                     <span *ngIf="raw.receivedDate">{{raw.receivedDate | date : 'dd/MM/yyyy'}}</span><br>
-                                    <span *ngIf="raw.receivedDate" class="w3-small"><b> ({{raw.receivedDate | date : 'hh:mm a'}})</b></span>
+                                    <span *ngIf="raw.receivedDate" class="w3-small"><b>
+                                            ({{raw.receivedDate | date : 'hh:mm a'}})</b></span>
                                 </td>
                             </ng-container>
 
@@ -144,7 +161,8 @@
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <span>{{raw.rejectedBy ? raw.rejectedBy : '---' }}</span><br>
                                     <span *ngIf="raw.rejectedDate">{{raw.rejectedDate | date : 'dd/MM/yyyy'}}</span><br>
-                                    <span *ngIf="raw.rejectedDate" class="w3-small"><b> ({{raw.rejectedDate | date : 'hh:mm a'}})</b></span>
+                                    <span *ngIf="raw.rejectedDate" class="w3-small"><b>
+                                            ({{raw.rejectedDate | date : 'hh:mm a'}})</b></span>
                                 </td>
                             </ng-container>
 
@@ -156,7 +174,8 @@
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <span>{{raw.canceledBy ? raw.canceledBy : '---' }}</span><br>
                                     <span *ngIf="raw.canceledDate">{{raw.canceledDate | date : 'dd/MM/yyyy'}}</span><br>
-                                    <span *ngIf="raw.canceledDate" class="w3-small"><b> ({{raw.canceledDate | date : 'hh:mm a'}})</b></span>
+                                    <span *ngIf="raw.canceledDate" class="w3-small"><b>
+                                            ({{raw.canceledDate | date : 'hh:mm a'}})</b></span>
                                 </td>
                             </ng-container>
 
@@ -173,7 +192,8 @@
                                             (click)="rejectTransfer(raw)">
                                             <mat-icon class="ms-icons-color">cancel</mat-icon> Rechazar
                                         </button>
-                                        <button mat-menu-item *ngIf="raw.status === 'Rechazado' || raw.status === 'Anulado'"
+                                        <button mat-menu-item
+                                            *ngIf="raw.status === 'Rechazado' || raw.status === 'Anulado'"
                                             (click)="restoreTransfer(raw)">
                                             <mat-icon class="ms-icons-color">history</mat-icon> Restaurar
                                         </button>
@@ -187,7 +207,8 @@
                                             <mat-icon class="ms-icons-color">cancel</mat-icon> Anular
                                         </button>
                                     </mat-menu>
-                                    <button mat-icon-button [matMenuTriggerFor]="rawMenu" [disabled]="raw.status === 'Recibido'">
+                                    <button mat-icon-button [matMenuTriggerFor]="rawMenu"
+                                        [disabled]="raw.status === 'Recibido'">
                                         <mat-icon>more_vert</mat-icon>
                                     </button>
                                 </td>

@@ -108,7 +108,7 @@ export class CheckStockTransferDialogComponent implements OnInit {
                 origin: this.dataFormGroup.value['origin'],
                 destination: this.dataFormGroup.value['destination'],
                 serialList: [this.data.serial],
-                transferList: null,
+                transferList: [{product: this.data.product, serialList: [this.data.serial]}],
                 status: 'Solicitado',
                 source: 'sales',
                 regDate: Date.now(),

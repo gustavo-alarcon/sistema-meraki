@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from "@angular/fire/firestore";
-import { Requirement, Correlative, Product, Color, RawMaterial, Category, Unit, ProductionOrder, TicketRawMaterial, DepartureRawMaterial, Store, User, Transfer, DepartureProduct, Quotation, Document, Cash } from './types';
+import { Requirement, Correlative, Product, Color, RawMaterial, Category, Unit, ProductionOrder, TicketRawMaterial, DepartureRawMaterial, Store, User, Transfer, DepartureProduct, Quotation, Document, Cash, CurrentCash } from './types';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
@@ -98,6 +98,15 @@ export class DatabaseService {
 
   public dataProductionOrders = new BehaviorSubject<ProductionOrder[]>([]);
   public currentDataProductionOrders = this.dataProductionOrders.asObservable();
+
+  /**
+   * QUOTATIONS TO BE REFERENCED
+   */
+  quotationsToReferenceCollection: AngularFirestoreCollection<Quotation>;
+  quotationsToReference: Array<Quotation> = []
+
+  public dataQuotationsToReference = new BehaviorSubject<Quotation[]>([]);
+  public currentDataQuotationsToReference = this.dataQuotationsToReference.asObservable();
 
   /**
    * PRODUCTS
@@ -199,6 +208,32 @@ export class DatabaseService {
   public dataCashList = new BehaviorSubject<Cash[]>([]);
   public currentDataCashList = this.dataCashList.asObservable();
 
+  /**
+   * CURRENT CASH
+   */
+  currentCashDocument: AngularFirestoreDocument<CurrentCash>;
+  currentCash: CurrentCash;
+
+  public dataCurrentCash = new BehaviorSubject<CurrentCash>({
+    id: '',
+    currentOwner: { displayName: '' },
+    currentOpening: '',
+    name: '',
+    location: { name: '' },
+    open: false,
+    password: '',
+    supervisor: { displayName: '' },
+    lastOpening: null,
+    lastClosure: null,
+    regDate: null,
+    createdBy: '',
+    createdByUid: '',
+    lastEditBy: '',
+    lastEditByUid: '',
+    lastEditDate: null
+  });
+  public currentDataCurrentCash = this.dataCurrentCash.asObservable();
+
 
 
   constructor(
@@ -225,25 +260,27 @@ export class DatabaseService {
       if (res.name) {
         this.getUsers();
         this.getDocuments();
-        this.getRequirements(true, from, to);
+        this.getRequirements(from, to);
         this.getRequirementsCorrelative();
-        this.getOrders(true, from, to);
+        this.getOrders(from, to);
+        this.getQuotationsToReference();
         this.getOrdersCorrelative();
-        this.getQuotations(true, from, to);
+        this.getQuotations(from, to);
         this.getQuotationsCorrelative();
         this.getStores();
         this.getRawMaterials();
         this.getCategories();
         this.getUnits();
-        this.getProductionOrders(true, from, to);
+        this.getProductionOrders(from, to);
         this.getProductionOrdersCorrelative();
-        this.getTickets(true, from, to);
-        this.getDepartures(true, from, to);
+        this.getTickets(from, to);
+        this.getDepartures(from, to);
         this.getFinishedProducts();
         this.getTransfers(from, to);
         this.getTransfersCorrelative();
         this.getReceptions(from, to);
         this.getCashList();
+        this.getCurrentCash();
       }
     })
 
@@ -297,20 +334,33 @@ export class DatabaseService {
    * @param from {number} time in milliseconds
    * @param to {number} time in milliseconds
    */
-  getRequirements(all: boolean, from?: number, to?: number): void {
-    if (all) {
-      this.requirementsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/requirements`, ref => ref.orderBy('regDate', 'desc'));
-    } else {
-      this.requirementsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/requirements`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
-    }
+  getRequirements(from?: number, to?: number): void {
+    this.requirementsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/requirements`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
 
     this.requirementsCollection.valueChanges()
       .pipe(
         map(res => {
-          res.forEach((element, index) => {
-            element['index'] = index;
-          });
-          return res;
+          try {
+            let filteredList = [];
+
+            res.forEach((element, index) => {
+              element['index'] = index;
+              if ((this.auth.userInteriores.uid === element.createdByUid) && !this.auth.permit.requirementsCompleteList) {
+                filteredList.push(element);
+              }
+            });
+
+            if (this.auth.permit.requirementsCompleteList) {
+              return res;
+            } else {
+              return filteredList;
+            }
+          } catch (error) {
+            console.log('getRequirements', error)
+          }
+        }),
+        map(res => {
+          return res.sort((a, b) => b['regDate'] - a['regDate']);
         })
       )
       .subscribe(res => {
@@ -319,20 +369,33 @@ export class DatabaseService {
       })
   }
 
-  getOrders(all: boolean, from?: number, to?: number): void {
-    if (all) {
-      this.ordersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/orders`, ref => ref.orderBy('regDate', 'desc'));
-    } else {
-      this.ordersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/orders`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
-    }
+  getOrders(from?: number, to?: number): void {
+    this.ordersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/orders`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
 
     this.ordersCollection.valueChanges()
       .pipe(
         map(res => {
-          res.forEach((element, index) => {
-            element['index'] = index;
-          });
-          return res;
+          try {
+            let filteredList = [];
+
+            res.forEach((element, index) => {
+              element['index'] = index;
+              if ((this.auth.userInteriores.uid === element.createdByUid) && !this.auth.permit.ordersCompleteList) {
+                filteredList.push(element);
+              }
+            });
+
+            if (this.auth.permit.ordersCompleteList) {
+              return res;
+            } else {
+              return filteredList;
+            }
+          } catch (error) {
+            console.log('getOrders', error)
+          }
+        }),
+        map(res => {
+          return res.sort((a, b) => b['regDate'] - a['regDate']);
         })
       )
       .subscribe(res => {
@@ -341,20 +404,43 @@ export class DatabaseService {
       })
   }
 
-  getQuotations(all: boolean, from?: number, to?: number): void {
-    if (all) {
-      this.quotationsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/quotations`, ref => ref.orderBy('regDate', 'desc'));
-    } else {
-      this.quotationsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/quotations`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
-    }
+  getQuotationsToReference(): void {
+    this.quotationsToReferenceCollection = this.af.collection<Quotation>(`db/${this.auth.userInteriores.db}/quotations`, ref => ref.where('status', '==', 'Respondida'));
+
+    this.quotationsToReferenceCollection.valueChanges()
+    .subscribe(res => {
+      this.quotationsToReference = res;
+      this.dataQuotationsToReference.next(res);
+    });
+  }
+
+  getQuotations(from?: number, to?: number): void {
+    this.quotationsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/quotations`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
 
     this.quotationsCollection.valueChanges()
       .pipe(
         map(res => {
-          res.forEach((element, index) => {
-            element['index'] = index;
-          });
-          return res;
+          try {
+            let filteredList = [];
+
+            res.forEach((element, index) => {
+              element['index'] = index;
+              if ((this.auth.userInteriores.uid === element.createdByUid) && !this.auth.permit.quotationsCompleteList) {
+                filteredList.push(element);
+              }
+            });
+
+            if (this.auth.permit.quotationsCompleteList) {
+              return res;
+            } else {
+              return filteredList;
+            }
+          } catch (error) {
+            console.log('getQuotations', error)
+          }
+        }),
+        map(res => {
+          return res.sort((a, b) => b['regDate'] - a['regDate']);
         })
       )
       .subscribe(res => {
@@ -444,12 +530,10 @@ export class DatabaseService {
       })
   }
 
-  getProductionOrders(all: boolean, from?: number, to?: number): void {
-    if (all) {
-      this.productionOrdersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/productionOrders`, ref => ref.orderBy('regDate', 'desc'));
-    } else {
-      this.productionOrdersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/productionOrders`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
-    }
+  getProductionOrders(from?: number, to?: number): void {
+
+    this.productionOrdersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/productionOrders`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
+
 
     this.productionOrdersCollection.valueChanges()
       .pipe(
@@ -475,12 +559,8 @@ export class DatabaseService {
       })
   }
 
-  getTickets(all: boolean, from?: number, to?: number): void {
-    if (all) {
-      this.ticketsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/tickets`, ref => ref.orderBy('regDate', 'desc'));
-    } else {
-      this.ticketsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/tickets`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
-    }
+  getTickets(from?: number, to?: number): void {
+    this.ticketsCollection = this.af.collection(`db/${this.auth.userInteriores.db}/tickets`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
 
     this.ticketsCollection.valueChanges()
       .pipe(
@@ -497,12 +577,8 @@ export class DatabaseService {
       })
   }
 
-  getDepartures(all: boolean, from?: number, to?: number): void {
-    if (all) {
-      this.departuresCollection = this.af.collection(`db/${this.auth.userInteriores.db}/departures`, ref => ref.orderBy('regDate', 'desc'));
-    } else {
-      this.departuresCollection = this.af.collection(`db/${this.auth.userInteriores.db}/departures`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
-    }
+  getDepartures(from?: number, to?: number): void {
+    this.departuresCollection = this.af.collection(`db/${this.auth.userInteriores.db}/departures`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
 
     this.departuresCollection.valueChanges()
       .pipe(
@@ -547,7 +623,7 @@ export class DatabaseService {
 
             res.forEach((element, index) => {
               element['index'] = index;
-              if ((this.auth.userInteriores.uid === element.destination.supervisor.uid) && !this.auth.permit.logisticTransfersCompleteList) {
+              if ((this.auth.userInteriores.uid === element.destination.supervisor.uid || this.auth.userInteriores.uid === element.createdByUid) && !this.auth.permit.logisticTransfersCompleteList) {
                 filteredTransfers.push(element);
               }
             });
@@ -628,10 +704,17 @@ export class DatabaseService {
         })
       )
       .subscribe(res => {
-        if (res) {
-          this.cashList = res;
-          this.dataCashList.next(res);
-        }
+        this.cashList = res;
+        this.dataCashList.next(res);
+      });
+  }
+
+  getCurrentCash(): void {
+    this.currentCashDocument = this.af.doc<CurrentCash>(`db/${this.auth.userInteriores.db}/currentCash/currentCash`);
+    this.currentCashDocument.valueChanges()
+      .subscribe(res => {
+        this.currentCash = res;
+        this.dataCurrentCash.next(res);
       });
   }
 

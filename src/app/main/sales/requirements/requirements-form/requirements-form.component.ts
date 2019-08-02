@@ -8,6 +8,7 @@ import { RequirementFormSaveDialogComponent } from './requirement-form-save-dial
 import { startWith, map } from 'rxjs/operators';
 import { DatabaseService } from 'src/app/core/database.service';
 import { Ng2ImgMaxService } from 'ng2-img-max';
+import { isObjectValidator } from 'src/app/core/is-object-validator';
 
 @Component({
   selector: 'app-requirements-form',
@@ -53,7 +54,7 @@ export class RequirementsFormComponent implements OnInit {
 
   createForm(): void {
     this.dataFormGroup = this.fb.group({
-      product: [null, [Validators.required]],
+      product: [null, [Validators.required, isObjectValidator]],
       quantity: [null, [Validators.required]],
       color: [null, [Validators.required]],
       description: null

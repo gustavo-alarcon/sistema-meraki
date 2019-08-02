@@ -70,7 +70,7 @@ export class StoresShowSerialsComponent implements OnInit, OnDestroy {
         store: this.data.store,
         serial: serial
       }
-    })
+    });
   }
 
 }

@@ -1,0 +1,48 @@
+<div class="ms-font-montserrat mat-title">
+    <mat-icon class="ms-icons-color" style="vertical-align:middle">attach_money</mat-icon> Abrir caja
+</div>
+<!-- <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar> -->
+
+<mat-dialog-content class="w3-margin-top">
+    <form [formGroup]="dataFormGroup">
+
+        <mat-form-field class="w3-margin-bottom" appearance="outline">
+            <mat-label>Caja</mat-label>
+            <input matInput type="text" formControlName="cash" [matAutocomplete]="cashAuto" placeholder="Escriba..."
+                autocomplete="off">
+            <mat-autocomplete #cashAuto="matAutocomplete" [displayWith]="showCash"
+                (optionSelected)="selectedCash($event)">
+                <mat-option *ngFor="let item of filteredCashList | async" [value]="item" [disabled]="item.open">
+                    {{item.name}} | {{item.location ? item.location.name : '---'}}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-hint>Requerido *</mat-hint>
+        </mat-form-field><br>
+
+        <mat-form-field class="w3-margin-bottom" appearance="outline">
+            <mat-label>Contraseña</mat-label>
+            <mat-pass-toggle-visibility #togglePassword matSuffix></mat-pass-toggle-visibility>
+            <input matInput [type]="togglePassword.type" required placeholder="Escriba..." formControlName="password"
+                autocomplete="off">
+            <mat-hint>Requerido *</mat-hint>
+            <!-- <mat-error *ngIf="!dataFormGroup.valid">Contraseña requerida *</mat-error> -->
+            <mat-error *ngIf="!rightPassword && !dataFormGroup.valid">Contraseña incorrecta **</mat-error>
+            <mat-error *ngIf="alreadyOpened">Esta caja ya se encuentra abierta *</mat-error>
+        </mat-form-field><br>
+
+        <mat-form-field class="w3-margin-bottom" appearance="outline">
+            <mat-label>Saldo inicial</mat-label>
+            <input matInput type="number" min="0" step="1" formControlName="openingBalance" placeholder="0"
+                autocomplete="off">
+            <mat-hint>Requerido *</mat-hint>
+        </mat-form-field><br>
+
+    </form>
+</mat-dialog-content>
+
+<mat-divider class="w3-margin-top"></mat-divider>
+<mat-dialog-actions align="end">
+    <button mat-stroked-button class="w3-margin-right" color="warn" mat-dialog-close>Cancelar</button>
+    <button mat-raised-button class="w3-margin-right" color="primary" (click)="openCash()"
+        [disabled]="!dataFormGroup.valid || !rightPassword">Abrir caja</button>
+</mat-dialog-actions>

@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { map, startWith } from 'rxjs/operators';
 import { DatabaseService } from 'src/app/core/database.service';
 import { Ng2ImgMaxService } from 'ng2-img-max';
+import { isObjectValidator } from 'src/app/core/is-object-validator';
 
 @Component({
   selector: 'app-orders-form',
@@ -76,7 +77,7 @@ export class OrdersFormComponent implements OnInit {
         .pipe(
           startWith<any>(''),
           map(value => typeof value === 'string' ? value : value.correlative),
-          map(corr => corr ? this.approvedQuotations.filter(option => option.correlative.toString().includes(corr)) : this.approvedQuotations)
+          map(corr => corr ? this.dbs.quotationsToReference.filter(option => option.correlative.toString().includes(corr)) : this.dbs.quotationsToReference)
         )
 
     this.filteredDocuments =
@@ -92,7 +93,7 @@ export class OrdersFormComponent implements OnInit {
     this.dataFormGroup = this.fb.group({
       quotation: null,
       orderNote: [null, [Validators.required]],
-      document: [null, [Validators.required]],
+      document: [null, [Validators.required, isObjectValidator]],
       documentSerial: [null, [Validators.required]],
       documentCorrelative: [null, [Validators.required]],
       quantity: [null, [Validators.required]],
@@ -138,6 +139,17 @@ export class OrdersFormComponent implements OnInit {
 
   save(): void {
     if (this.dataFormGroup.valid) {
+
+      if(typeof this.dataFormGroup.value['quotation'] === 'object'){
+        // 
+      } else {
+        this.dataFormGroup.get('quotation').setValue('');
+        this.imageSrc1 = '';
+        this.imageSrc2 = '';
+        this.pdf1 = '';
+        this.pdf2 = '';
+      }
+
       this.dialog.open(OrdersFormSaveDialogComponent, {
         data: {
           form: this.dataFormGroup.value,
@@ -178,7 +190,7 @@ export class OrdersFormComponent implements OnInit {
       this.ng2ImgMax.resizeImage(event.target.files[0], 10000, 426).subscribe(
         result => {
           this.selectedFile1 = new File([result], result.name);
-          console.log(':smiley: Oh si!');
+          // console.log(':smiley: Oh si!');
           this.resizingImage1 = false;
         },
         error => {
@@ -211,7 +223,7 @@ export class OrdersFormComponent implements OnInit {
       this.ng2ImgMax.resizeImage(event.target.files[0], 10000, 426).subscribe(
         result => {
           this.selectedFile2 = new File([result], result.name);
-          console.log('Oh si!');
+          // console.log('Oh si!');
           this.resizingImage2 = false;
         },
         error => {

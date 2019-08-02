@@ -12,11 +12,16 @@
 
             <mat-form-field appearance="outline">
                 <mat-label>Origen</mat-label>
-                <input matInput type="text" formControlName="origin" placeholder="Escriba..." autocomplete="off"
+                <input matInput type="text" formControlName="origin" [matAutocomplete]="originAuto" placeholder="Escriba..." autocomplete="off"
                     readonly>
+                <mat-autocomplete #originAuto="matAutocomplete" [displayWith]="showStore">
+                    <mat-option *ngFor="let item of dbs.currentDataStores | async" [value]="item">
+                        {{item.name}}
+                    </mat-option>
+                </mat-autocomplete>
                 <mat-hint>Requerido *</mat-hint>
             </mat-form-field><br>
-            
+
             <mat-form-field appearance="outline">
                 <mat-label>Destino</mat-label>
                 <input matInput type="text" formControlName="destination" [matAutocomplete]="destinationAuto"

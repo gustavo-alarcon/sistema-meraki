@@ -6,6 +6,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { debounceTime, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { isObjectValidator } from 'src/app/core/is-object-validator';
 
 @Component({
   selector: 'app-stores-sell-dialog',
@@ -61,11 +62,11 @@ export class StoresSellDialogComponent implements OnInit {
 
   createForm(): void {
     this.dataFormGroup = this.fb.group({
-      document: [null, [Validators.required]],
+      document: [null, [Validators.required, isObjectValidator]],
       documentSerial: [null, [Validators.required]],
       documentCorrelative: [null, [Validators.required]],
       price: [null, [Validators.required]],
-      discount: [0, [Validators.required]],
+      discount: 0,
       paymentType: [null, [Validators.required]],
       dni: [null, [Validators.required]],
       phone: [null, [Validators.required]],
@@ -86,7 +87,7 @@ export class StoresSellDialogComponent implements OnInit {
         documentCorrelative: this.dataFormGroup.value['documentCorrelative'],
         product: this.data.product,
         serie: this.data.serial.serie,
-        color: this.data.serial.color,
+        color: this.data.serial.color ? this.data.serial.color : '',
         quantity: 1,
         price: this.dataFormGroup.value['price'],
         discount: (this.dataFormGroup.value['price'] / this.data.product.sale) * 100,

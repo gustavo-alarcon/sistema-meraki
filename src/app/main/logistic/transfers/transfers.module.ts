@@ -5,7 +5,7 @@ import { TransfersRoutingModule } from './transfers-routing.module';
 import { TransfersComponent } from './transfers.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatAutocompleteModule, MatCheckboxModule, MatTooltipModule, MatDividerModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSnackBarModule, MatProgressSpinnerModule, MatProgressBarModule, MatMenuModule } from '@angular/material';
+import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatAutocompleteModule, MatCheckboxModule, MatTooltipModule, MatDividerModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSnackBarModule, MatProgressSpinnerModule, MatProgressBarModule, MatMenuModule, MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 import { TransfersCreateDialogComponent } from './transfers-create-dialog/transfers-create-dialog.component';
 import { TransfersCreateConfirmComponent } from './transfers-create-confirm/transfers-create-confirm.component';
 import { TransfersShowSerialListComponent } from './transfers-show-serial-list/transfers-show-serial-list.component';
@@ -38,6 +38,8 @@ import { TransfersShowSerialListComponent } from './transfers-show-serial-list/t
     MatProgressSpinnerModule,
     MatProgressBarModule,
     MatMenuModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   entryComponents: [
     TransfersCreateDialogComponent,

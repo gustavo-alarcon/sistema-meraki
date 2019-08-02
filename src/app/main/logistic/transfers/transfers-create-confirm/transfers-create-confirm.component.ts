@@ -73,46 +73,6 @@ export class TransfersCreateConfirmComponent implements OnInit {
                 }
               })
 
-              // this.data.producList.forEach(element => {
-
-              //   if (this.data.form['origin']['name'] === "Productos acabados") {
-              //     const productDestinationRef =
-              //       this.dbs.finishedProductsCollection
-              //         .doc(this.data.form['product']['id'])
-              //         .collection('products')
-              //         .doc(element.id).ref;
-              //     t.set(productDestinationRef, element);
-              //   } else {
-              //     const productDestinationRef =
-              //       this.dbs.storesCollection
-              //         .doc(this.data.form['destination']['id'])
-              //         .collection('products')
-              //         .doc(this.data.form['product']['id'])
-              //         .collection('products')
-              //         .doc(element.id).ref;
-              //     t.set(productDestinationRef, element);
-              //   }
-
-              //   if (this.data.form['origin']['name'] === "Productos acabados") {
-              //     const productOriginRef =
-              //       this.dbs.finishedProductsCollection
-              //         .doc(this.data.form['product']['id'])
-              //         .collection('products')
-              //         .doc(element.id).ref;
-              //     t.delete(productOriginRef);
-              //   } else {
-              //     const productOriginRef =
-              //       this.dbs.storesCollection
-              //         .doc(this.data.form['origin']['id'])
-              //         .collection('products')
-              //         .doc(this.data.form['product']['id'])
-              //         .collection('products')
-              //         .doc(element.id).ref;
-              //     t.delete(productOriginRef);
-              //   }
-
-              // });
-
               // update transfer correlative
               t.update(this.dbs.transferCorrelativeDocument.ref,
                 { correlative: newCorrelative });

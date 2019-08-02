@@ -6,6 +6,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { Product, Store, SerialNumber, DepartureProduct, Document } from 'src/app/core/types';
 import { debounceTime, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { isObjectValidator } from 'src/app/core/is-object-validator';
 
 @Component({
   selector: 'app-check-stock-sell-dialog',
@@ -62,7 +63,7 @@ export class CheckStockSellDialogComponent implements OnInit {
 
   createForm(): void {
     this.dataFormGroup = this.fb.group({
-      document: [null, [Validators.required]],
+      document: [null, [Validators.required, isObjectValidator]],
       documentSerial: [null, [Validators.required]],
       documentCorrelative: [null, [Validators.required]],
       price: [null, [Validators.required]],

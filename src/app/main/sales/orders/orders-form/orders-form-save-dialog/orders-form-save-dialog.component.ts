@@ -65,8 +65,6 @@ export class OrdersFormSaveDialogComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.checkNumberOfFiles();
 
-    console.log(this.data);
-
     const storage$ =
       this.currentStorageUploading.subscribe(res => {
         if (res) {
@@ -132,7 +130,7 @@ export class OrdersFormSaveDialogComponent implements OnInit, OnDestroy {
               documentSerial: this.data['form']['documentSerial'],
               documentCorrelative: this.data['form']['documentCorrelative'],
               deliveryDate: this.data['form']['deliveryDate'].valueOf(),
-              color: [],
+              color: '',
               quantity: this.data['form']['quantity'],
               description: this.data['form']['description'],
               image1: this.data['imageSrc1'],
@@ -143,6 +141,8 @@ export class OrdersFormSaveDialogComponent implements OnInit, OnDestroy {
               createdBy: this.auth.userInteriores.displayName,
               createdByUid: this.auth.userInteriores.uid
             };
+
+            console.log(data);
 
             t.set(this.orderRef.ref, data);
             t.update(this.dbs.orderCorrelativeDocument.ref, { correlative: newCorrelative });

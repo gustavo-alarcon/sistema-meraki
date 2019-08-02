@@ -31,6 +31,7 @@ export class ManageCashCreateDialogComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     public dbs: DatabaseService,
+    public auth: AuthService,
     private dialogRef: MatDialogRef<ManageCashCreateDialogComponent>,
     private snackbar: MatSnackBar
   ) { }
@@ -107,17 +108,24 @@ export class ManageCashCreateDialogComponent implements OnInit, OnDestroy {
 
       const data = {
         id: '',
-        regDate: Date.now(),
+        name: this.dataFormGroup.value['name'].trim(),
+        location: this.dataFormGroup.value['location'],
+        supervisor: this.dataFormGroup.value['supervisor'],
+        password: this.dataFormGroup.valid['password'].trim(),
         lastOpening: null,
         lastClosure: null,
         currentOwner: null,
-        open: false
+        open: false,
+        createdBy: this.auth.userInteriores.displayName,
+        createdByUid: this.auth.userInteriores.uid,
+        regDate: Date.now(),
+        lastEditBy: null,
+        lastEditByUid: null,
+        lastEditDate: null
       }
 
-      const finalData = Object.assign(data, this.dataFormGroup.value);
-
       this.dbs.cashListCollection
-        .add(finalData)
+        .add(data)
         .then(ref => {
           ref.update({ id: ref.id });
           this.loading = false;

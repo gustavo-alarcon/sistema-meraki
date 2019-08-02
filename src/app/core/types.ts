@@ -14,8 +14,11 @@ export interface Permit {
     name: string;
     salesSection: boolean;
     salesRequirementsButton: boolean;
+    requirementsCompleteList: boolean;
     salesOrdersButton: boolean;
+    ordersCompleteList: boolean;
     salesQuotationsButton: boolean;
+    quotationsCompleteList: boolean;
     salesShoppingButton: boolean;
     salesStoresButton: boolean;
     salesCheckStockButton: boolean;
@@ -387,13 +390,41 @@ export interface Provider {
 
 export interface Cash {
     id: string;
-    currentOwner: User;
+    currentOwner: User | {displayName: string};
     name: string;
-    location: Store;
+    location: Store | {name: string};
     open: boolean;
     password: string;
-    supervisor: User;
+    supervisor: User | {displayName: string};
     lastOpening: number;
     lastClosure: number;
     regDate: number;
+    createdBy: string;
+    createdByUid: string;
+    lastEditBy: string;
+    lastEditByUid: string;
+    lastEditDate: number;
+}
+
+export interface CurrentCash extends Cash {
+    currentOpening: string;
+}
+
+export interface Transaction {
+    id: string;
+    regDate: number;
+    type: string;
+    description?: string;
+    import: number;
+    user: User;
+    verified: boolean;
+    status: string;
+    paymentType: boolean;
+    debt?: number;
+    lastEditBy: string;
+    lastEditUid: string;
+    lastEditDate: number;
+    approvedBy: string;
+    approvedByUid: string;
+    approvedDate: number;
 }

@@ -22,7 +22,9 @@ import {  MatFormFieldModule,
           MatSnackBarModule,
           MatProgressSpinnerModule,
           MatProgressBarModule,
-          MatMenuModule} from '@angular/material';
+          MatMenuModule,
+          MatDatepickerModule,
+          MatNativeDateModule} from '@angular/material';
 import { RequirementsListRestoreConfirmComponent } from './requirements-list-restore-confirm/requirements-list-restore-confirm.component';
 
 @NgModule({
@@ -53,7 +55,9 @@ import { RequirementsListRestoreConfirmComponent } from './requirements-list-res
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
-    MatMenuModule
+    MatMenuModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   entryComponents: [
     RequirementsListEditDialogComponent,

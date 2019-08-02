@@ -24,7 +24,7 @@ export class CheckStockComponent implements OnInit {
 
   filteredProducts: Observable<Product[]>;
 
-  displayedColumns: string[] = ['index', 'location', 'serie', 'code', 'color', 'status', 'actions'];
+  displayedColumns: string[] = ['index', 'location', 'serie', 'code', 'color', 'sale', 'status', 'actions'];
 
 
   dataSource = new MatTableDataSource();
@@ -174,6 +174,7 @@ export class CheckStockComponent implements OnInit {
               this.snackbar.open(`${serial.name} #${serial.serie} SEPARADO!`, 'Cerrar', {
                 duration: 6000
               });
+              this.searchProduct();
             })
             .catch(err => {
               this.snackbar.open('Hubo un error separando el producto', 'Cerrar', {
