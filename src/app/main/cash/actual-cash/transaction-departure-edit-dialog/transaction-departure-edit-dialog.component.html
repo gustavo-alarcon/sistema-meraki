@@ -1,7 +1,6 @@
 <div class="ms-font-montserrat mat-title">
-    <mat-icon class="ms-icons-color" style="vertical-align:middle">remove_circle</mat-icon> Retirar dinero
+    <mat-icon class="ms-icons-color" style="vertical-align:middle">edit</mat-icon> Editar retiro
 </div>
-<!-- <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar> -->
 
 <mat-dialog-content class="w3-margin-top" style="min-width:300px">
     <form [formGroup]="dataFormGroup">
@@ -69,6 +68,6 @@
 <mat-divider class="w3-margin-top"></mat-divider>
 <mat-dialog-actions align="end">
     <button mat-stroked-button class="w3-margin-right" color="warn" mat-dialog-close>Cancelar</button>
-    <button mat-raised-button class="w3-margin-right" color="primary" (click)="retriveMoney()"
-        [disabled]="!dataFormGroup.valid">Retirar</button>
+    <button mat-raised-button class="w3-margin-right" color="primary" (click)="edit()"
+        [disabled]="!dataFormGroup.valid">Editar</button>
 </mat-dialog-actions>

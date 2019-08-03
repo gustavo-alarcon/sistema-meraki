@@ -391,6 +391,7 @@ export interface Provider {
 export interface Cash {
     id: string;
     currentOwner: User | {displayName: string};
+    currentOpening?: string;
     name: string;
     location: Store | {name: string};
     open: boolean;
@@ -419,7 +420,11 @@ export interface Transaction {
     user: User;
     verified: boolean;
     status: string;
-    paymentType: boolean;
+    ticketType: string;
+    paymentType: string;
+    expenseType?: string;
+    departureType?: string;
+    originAccount?: string;
     debt?: number;
     lastEditBy: string;
     lastEditUid: string;

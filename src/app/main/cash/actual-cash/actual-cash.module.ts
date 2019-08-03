@@ -17,6 +17,10 @@ import { RetriveMoneyCashConfirmComponent } from './retrive-money-cash-confirm/r
 import { TransactionCancelConfirmComponent } from './transaction-cancel-confirm/transaction-cancel-confirm.component';
 import { TransactionRestoreConfirmComponent } from './transaction-restore-confirm/transaction-restore-confirm.component';
 import { TransactionApproveConfirmComponent } from './transaction-approve-confirm/transaction-approve-confirm.component';
+import { TransactionTicketEditDialogComponent } from './transaction-ticket-edit-dialog/transaction-ticket-edit-dialog.component';
+import { TransactionDepartureEditDialogComponent } from './transaction-departure-edit-dialog/transaction-departure-edit-dialog.component';
+import { TransactionTicketEditConfirmComponent } from './transaction-ticket-edit-confirm/transaction-ticket-edit-confirm.component';
+import { TransactionDepartureEditConfirmComponent } from './transaction-departure-edit-confirm/transaction-departure-edit-confirm.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +35,11 @@ import { TransactionApproveConfirmComponent } from './transaction-approve-confir
     RetriveMoneyCashConfirmComponent,
     TransactionCancelConfirmComponent,
     TransactionRestoreConfirmComponent,
-    TransactionApproveConfirmComponent
+    TransactionApproveConfirmComponent,
+    TransactionTicketEditDialogComponent,
+    TransactionDepartureEditDialogComponent,
+    TransactionTicketEditConfirmComponent,
+    TransactionDepartureEditConfirmComponent
   ],
   imports: [
     CommonModule,
@@ -65,7 +73,14 @@ import { TransactionApproveConfirmComponent } from './transaction-approve-confir
     RetriveMoneyCashDialogComponent,
     ShowTotalCashDialogComponent,
     AddMoneyCashConfirmComponent,
-    RetriveMoneyCashConfirmComponent
+    RetriveMoneyCashConfirmComponent,
+    TransactionCancelConfirmComponent,
+    TransactionRestoreConfirmComponent,
+    TransactionApproveConfirmComponent,
+    TransactionTicketEditDialogComponent,
+    TransactionDepartureEditDialogComponent,
+    TransactionTicketEditConfirmComponent,
+    TransactionDepartureEditConfirmComponent
   ]
 })
 export class ActualCashModule { }

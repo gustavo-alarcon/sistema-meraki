@@ -13,6 +13,10 @@ import { AuthService } from 'src/app/core/auth.service';
 import { TransactionCancelConfirmComponent } from './transaction-cancel-confirm/transaction-cancel-confirm.component';
 import { TransactionRestoreConfirmComponent } from './transaction-restore-confirm/transaction-restore-confirm.component';
 import { TransactionApproveConfirmComponent } from './transaction-approve-confirm/transaction-approve-confirm.component';
+import { RetriveMoneyCashDialogComponent } from './retrive-money-cash-dialog/retrive-money-cash-dialog.component';
+import { TransactionTicketEditDialogComponent } from './transaction-ticket-edit-dialog/transaction-ticket-edit-dialog.component';
+import { TransactionDepartureEditDialogComponent } from './transaction-departure-edit-dialog/transaction-departure-edit-dialog.component';
+import { ShowTotalCashDialogComponent } from './show-total-cash-dialog/show-total-cash-dialog.component';
 
 @Component({
   selector: 'app-actual-cash',
@@ -25,14 +29,19 @@ export class ActualCashComponent implements OnInit, OnDestroy {
 
   filteredOperations: Array<TicketProduct | TicketRawMaterial | DepartureProduct | DepartureRawMaterial> = [];
   filteredTransactions: Array<Transaction> = [];
+  referenceTransactions: Array<Transaction> = [];
 
   currentCash: Cash;
 
-  displayedColumns: string[] = ['index', 'regDate', 'type', 'description', 'import', 'user', 'verified', 'paymentType', 'debt', 'actions'];
+  displayedColumns: string[] = ['index', 'regDate', 'type', 'description', 'import', 'verified', 'user', 'paymentType', 'debt', 'approvedBy', 'actions'];
   dataSource = new MatTableDataSource();
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+
+  totalImport: number = 0;
+  totalTickets: number = 0;
+  totalDepartures: number = 0;
 
   subscriptions: Array<Subscription> = [];
 
@@ -45,6 +54,8 @@ export class ActualCashComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
 
     this.dbs.currentDataCurrentCash
       .subscribe(res => {
@@ -54,18 +65,28 @@ export class ActualCashComponent implements OnInit, OnDestroy {
               .doc(res.id)
               .collection('openings')
               .doc(res.currentOpening)
-              .collection<Transaction>('transactions')
+              .collection<Transaction>('transactions', ref => ref.orderBy('regDate', 'desc'))
               .valueChanges()
               .pipe(
                 map(res => {
+                  this.totalImport = 0;
+
                   res.forEach((element, index) => {
                     element['index'] = index;
+                    if (element.status === 'Aprobado') {
+                      if (element.ticketType) {
+                        this.totalImport += element.import;
+                      } else {
+                        this.totalImport -= element.import;
+                      }
+                    }
                   });
                   return res;
                 })
               )
               .subscribe(res => {
                 this.filteredTransactions = res;
+                this.referenceTransactions = res;
                 this.dataSource.data = this.filteredTransactions;
               });
 
@@ -82,11 +103,18 @@ export class ActualCashComponent implements OnInit, OnDestroy {
   }
 
   filterData(ref): void {
-    // 
+    ref = ref.toLowerCase();
+
+    this.filteredTransactions = this.referenceTransactions.filter(option =>
+      option.paymentType.toLowerCase().includes(ref) ||
+      option.type.toLowerCase().includes(ref) ||
+      option.user.displayName.toLowerCase());
+
+    this.dataSource.data = this.filteredTransactions;
   }
 
   showTotal(): void {
-    // 
+    this.dialog.open(ShowTotalCashDialogComponent);
   }
 
   addMoney(): void {
@@ -94,7 +122,7 @@ export class ActualCashComponent implements OnInit, OnDestroy {
   }
 
   retriveMoney(): void {
-    // 
+    this.dialog.open(RetriveMoneyCashDialogComponent);
   }
 
   openCash(): void {
@@ -140,7 +168,19 @@ export class ActualCashComponent implements OnInit, OnDestroy {
   }
 
   editTransaction(transaction: Transaction): void {
-    
+    if(transaction.ticketType){
+      this.dialog.open(TransactionTicketEditDialogComponent, {
+        data: {
+          transaction: transaction
+        }
+      });
+    }else{
+      this.dialog.open(TransactionDepartureEditDialogComponent, {
+        data: {
+          transaction: transaction
+        }
+      });
+    }
   }
 
   cancelTransaction(transaction: Transaction): void {

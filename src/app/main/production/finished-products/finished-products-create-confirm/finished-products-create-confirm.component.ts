@@ -66,6 +66,45 @@ export class FinishedProductsCreateConfirmComponent implements OnInit {
 
             this.flags.created = true;
 
+            for (let serie = initSerie; serie <= finalSerie; serie++) {
+              ref.collection('products')
+                .add(
+                  {
+                    id: '',
+                    productId: ref.id,
+                    name: this.data['form']['name'],
+                    code: this.data['form']['code'],
+                    serie: serie,
+                    color: '',
+                    status: 'Acabado',
+                    location: 'Productos acabados',
+                    regDate: Date.now(),
+                    createdBy: this.auth.userInteriores.displayName,
+                    createdByUid: this.auth.userInteriores.uid,
+                    modifiedBy: '',
+                    modifiedByUid: '',
+                    customerDisplayName: '',
+                    customerDocumentNumber: '',
+                    customerDate: null
+                  }
+                ).then(refSerie => {
+                  refSerie.update({ id: refSerie.id })
+                }).catch(err => {
+                  this.uploading = false;
+                  this.snackbar.open('Hubo un error creando los números de serie', 'Cerrar', {
+                    duration: 6000
+                  });
+                  console.log(err);
+                })
+            }
+
+            this.uploading = false;
+            this.flags.serie = true;
+            this.snackbar.open('Nuevo producto creado!', 'Cerrar', {
+              duration: 6000
+            });
+            this.dialogRef.close(true);
+
             if (this.data.image) {
               this.uploading1 = true;
               const file = this.data.image;
@@ -85,45 +124,6 @@ export class FinishedProductsCreateConfirmComponent implements OnInit {
                       ref.update({ image: url })
                         .then(() => {
                           this.flags.image = true;
-
-                          for (let serie = initSerie; serie <= finalSerie; serie++) {
-                            ref.collection('products')
-                              .add(
-                                {
-                                  id: '',
-                                  productId: ref.id,
-                                  name: this.data['form']['name'],
-                                  code: this.data['form']['code'],
-                                  serie: serie,
-                                  color: '',
-                                  status: 'Acabado',
-                                  location: 'Productos acabados',
-                                  regDate: Date.now(),
-                                  createdBy: this.auth.userInteriores.displayName,
-                                  createdByUid: this.auth.userInteriores.uid,
-                                  modifiedBy: '',
-                                  modifiedByUid: '',
-                                  customerDisplayName: '',
-                                  customerDocumentNumber: '',
-                                  customerDate: null
-                                }
-                              ).then(refSerie => {
-                                refSerie.update({ id: refSerie.id })
-                              }).catch(err => {
-                                this.uploading = false;
-                                this.snackbar.open('Hubo un error creando los números de serie', 'Cerrar', {
-                                  duration: 6000
-                                });
-                                console.log(err);
-                              })
-                          }
-
-                          this.uploading = false;
-                          this.flags.serie = true;
-                          this.snackbar.open('Nuevo producto creado!', 'Cerrar', {
-                            duration: 6000
-                          });
-                          this.dialogRef.close(true);
                         })
                         .catch(err => {
                           console.log(err);

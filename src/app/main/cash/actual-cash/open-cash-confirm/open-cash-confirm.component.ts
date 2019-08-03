@@ -59,7 +59,11 @@ export class OpenCashConfirmComponent implements OnInit {
           .collection('openings')
           .add(openingData)
           .then(ref => {
-            ref.update({ id: ref.id });
+            ref.update({ id: ref.id});
+
+            this.dbs.cashListCollection
+            .doc(this.data.cash.id)
+            .update({currentOpening: ref.id});
 
             let currentData = {
               currentOpening: ref.id

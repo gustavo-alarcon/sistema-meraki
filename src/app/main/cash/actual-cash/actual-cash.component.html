@@ -99,6 +99,7 @@
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw; let i = index">
                                     {{raw.index + 1}}
                                 </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
                             </ng-container>
 
                             <ng-container matColumnDef="regDate">
@@ -110,42 +111,47 @@
                                     <span *ngIf="raw.regDate" class="w3-small"><b>
                                             ({{raw.regDate | date : 'hh:mm a'}})</b></span>
                                 </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
                             </ng-container>
 
                             <ng-container matColumnDef="type">
-                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                <th mat-header-cell style="padding:0px 8px; min-width:170px" *matHeaderCellDef
                                     matTooltip="Ordenar tabla por tipo" matTooltipPosition="above"
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Tipo</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     {{raw.type}}
                                 </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
                             </ng-container>
 
                             <ng-container matColumnDef="description">
-                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                <th mat-header-cell style="padding:0px 8px; min-width:170px" *matHeaderCellDef
                                     matTooltip="Ordenar tabla por descripción" matTooltipPosition="above"
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Descripción</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     {{raw.description}}
                                 </td>
+                                <td mat-footer-cell *matFooterCellDef style="text-align:right; padding-right:8px"> <b>Total</b></td>
                             </ng-container>
 
                             <ng-container matColumnDef="import">
-                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                <th mat-header-cell style="padding:0px 8px; min-width:150px" *matHeaderCellDef
                                     matTooltip="Ordenar tabla por importe" matTooltipPosition="above"
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Importe</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
-                                    {{raw.import | currency : 'S/.'}}
+                                    <span [ngClass]="{'w3-text-gray': raw.status === 'Anulado'}"><mat-icon style="vertical-align:middle; margin-right:0.2em">{{raw.ticketType ? 'add_circle' : 'remove_circle'}}</mat-icon>{{raw.import | currency : 'S/.'}}</span>
                                 </td>
+                                <td mat-footer-cell *matFooterCellDef class="w3-topbar" style="padding: 0px 8px"> <mat-icon style="vertical-align:middle;margin-right:0.2em">attach_money</mat-icon> {{totalImport | currency : 'S./'}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="user">
-                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                <th mat-header-cell style="padding:0px 8px; min-width:180px" *matHeaderCellDef
                                     matTooltip="Ordenar tabla por usuario" matTooltipPosition="above"
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Usuario</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     {{raw.user.displayName}}
                                 </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
                             </ng-container>
 
                             <ng-container matColumnDef="verified">
@@ -154,8 +160,9 @@
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Verificado</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <span style="padding: 8px 8px; border-radius: 10px"
-                                        [ngClass]="{'w3-green': raw.verified, 'w3-amber': !raw.verified}">{{raw.verified ? 'Aprobado' : 'Pendiente'}}</span>
+                                        [ngClass]="{'w3-green': raw.status === 'Aprobado', 'w3-amber': !raw.verified, 'w3-black': raw.status === 'Anulado' }">{{raw.status}}</span>
                                 </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
                             </ng-container>
 
                             <ng-container matColumnDef="paymentType">
@@ -165,6 +172,17 @@
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     {{raw.paymentType}}
                                 </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="approvedBy">
+                                <th mat-header-cell style="padding:0px 8px; min-width:170px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por precio de compra" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Aprobado por</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.approvedBy}}
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
                             </ng-container>
 
                             <ng-container matColumnDef="debt">
@@ -174,36 +192,33 @@
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     {{raw.debt | currency : 'S/.'}}
                                 </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
                             </ng-container>
 
                             <ng-container matColumnDef="actions" stickyEnd>
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <mat-menu #rawMenu="matMenu">
-                                        <button mat-menu-item (click)="approveTransaction(raw)"
-                                            [disabled]="raw.varified">
+                                        <button mat-menu-item (click)="approveTransaction(raw)">
                                             <mat-icon class="ms-icons-color">check_circle</mat-icon> Aprobar
                                         </button>
                                         <button mat-menu-item (click)="editTransaction(raw)">
                                             <mat-icon class="ms-icons-color">edit</mat-icon> Editar
                                         </button>
-                                        <button mat-menu-item (click)="cancelTransaction(raw)"
-                                            *ngIf="raw.status === 'Grabado'">
+                                        <button mat-menu-item (click)="cancelTransaction(raw)">
                                             <mat-icon class="ms-icons-color">cancel</mat-icon> Anular
-                                        </button>
-                                        <button mat-menu-item (click)="restoreTransaction(raw)"
-                                            *ngIf="raw.status === 'Anulado'">
-                                            <mat-icon class="ms-icons-color">history</mat-icon> Restaurar
                                         </button>
                                     </mat-menu>
                                     <button mat-icon-button [matMenuTriggerFor]="rawMenu">
                                         <mat-icon>more_vert</mat-icon>
                                     </button>
                                 </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
                             </ng-container>
 
                             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
 
                         </table>
                     </div>

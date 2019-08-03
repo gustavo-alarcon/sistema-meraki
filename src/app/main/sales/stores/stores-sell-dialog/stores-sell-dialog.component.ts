@@ -1,4 +1,4 @@
-import { SerialNumber, Product, DepartureProduct, Store, Document } from './../../../../core/types';
+import { SerialNumber, Product, DepartureProduct, Store, Document, Cash } from './../../../../core/types';
 import { Component, OnInit, Inject } from '@angular/core';
 import { DatabaseService } from 'src/app/core/database.service';
 import { AuthService } from 'src/app/core/auth.service';
@@ -27,6 +27,8 @@ export class StoresSellDialogComponent implements OnInit {
   ]
 
   filteredDocuments: Observable<Document[]>;
+  filteredCash: Observable<Cash[]>;
+  preFilteredCash: Array<Cash> = [];
 
   constructor(
     public dbs: DatabaseService,
@@ -58,6 +60,15 @@ export class StoresSellDialogComponent implements OnInit {
           map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
           map(name => name ? this.dbs.documents.filter(option => option.name.toLowerCase().includes(name)) : this.dbs.documents)
         );
+
+    this.preFilteredCash = this.dbs.cashList.filter(option => option.location.name === this.data.store.name);
+
+    this.filteredCash =
+      this.dataFormGroup.get('cash').valueChanges
+        .pipe(
+          map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+          map(name => name ? this.preFilteredCash.filter(option => option.name.toLowerCase().includes(name) && (option.location.name === this.data.store.name)) : this.preFilteredCash)
+        )
   }
 
   createForm(): void {
@@ -70,6 +81,7 @@ export class StoresSellDialogComponent implements OnInit {
       paymentType: [null, [Validators.required]],
       dni: [null, [Validators.required]],
       phone: [null, [Validators.required]],
+      cash: [null, [Validators.required, isObjectValidator]]
     });
   }
 
@@ -77,9 +89,14 @@ export class StoresSellDialogComponent implements OnInit {
     return document ? document.name : null;
   }
 
+  showCash(cash: Cash): string | null {
+    return cash ? cash.name : null;
+  }
+
   save(): void {
     this.loading = true;
     if (this.dataFormGroup.valid) {
+
       const data: DepartureProduct = {
         id: '',
         document: this.dataFormGroup.value['document'],
@@ -144,6 +161,50 @@ export class StoresSellDialogComponent implements OnInit {
             duration: 6000
           });
           console.log(err);
+        });
+
+      const transaction = {
+        id: '',
+        regDate: Date.now(),
+        type: 'VENTA',
+        description:  this.dataFormGroup.value['document']['name']
+                      + ', Serie ' + this.dataFormGroup.value['documentSerial']
+                      + ', Correlativo ' + this.dataFormGroup.value['documentCorrelative']
+                      + ', DNI ' + this.dataFormGroup.value['dni']
+                      + ', Celular ' + this.dataFormGroup.value['phone']
+                      + ', Dsct.  ' + this.dataFormGroup.value['discount'] + '%',
+        import: this.dataFormGroup.value['price'],
+        user: this.auth.userInteriores,
+        verified: false,
+        status: 'Grabado',
+        ticketType: 'VENTA',
+        paymentType: this.dataFormGroup.value['paymentType'],
+        expenseType: null,
+        departureType: null,
+        originAccount: null,
+        debt: 0,
+        lastEditBy: null,
+        lastEditUid: null,
+        lastEditDate: null,
+        approvedBy: null,
+        approvedByUid: null,
+        approvedDate: null,
+      }
+
+      this.dbs.cashListCollection
+        .doc(this.dataFormGroup.value['cash'].id)
+        .collection('openings')
+        .doc(this.dataFormGroup.value['cash'].currentOpening)
+        .collection('transactions')
+        .add(transaction)
+        .then(ref => {
+          ref.update({id : ref.id});
+        })
+        .catch(err => {
+          console.log(err);
+          this.snackbar.open('Parece que hubo un error guardan la transacción!', 'Cerrar', {
+            duration: 6000
+          });
         })
     }
 

@@ -15,7 +15,7 @@
                     <mat-form-field autocomplete="off" appearance="outline" class="w3-block">
                         <mat-label>Buscar Código</mat-label>
                         <input matInput type="text" [formControl]="product"
-                            placeholder="Escriba código del producto que esta buscando" [matAutocomplete]="productAuto"
+                            placeholder="Escriba el nombre o código del producto que esta buscando" [matAutocomplete]="productAuto"
                             autocomplete="off">
                         <mat-autocomplete #productAuto="matAutocomplete" [displayWith]="showProduct"
                             (optionSelected)="selectedProduct($event)">

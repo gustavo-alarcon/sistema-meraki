@@ -26,8 +26,8 @@
 
                     <mat-form-field class="w3-margin-right" appearance="outline">
                         <mat-label>Serie</mat-label>
-                        <input matInput type="number" min="0" step="1" formControlName="documentSerial"
-                            placeholder="0" autocomplete="off">
+                        <input matInput type="number" min="0" step="1" formControlName="documentSerial" placeholder="0"
+                            autocomplete="off">
                         <mat-hint>Requerido *</mat-hint>
                     </mat-form-field><br>
 
@@ -61,11 +61,24 @@
                     <mat-form-field class="w3-margin-right" appearance="outline">
                         <mat-label>Tipo de pago</mat-label>
                         <mat-select formControlName="paymentType" placeholder="Seleccione...">
-                            <mat-option *ngFor="let option of paymentTypes" [value]="">
+                            <mat-option *ngFor="let option of paymentTypes" [value]="option">
                                 {{option}}
                             </mat-option>
                         </mat-select>
                         <mat-hint>Requerido *</mat-hint>
+                    </mat-form-field><br>
+
+                    <mat-form-field class="w3-margin-right" appearance="outline">
+                        <mat-label>Caja destino</mat-label>
+                        <input matInput type="text" formControlName="cash" [matAutocomplete]="cashAuto"
+                            placeholder="Nombre de caja" autocomplete="off">
+                        <mat-autocomplete #cashAuto [displayWith]="showCash">
+                            <mat-option *ngFor="let item of filteredCash | async" [value]="item">
+                                {{item.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint>Requerido *</mat-hint>
+                        <mat-error *ngIf="(filteredCash | async)?.length">Lista vacía</mat-error>
                     </mat-form-field><br>
 
                     <mat-form-field class="w3-margin-right" appearance="outline">

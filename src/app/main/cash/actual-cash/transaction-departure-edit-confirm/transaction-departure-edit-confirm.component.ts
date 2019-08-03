@@ -2,55 +2,50 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { DatabaseService } from 'src/app/core/database.service';
 import { AuthService } from 'src/app/core/auth.service';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
+import { Transaction } from 'src/app/core/types';
 
 @Component({
-  selector: 'app-add-money-cash-confirm',
-  templateUrl: './add-money-cash-confirm.component.html',
+  selector: 'app-transaction-departure-edit-confirm',
+  templateUrl: './transaction-departure-edit-confirm.component.html',
   styles: []
 })
-export class AddMoneyCashConfirmComponent implements OnInit {
+export class TransactionDepartureEditConfirmComponent implements OnInit {
 
   uploading: boolean = false;
 
   flags = {
-    added: false
+    edited: false
   }
 
   constructor(
     public dbs: DatabaseService,
     public auth: AuthService,
-    private dialogRef: MatDialogRef<AddMoneyCashConfirmComponent>,
+    private dialogRef: MatDialogRef<TransactionDepartureEditConfirmComponent>,
     private snackbar: MatSnackBar,
-    @Inject(MAT_DIALOG_DATA) public data: { form: any }
+    @Inject(MAT_DIALOG_DATA) public data: { transaction: Transaction, form: any }
   ) { }
 
   ngOnInit() {
   }
 
-  add(): void {
+  edit(): void {
     this.uploading = true;
 
     const data = {
-      id: '',
-      regDate: Date.now(),
-      type: this.data.form['ticketType'],
+      type: this.data.form['departureType'],
       description: this.data.form['description'],
       import: this.data.form['import'],
       user: this.data.form['user'],
       verified: true,
       status: 'Aprobado',
-      ticketType: this.data.form['ticketType'],
+      ticketType: null,
       paymentType: this.data.form['paymentType'],
-      expenseType: null,
-      departureType: null,
-      originAccount: null,
-      debt: this.data.form['debt'],
-      lastEditBy: null,
-      lastEditUid: null,
-      lastEditDate: null,
-      approvedBy: this.auth.userInteriores.displayName,
-      approvedByUid: this.auth.userInteriores.uid,
-      approvedDate: Date.now()
+      expenseType: this.data.form['expenseType'],
+      originAccount: this.data.form['originAccount'],
+      debt: 0,
+      lastEditBy: this.auth.userInteriores.displayName,
+      lastEditUid: this.auth.userInteriores.uid,
+      lastEditDate: Date.now()
     }
 
     this.dbs.cashListCollection
@@ -58,18 +53,20 @@ export class AddMoneyCashConfirmComponent implements OnInit {
       .collection('openings')
       .doc(this.dbs.currentCash.currentOpening)
       .collection('transactions')
-      .add(data)
-      .then(ref => {
-        ref.update({id: ref.id});
+      .doc(this.data.transaction.id)
+      .update(data)
+      .then(() => {
+        this.flags.edited = true;
         this.uploading = false;
-        this.snackbar.open('Dinero agregado!', 'Cerrar', {
+        this.snackbar.open('Transacción editada!', 'Cerrar', {
           duration: 6000
         });
         this.dialogRef.close(true);
       })
       .catch(err => {
         console.log(err);
-        this.snackbar.open('Parece que hubo un error agregando el dinero!', 'Cerrar', {
+        this.uploading = false;
+        this.snackbar.open('Parece que hubo un error editando la transacción!', 'Cerrar', {
           duration: 6000
         });
       })

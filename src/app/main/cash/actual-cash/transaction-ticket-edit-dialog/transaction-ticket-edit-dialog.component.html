@@ -1,5 +1,5 @@
 <div class="ms-font-montserrat mat-title">
-    <mat-icon class="ms-icons-color" style="vertical-align:middle">add_circle</mat-icon> Agregar dinero
+    <mat-icon class="ms-icons-color" style="vertical-align:middle">edit</mat-icon> Editar ingreso
 </div>
 <!-- <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar> -->
 
@@ -71,6 +71,6 @@
 <mat-divider class="w3-margin-top"></mat-divider>
 <mat-dialog-actions align="end">
     <button mat-stroked-button class="w3-margin-right" color="warn" mat-dialog-close>Cancelar</button>
-    <button mat-raised-button class="w3-margin-right" color="primary" (click)="addMoney()"
-        [disabled]="!dataFormGroup.valid">Agregar</button>
+    <button mat-raised-button class="w3-margin-right" color="primary" (click)="edit()"
+        [disabled]="!dataFormGroup.valid">Editar</button>
 </mat-dialog-actions>
