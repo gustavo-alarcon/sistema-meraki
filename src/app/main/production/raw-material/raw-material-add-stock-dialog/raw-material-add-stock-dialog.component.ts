@@ -2,8 +2,11 @@ import { RawMaterialAddStockConfirmComponent } from './../raw-material-add-stock
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material';
 import { Component, OnInit, Inject } from '@angular/core';
-import { RawMaterial } from 'src/app/core/types';
+import { RawMaterial, Document } from 'src/app/core/types';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { map, startWith } from 'rxjs/operators';
+import { DatabaseService } from 'src/app/core/database.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-raw-material-add-stock-dialog',
@@ -14,20 +17,32 @@ export class RawMaterialAddStockDialogComponent implements OnInit {
 
   dataFormGroup: FormGroup;
 
+  filteredDocuments: Observable<Document[]>;
+  
   constructor(
     private dialog: MatDialog,
+    public dbs: DatabaseService,
     public fb: FormBuilder,
     private dialogRef: MatDialogRef<RawMaterialAddStockDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {raw: RawMaterial}
+    @Inject(MAT_DIALOG_DATA) public data: { raw: RawMaterial }
   ) { }
 
   ngOnInit() {
     this.createForm();
+
+    this.filteredDocuments =
+      this.dataFormGroup.get('document').valueChanges
+        .pipe(
+          startWith<any>(''),
+          map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+          map(name => name ? this.dbs.documents.filter(option => option.name.toLowerCase().includes(name)) : this.dbs.documents)
+        )
   }
 
   createForm(): void {
     this.dataFormGroup = this.fb.group({
       document: [null, [Validators.required]],
+      documentSerial: [null, [Validators.required]],
       documentCorrelative: [null, [Validators.required]],
       quantity: [null, [Validators.required]],
       totalPrice: [null, [Validators.required]]
@@ -41,10 +56,10 @@ export class RawMaterialAddStockDialogComponent implements OnInit {
         form: this.dataFormGroup.value
       }
     }).afterClosed().subscribe(res => {
-        if(res) {
-          this.dialogRef.close(true);
-        }
-      });
+      if (res) {
+        this.dialogRef.close(true);
+      }
+    });
   }
 
 }

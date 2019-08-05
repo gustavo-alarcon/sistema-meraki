@@ -6,6 +6,7 @@ import { DatabaseService } from 'src/app/core/database.service';
 import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { AuthService } from 'src/app/core/auth.service';
 import { startWith, map, tap, debounceTime } from 'rxjs/operators';
+import { isObjectValidator } from 'src/app/core/is-object-validator';
 
 @Component({
   selector: 'app-manage-cash-create-dialog',
@@ -87,8 +88,8 @@ export class ManageCashCreateDialogComponent implements OnInit, OnDestroy {
   createForm(): void {
     this.dataFormGroup = this.fb.group({
       name: [null, [Validators.required]],
-      location: [null, [Validators.required]],
-      supervisor: [null, [Validators.required]],
+      location: [null, [Validators.required, isObjectValidator]],
+      supervisor: [null, [Validators.required, isObjectValidator]],
       password: [null, [Validators.required]]
     })
   }

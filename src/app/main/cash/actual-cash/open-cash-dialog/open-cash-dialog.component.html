@@ -3,11 +3,12 @@
 </div>
 <!-- <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar> -->
 
-<mat-dialog-content class="w3-margin-top">
+<mat-dialog-content class="w3-margin-top" style="min-width:300px">
     <form [formGroup]="dataFormGroup">
 
-        <mat-form-field class="w3-margin-bottom" appearance="outline">
+        <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
             <mat-label>Caja</mat-label>
+            <mat-icon matSuffix>arrow_drop_down</mat-icon>
             <input matInput type="text" formControlName="cash" [matAutocomplete]="cashAuto" placeholder="Escriba..."
                 autocomplete="off">
             <mat-autocomplete #cashAuto="matAutocomplete" [displayWith]="showCash"
@@ -19,7 +20,7 @@
             <mat-hint>Requerido *</mat-hint>
         </mat-form-field><br>
 
-        <mat-form-field class="w3-margin-bottom" appearance="outline">
+        <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
             <mat-label>Contraseña</mat-label>
             <mat-pass-toggle-visibility #togglePassword matSuffix></mat-pass-toggle-visibility>
             <input matInput [type]="togglePassword.type" required placeholder="Escriba..." formControlName="password"
@@ -30,7 +31,7 @@
             <mat-error *ngIf="alreadyOpened">Esta caja ya se encuentra abierta *</mat-error>
         </mat-form-field><br>
 
-        <mat-form-field class="w3-margin-bottom" appearance="outline">
+        <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
             <mat-label>Saldo inicial</mat-label>
             <input matInput type="number" min="0" step="1" formControlName="openingBalance" placeholder="0"
                 autocomplete="off">

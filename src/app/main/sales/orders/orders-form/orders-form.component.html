@@ -8,6 +8,7 @@
     <form [formGroup]="dataFormGroup">
         <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
             <mat-label>Referencie una <b>cotización</b></mat-label>
+            <mat-icon matSuffix>arrow_drop_down</mat-icon>
             <input matInput type="text" [matAutocomplete]="quotationAuto" placeholder="Número de COT"
                 formControlName="quotation">
             <mat-autocomplete #quotationAuto="matAutocomplete" [displayWith]="showQuotation"
@@ -26,6 +27,7 @@
 
         <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
             <mat-label>Seleccione un <b>documento</b></mat-label>
+            <mat-icon matSuffix>arrow_drop_down</mat-icon>
             <input matInput type="text" [matAutocomplete]="documentAuto" placeholder="Nombre del documento"
                 formControlName="document" autocomplete="off">
             <mat-autocomplete #documentAuto="matAutocomplete" [displayWith]="showDocument">

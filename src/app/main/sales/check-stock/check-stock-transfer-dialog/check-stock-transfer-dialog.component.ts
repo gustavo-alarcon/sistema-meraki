@@ -4,9 +4,10 @@ import { MAT_DIALOG_DATA, MatSnackBar, MatDialogRef } from '@angular/material';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { DatabaseService } from 'src/app/core/database.service';
-import { map } from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/core/auth.service';
+import { isObjectValidator } from 'src/app/core/is-object-validator';
 
 @Component({
   selector: 'app-check-stock-transfer-dialog',
@@ -46,6 +47,7 @@ export class CheckStockTransferDialogComponent implements OnInit {
     this.filteredDestinationStores =
       this.dataFormGroup.get('destination').valueChanges
         .pipe(
+          startWith<any>(''),
           map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
           map(name => name ? this.dbs.stores.filter(option => option.name.toLowerCase()) : this.dbs.stores)
         )
@@ -56,7 +58,7 @@ export class CheckStockTransferDialogComponent implements OnInit {
 
     this.dataFormGroup = this.fb.group({
       origin: [originStore[0] ? originStore[0] : null, [Validators.required]],
-      destination: [null, [Validators.required]]
+      destination: [null, [Validators.required, isObjectValidator]]
     });
   }
 

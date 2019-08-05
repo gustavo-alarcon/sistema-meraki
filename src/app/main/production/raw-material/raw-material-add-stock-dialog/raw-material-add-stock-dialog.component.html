@@ -4,27 +4,41 @@
 
 <mat-dialog-content class="w3-margin-top">
     <form [formGroup]="dataFormGroup">
-        <mat-form-field class="w3-margin-right" appearance="outline">
+        <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
             <mat-label>Documento</mat-label>
-            <input matInput type="text" formControlName="document" placeholder="Escriba..." autocomplete="off">
+            <mat-icon matSuffix>arrow_drop_down</mat-icon>
+            <input matInput type="text" formControlName="document" [matAutocomplete]="documentAuto"
+                placeholder="Escriba..." autocomplete="off">
+            <mat-autocomplete #documentAuto="matAutocomplete">
+                <mat-option *ngFor="let item of filteredDocuments | async" [value]="item.name">
+                    {{item.name}}
+                </mat-option>
+            </mat-autocomplete>
             <mat-hint>Requerido *</mat-hint>
         </mat-form-field><br>
-
-        <mat-form-field class="w3-margin-right" appearance="outline">
-            <mat-label>Correlativo</mat-label>
+        
+        <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
+            <mat-label>Documento serie</mat-label>
             <input matInput type="number" min="0" step="1" formControlName="documentCorrelative" placeholder="0"
                 autocomplete="off">
             <mat-hint>Requerido *</mat-hint>
         </mat-form-field><br>
 
-        <mat-form-field class="w3-margin-right" appearance="outline">
+        <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
+            <mat-label>Documento correlativo</mat-label>
+            <input matInput type="number" min="0" step="1" formControlName="documentSerial" placeholder="0"
+                autocomplete="off">
+            <mat-hint>Requerido *</mat-hint>
+        </mat-form-field><br>
+
+        <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
             <mat-label>Cantidad</mat-label>
             <input matInput type="number" min="0" step="0.1" formControlName="quantity" placeholder="0"
                 autocomplete="off">
             <mat-hint>Requerido *</mat-hint>
         </mat-form-field><br>
 
-        <mat-form-field class="w3-margin-right" appearance="outline">
+        <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
             <mat-label>Importe total</mat-label>
             <input matInput type="number" min="0" step="0.01" formControlName="totalPrice" placeholder="0"
                 autocomplete="off">

@@ -269,6 +269,7 @@ export interface ProductionOrder {
 export interface TicketRawMaterial {
     id: string;
     document: string;
+    documentSerial: number;
     documentCorrelative: string;
     provider?: Provider;
     raw: RawMaterial;

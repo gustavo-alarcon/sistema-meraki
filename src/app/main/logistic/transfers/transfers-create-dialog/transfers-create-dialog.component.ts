@@ -7,6 +7,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { startWith, map, tap } from 'rxjs/operators';
 import { MatSnackBar, MatTableDataSource, MatPaginator, MatSort, MatDialog, MatDialogRef } from '@angular/material';
 import { TransfersCreateConfirmComponent } from '../transfers-create-confirm/transfers-create-confirm.component';
+import { isObjectValidator } from 'src/app/core/is-object-validator';
 
 @Component({
   selector: 'app-transfers-create-dialog',
@@ -111,7 +112,7 @@ export class TransfersCreateDialogComponent implements OnInit, OnDestroy {
     this.dataFormGroup = this.fb.group({
       origin: [null, [Validators.required]],
       destination: [null, [Validators.required]],
-      product: [null, [Validators.required]],
+      product: [null, [Validators.required, isObjectValidator]],
       serialNumber: null
     })
   }
@@ -138,7 +139,9 @@ export class TransfersCreateDialogComponent implements OnInit, OnDestroy {
           .valueChanges()
           .subscribe(res => {
             if (res) {
-              this.products = res
+              this.products = res;
+              this.dataFormGroup.get('product').setValue('');
+              this.dataFormGroup.get('serialNumber').setValue('');
             }
           });
 
@@ -268,8 +271,8 @@ export class TransfersCreateDialogComponent implements OnInit, OnDestroy {
     if (this.dataFormGroup.valid && this.tableList.length) {
       this.dialog.open(TransfersCreateConfirmComponent, {
         data: {
-          form: {origin: this.dataFormGroup.value['origin'], destination: this.dataFormGroup.value['destination']},
-          transferLists: this.transferLists ,
+          form: { origin: this.dataFormGroup.value['origin'], destination: this.dataFormGroup.value['destination'] },
+          transferLists: this.transferLists,
           tableList: this.tableList
         }
       }).afterClosed().subscribe(res => {

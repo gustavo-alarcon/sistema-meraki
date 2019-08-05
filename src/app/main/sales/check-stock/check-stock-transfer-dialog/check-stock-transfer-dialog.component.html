@@ -3,15 +3,16 @@
 </div>
 <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
 
-<mat-dialog-content>
+<mat-dialog-content style="min-width:300px">
     <form [formGroup]="dataFormGroup">
         <div class="w3-margin">
             <span class="ms-color-11 mat-subheading-1 w3-margin-bottom"><b>{{data.serial.name}}
                     #{{data.serial.serie | number : '2.'}}</b></span>
             <mat-divider class="w3-margin-bottom"></mat-divider>
 
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" class="w3-margin-bottom w3-block">
                 <mat-label>Origen</mat-label>
+                <mat-icon matSuffix>arrow_drop_down</mat-icon>
                 <input matInput type="text" formControlName="origin" [matAutocomplete]="originAuto" placeholder="Escriba..." autocomplete="off"
                     readonly>
                 <mat-autocomplete #originAuto="matAutocomplete" [displayWith]="showStore">
@@ -22,8 +23,9 @@
                 <mat-hint>Requerido *</mat-hint>
             </mat-form-field><br>
 
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" class="w3-margin-bottom w3-block">
                 <mat-label>Destino</mat-label>
+                <mat-icon matSuffix>arrow_drop_down</mat-icon>
                 <input matInput type="text" formControlName="destination" [matAutocomplete]="destinationAuto"
                     placeholder="Escriba..." autocomplete="off">
                 <mat-autocomplete #destinationAuto="matAutocomplete" [displayWith]="showStore">

@@ -10,21 +10,21 @@
                 <div class="w3-margin">
                     <span class="ms-color-11 mat-subheading-1 w3-margin-bottom"><b>Información</b></span>
                     <mat-divider class="w3-margin-bottom"></mat-divider>
-                    <mat-form-field class="w3-margin-bottom" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Descripción</mat-label>
                         <textarea matInput cols="10" rows="5" formControlName="description" placeholder="Describa ..."
                             autocomplete="off"></textarea>
                         <mat-hint>Requerido *</mat-hint>
                     </mat-form-field><br>
 
-                    <mat-form-field class="w3-margin-bottom" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Importe (S/.)</mat-label>
                         <input matInput type="number" min="0" step="0.01" formControlName="import" placeholder="0"
                             autocomplete="off">
                         <mat-hint>Requerido *</mat-hint>
                     </mat-form-field><br>
 
-                    <mat-form-field class="w3-margin-bottom" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>En deuda (S/.)</mat-label>
                         <input matInput type="number" min="0" step="0.01" formControlName="debt" placeholder="0"
                             autocomplete="off">
@@ -36,7 +36,7 @@
                 <div class="w3-margin">
                     <span class="ms-color-11 mat-subheading-1 w3-margin-bottom"><b>Detalles</b></span>
                     <mat-divider class="w3-margin-bottom"></mat-divider>
-                    <mat-form-field class="w3-margin-bottom" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Tipo de ingreso</mat-label>
                         <mat-select formControlName="ticketType">
                             <mat-option *ngFor="let item of ticketTypes" [value]="item">{{item}}</mat-option>
@@ -44,7 +44,7 @@
                         <mat-hint>Requerido *</mat-hint>
                     </mat-form-field><br>
 
-                    <mat-form-field class="w3-margin-bottom" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Tipo de pago</mat-label>
                         <mat-select formControlName="paymentType">
                             <mat-option *ngFor="let item of paymentTypes" [value]="item">{{item}}</mat-option>
@@ -52,8 +52,9 @@
                         <mat-hint>Requerido *</mat-hint>
                     </mat-form-field><br>
 
-                    <mat-form-field class="w3-margin-bottom" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Usuario asignado</mat-label>
+                        <mat-icon matSuffix>arrow_drop_down</mat-icon>
                         <input matInput type="text" formControlName="user" [matAutocomplete]="userAuto"
                             autocomplete="off">
                         <mat-autocomplete #userAuto="matAutocomplete" [displayWith]="showUser">

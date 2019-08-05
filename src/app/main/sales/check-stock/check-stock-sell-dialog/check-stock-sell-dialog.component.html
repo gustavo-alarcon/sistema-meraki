@@ -11,8 +11,9 @@
                 <div class="w3-margin">
                     <span class="ms-color-11 mat-subheading-1 w3-margin-bottom"><b>Documento</b></span>
                     <mat-divider class="w3-margin-bottom"></mat-divider>
-                    <mat-form-field class="w3-margin-right" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Documento</mat-label>
+                        <mat-icon matSuffix>arrow_drop_down</mat-icon>
                         <input matInput type="text" formControlName="document" [matAutocomplete]="documentAuto"
                             placeholder="Escriba..." autocomplete="off">
                         <mat-autocomplete #documentAuto="matAutocomplete" [displayWith]="showDocument">
@@ -24,28 +25,28 @@
                         <mat-error *ngIf="!dataFormGroup.valid">Seleccione un documento *</mat-error>
                     </mat-form-field><br>
 
-                    <mat-form-field class="w3-margin-right" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Serie</mat-label>
                         <input matInput type="number" min="0" step="1" formControlName="documentSerial" placeholder="0"
                             autocomplete="off">
                         <mat-hint>Requerido *</mat-hint>
                     </mat-form-field><br>
 
-                    <mat-form-field class="w3-margin-right" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Correlativo</mat-label>
                         <input matInput type="number" min="0" step="1" formControlName="documentCorrelative"
                             placeholder="0" autocomplete="off">
                         <mat-hint>Requerido *</mat-hint>
                     </mat-form-field><br>
 
-                    <mat-form-field class="w3-margin-right" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Importe</mat-label>
                         <input matInput type="number" min="0" step="0.01" formControlName="price"
                             [placeholder]="data.product.sale" autocomplete="off">
                         <mat-hint>Requerido *</mat-hint>
                     </mat-form-field><br>
 
-                    <mat-form-field class="w3-margin-right" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Descuento</mat-label>
                         <span matSuffix><b>%</b></span>
                         <input matInput type="number" min="0" step="0.01" formControlName="discount" autocomplete="off"
@@ -58,7 +59,7 @@
                 <div class="w3-margin">
                     <span class="ms-color-11 mat-subheading-1 w3-margin-bottom"><b>Información</b></span>
                     <mat-divider class="w3-margin-bottom"></mat-divider>
-                    <mat-form-field class="w3-margin-right" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Tipo de pago</mat-label>
                         <mat-select formControlName="paymentType" placeholder="Seleccione...">
                             <mat-option *ngFor="let option of paymentTypes" [value]="option">
@@ -68,8 +69,9 @@
                         <mat-hint>Requerido *</mat-hint>
                     </mat-form-field><br>
 
-                    <mat-form-field class="w3-margin-right" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Caja destino</mat-label>
+                        <mat-icon matSuffix>arrow_drop_down</mat-icon>
                         <input matInput type="text" formControlName="cash" [matAutocomplete]="cashAuto"
                             placeholder="Nombre de caja" autocomplete="off">
                         <mat-autocomplete #cashAuto [displayWith]="showCash">
@@ -81,14 +83,14 @@
                         <mat-error *ngIf="(filteredCash | async)?.length">Lista vacía</mat-error>
                     </mat-form-field><br>
 
-                    <mat-form-field class="w3-margin-right" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>DNI</mat-label>
                         <input matInput type="number" min="0" step="1" formControlName="dni" placeholder="Escriba..."
                             autocomplete="off">
                         <mat-hint>Requerido *</mat-hint>
                     </mat-form-field><br>
 
-                    <mat-form-field class="w3-margin-right" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Celular</mat-label>
                         <input matInput type="number" min="0" step="1" formControlName="phone" placeholder="Escriba..."
                             autocomplete="off">

@@ -10,7 +10,7 @@
                 <div class="w3-margin">
                     <span class="ms-color-11 mat-subheading-1 w3-margin-bottom"><b>Información</b></span>
                     <mat-divider class="w3-margin-bottom"></mat-divider>
-                    <mat-form-field class="w3-margin-bottom" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Nombre</mat-label>
                         <input matInput type="text" formControlName="name" placeholder="¿Qué nombre tendrá el producto?"
                             autocomplete="off">
@@ -20,7 +20,7 @@
                         <mat-hint *ngIf="duplicate.name">Este nombre ya existe <b>!!!</b></mat-hint>
                         <mat-error *ngIf="!dataFormGroup.valid">Nombre requerido *</mat-error>
                     </mat-form-field><br>
-                    <mat-form-field class="w3-margin-bottom" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Código</mat-label>
                         <input matInput type="text" formControlName="code" placeholder="¿Qué codigo tiene el producto?"
                             autocomplete="off">
@@ -36,10 +36,11 @@
                 <div class="w3-margin">
                     <span class="ms-color-11 mat-subheading-1 w3-margin-bottom"><b>Propiedades</b></span>
                     <mat-divider class="w3-margin-bottom"></mat-divider>
-                    <mat-form-field class="w3-margin-bottom" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Categoría</mat-label>
+                        <mat-icon matSuffix>arrow_drop_down</mat-icon>
                         <input matInput type="text" formControlName="category" [matAutocomplete]="categoryAuto"
-                            placeholder="¿A qué categoría pertenece?">
+                            placeholder="Escriba...">
                         <mat-autocomplete #categoryAuto="matAutocomplete">
                             <mat-option *ngFor="let cat of filteredCategories | async" [value]="cat.name">
                                 {{cat.name}}
@@ -48,13 +49,13 @@
                         <mat-hint>Requerido *</mat-hint>
                         <mat-error *ngIf="!dataFormGroup.valid">Seleccione una categoría *</mat-error>
                     </mat-form-field><br>
-                    <mat-form-field class="w3-margin-bottom" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Descripción</mat-label>
                         <input matInput type="text" formControlName="description" placeholder="Escriba...">
                         <mat-hint>Requerido *</mat-hint>
                         <mat-error *ngIf="!dataFormGroup.valid">Seleccione un color *</mat-error>
                     </mat-form-field><br>
-                    <mat-form-field class="w3-margin-bottom" appearance="outline">
+                    <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
                         <mat-label>Precio de venta</mat-label>
                         <input matInput type="number" min="0" step="0.1" formControlName="sale" placeholder="Escriba..."
                             autocomplete="off">

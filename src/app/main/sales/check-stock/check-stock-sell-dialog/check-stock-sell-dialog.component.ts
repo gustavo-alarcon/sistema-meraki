@@ -4,7 +4,7 @@ import { DatabaseService } from 'src/app/core/database.service';
 import { AuthService } from 'src/app/core/auth.service';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { Product, Store, SerialNumber, DepartureProduct, Document, Cash } from 'src/app/core/types';
-import { debounceTime, map } from 'rxjs/operators';
+import { debounceTime, map, startWith } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { isObjectValidator } from 'src/app/core/is-object-validator';
 
@@ -58,6 +58,7 @@ export class CheckStockSellDialogComponent implements OnInit {
     this.filteredDocuments =
       this.dataFormGroup.get('document').valueChanges
         .pipe(
+          startWith<any>(''),
           map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
           map(name => name ? this.dbs.documents.filter(option => option.name.toLowerCase().includes(name)) : this.dbs.documents)
         )
@@ -67,6 +68,7 @@ export class CheckStockSellDialogComponent implements OnInit {
     this.filteredCash =
       this.dataFormGroup.get('cash').valueChanges
         .pipe(
+          startWith<any>(''),
           map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
           map(name => name ? this.preFilteredCash.filter(option => option.name.toLowerCase().includes(name) && (option.location.name === this.data.serial.location)) : this.preFilteredCash)
         )

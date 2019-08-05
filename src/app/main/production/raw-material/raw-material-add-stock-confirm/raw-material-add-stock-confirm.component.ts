@@ -27,7 +27,7 @@ export class RawMaterialAddStockConfirmComponent implements OnInit {
     private af: AngularFirestore,
     private dialogRef: MatDialogRef<RawMaterialAddStockConfirmComponent>,
     private snackbar: MatSnackBar,
-    @Inject(MAT_DIALOG_DATA) public data: { raw: RawMaterial, form: { document: string, documentCorrelative: number, quantity: number, totalPrice: number } }
+    @Inject(MAT_DIALOG_DATA) public data: { raw: RawMaterial, form: { document: string, documentSerial: number, documentCorrelative: number, quantity: number, totalPrice: number } }
   ) { }
 
   ngOnInit() {
@@ -50,13 +50,14 @@ export class RawMaterialAddStockConfirmComponent implements OnInit {
             });
             t.set(purchaseRef, {
               document: this.data.form.document,
+              documentSerial: this.data.form.documentSerial,
               documentCorrelative: this.data.form.documentCorrelative,
               provider: null,
               raw: this.data.raw,
               quantity: this.data.form.quantity,
               totalPrice: this.data.form.totalPrice,
               unitPrice: this.data.form.totalPrice / this.data.form.quantity,
-              source: 'production',
+              source: 'raw',
               status: 'Grabado',
               regDate: Date.now(),
               createdBy: this.auth.userInteriores.displayName,

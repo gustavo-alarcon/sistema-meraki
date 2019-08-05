@@ -83,6 +83,7 @@ export class OrdersFormComponent implements OnInit {
     this.filteredDocuments =
           this.dataFormGroup.get('document').valueChanges
           .pipe(
+            startWith<any>(''),
             map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
             map(name => name ? this.dbs.documents.filter(option => option.name.toLowerCase().includes(name)) : this.dbs.documents)
           )

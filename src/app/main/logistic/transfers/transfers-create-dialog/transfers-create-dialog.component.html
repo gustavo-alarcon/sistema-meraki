@@ -12,6 +12,7 @@
 
                     <mat-form-field appearance="outline">
                         <mat-label>Origen</mat-label>
+                        <mat-icon matSuffix>arrow_drop_down</mat-icon>
                         <input matInput type="text" formControlName="origin" [matAutocomplete]="originAuto"
                             placeholder="Escriba..." autocomplete="off">
                         <mat-autocomplete #originAuto="matAutocomplete" [displayWith]="showStore"
@@ -25,6 +26,7 @@
                     </mat-form-field><br>
                     <mat-form-field appearance="outline">
                         <mat-label>Destino</mat-label>
+                        <mat-icon matSuffix>arrow_drop_down</mat-icon>
                         <input matInput type="text" formControlName="destination" [matAutocomplete]="destinationAuto"
                             placeholder="Escriba..." autocomplete="off">
                         <mat-autocomplete #destinationAuto="matAutocomplete" [displayWith]="showStore">
@@ -42,6 +44,8 @@
                     <span class="ms-color-11 mat-subheading-1 w3-margin-bottom"><b>Items</b></span>
                     <mat-divider class="w3-margin-bottom"></mat-divider>
                     <mat-form-field appearance="outline">
+                        <mat-label>Producto</mat-label>
+                        <mat-icon matSuffix>arrow_drop_down</mat-icon>
                         <input matInput type="text" formControlName="product" [matAutocomplete]="productAuto"
                             placeholder="Escriba..." autocomplete="off">
                         <mat-hint>Requerido *</mat-hint>
@@ -53,7 +57,9 @@
                         </mat-autocomplete>
                     </mat-form-field>
                     <mat-form-field appearance="outline">
-                        <input matInput type="text" formControlName="serialNumber" (keyUp.enter)="addSerial($event)" [matAutocomplete]="serialNumberAuto"
+                        <mat-label>Serie</mat-label>
+                        <mat-icon matSuffix>arrow_drop_down</mat-icon>
+                        <input matInput type="text" formControlName="serialNumber" [matAutocomplete]="serialNumberAuto"
                             placeholder="Escriba..." autocomplete="off">
                         <mat-hint>Requerido *</mat-hint>
                         <mat-autocomplete #serialNumberAuto="matAutocomplete" [displayWith]="showSerialNumber"
