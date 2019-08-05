@@ -1,15 +1,15 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
 import { CashOpening, TotalImports } from 'src/app/core/types';
-import { DatabaseService } from 'src/app/core/database.service';
 import { Subscription } from 'rxjs';
+import { DatabaseService } from 'src/app/core/database.service';
+import { MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
-  selector: 'app-show-total-cash-dialog',
-  templateUrl: './show-total-cash-dialog.component.html',
+  selector: 'app-show-history-transactions-total-dialog',
+  templateUrl: './show-history-transactions-total-dialog.component.html',
   styles: []
 })
-export class ShowTotalCashDialogComponent implements OnInit {
+export class ShowHistoryTransactionsTotalDialogComponent implements OnInit {
 
   currentOpening: CashOpening;
 
@@ -21,7 +21,6 @@ export class ShowTotalCashDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     const opening$ =
       this.dbs.cashListCollection
         .doc(this.data.currentCash.id)

@@ -59,7 +59,7 @@ export class OpenCashConfirmComponent implements OnInit {
           .collection('openings')
           .add(openingData)
           .then(ref => {
-            ref.update({ id: ref.id});
+            ref.update({id: ref.id});
 
             this.dbs.cashListCollection
             .doc(this.data.cash.id)
@@ -74,9 +74,13 @@ export class OpenCashConfirmComponent implements OnInit {
             finalData.currentOwner = this.auth.userInteriores;
             finalData.open = true;
             finalData.lastOpening = data.lastOpening;
+            finalData.currentOpening = ref.id;
             
-            this.dbs.currentCashDocument
-              .set(finalData)
+            console.log(finalData);
+            
+            this.dbs.usersCollection
+              .doc(this.auth.userInteriores.uid)
+              .update({currentCash: finalData})
               .then(() => {
                 this.uploading = false;
                 this.flags.opened = true;

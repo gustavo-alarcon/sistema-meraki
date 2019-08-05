@@ -3,6 +3,8 @@ export interface User {
     name: string;
     lastname: string;
     displayName: string;
+    lastRoute: string;
+    currentCash: CurrentCash | null;
     password: string;
     permitId: string;
     db: string;
@@ -209,7 +211,7 @@ export interface OtherResource {
     lastUpdateBy?: string;
     lastUpdateByUid?: string;
     lastUpdateDate?: number;
-    
+
 }
 
 export interface Category {
@@ -369,7 +371,7 @@ export interface Transfer {
 export interface TransferList {
     product: Product;
     serialList: Array<SerialNumber>;
-  }
+}
 
 export interface TransferItem {
     id: string;
@@ -391,13 +393,13 @@ export interface Provider {
 
 export interface Cash {
     id: string;
-    currentOwner: User | {displayName: string};
+    currentOwner: User | { displayName: string } | null;
     currentOpening?: string;
     name: string;
-    location: Store | {name: string};
+    location: Store | { name: string };
     open: boolean;
     password: string;
-    supervisor: User | {displayName: string};
+    supervisor: User | { displayName: string };
     lastOpening: number;
     lastClosure: number;
     regDate: number;
@@ -410,6 +412,38 @@ export interface Cash {
 
 export interface CurrentCash extends Cash {
     currentOpening: string;
+}
+
+export interface CashOpening {
+    id?: string;
+    openedBy: string;
+    openedByUid: string;
+    closedBy: string;
+    closedByUid: string;
+    openingDate: number;
+    closureDate: number;
+    openingBalance: number;
+    closureBalance: number;
+    importAdded: number;
+    importWithdrawn: number;
+    cashCount: number;
+    reOpenedBy: string;
+    reOpenedByUid: string;
+    reOpenedDate: number;
+    currentCash: CurrentCash;
+    totalImport?: number;
+    totalTickets?: number;
+    totalDepartures?: number;
+    totalTicketsByPaymentType?: {
+        'TARJETA VIDA': number;
+        'TARJETA MASTERCARD': number;
+        'TARJETA ESTILOS': number;
+        'EFECTIVO': number;
+    };
+    totalDeparturesByPaymentType?: {
+        'TRANSFERENCIA': number;
+        'EFECTIVO': number;
+    }
 }
 
 export interface Transaction {
@@ -433,4 +467,21 @@ export interface Transaction {
     approvedBy: string;
     approvedByUid: string;
     approvedDate: number;
+}
+
+export interface TotalImports {
+    currentCash: CurrentCash;
+    totalImport: number;
+    totalTickets: number;
+    totalDepartures: number;
+    totalTicketsByPaymentType: {
+        'TARJETA VIDA': number;
+        'TARJETA MASTERCARD': number;
+        'TARJETA ESTILOS': number;
+        'EFECTIVO': number;
+    };
+    totalDeparturesByPaymentType: {
+        'TRANSFERENCIA': number;
+        'EFECTIVO': number;
+    }
 }

@@ -1,0 +1,32 @@
+<div class="ms-font-montserrat mat-title">
+    <mat-icon class="ms-icons-color" style="vertical-align:middle">money_off</mat-icon> Cerrar caja
+</div>
+
+<mat-dialog-content class="w3-margin-top" style="min-width:300px">
+    <form [formGroup]="dataFormGroup">
+
+        <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
+            <mat-label>Contraseña</mat-label>
+            <mat-pass-toggle-visibility #togglePassword matSuffix></mat-pass-toggle-visibility>
+            <input matInput [type]="togglePassword.type" required placeholder="Escriba..." formControlName="password"
+                autocomplete="off">
+            <mat-hint>Requerido *</mat-hint>            
+            <mat-error *ngIf="!rightPassword && !dataFormGroup.valid">Contraseña incorrecta **</mat-error>
+        </mat-form-field><br>
+
+        <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
+            <mat-label>Saldo final</mat-label>
+            <input matInput type="number" min="0" step="1" formControlName="closureBalance" placeholder="0"
+                autocomplete="off">
+            <mat-hint>Requerido *</mat-hint>
+        </mat-form-field><br>
+
+    </form>
+</mat-dialog-content>
+
+<mat-divider class="w3-margin-top"></mat-divider>
+<mat-dialog-actions align="end">
+    <button mat-stroked-button class="w3-margin-right" color="warn" mat-dialog-close>Cancelar</button>
+    <button mat-raised-button class="w3-margin-right" color="primary" (click)="closeCash()"
+        [disabled]="!dataFormGroup.valid || !rightPassword">Cerrar caja</button>
+</mat-dialog-actions>

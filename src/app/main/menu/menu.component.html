@@ -151,11 +151,11 @@
                                 [disabled]="!permits.cashActualButton">
                                 <mat-icon class="ms-icons-color">account_balance_wallet</mat-icon> Caja actual
                             </button><br>
-                            <button class="w3-small" mat-button
+                            <!-- <button class="w3-small" mat-button
                                 [ngClass]="{'ms-button-selected': buttonOptions.cash.previous}"
                                 routerLink="cash/previous" [disabled]="!permits.cashPreviousButton">
                                 <mat-icon class="ms-icons-color">account_balance_wallet</mat-icon> Caja anterior
-                            </button><br>
+                            </button><br> -->
                         </div>
                         <div class="w3-margin-right">
                             <button class="w3-small" mat-button
@@ -330,6 +330,15 @@
                     </mat-expansion-panel-header>
 
                     <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.cash.mange}" routerLink="cash/manage"
+                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
+                        (click)="toggleSideMenu()" *ngIf="permits.cashManageButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            account_balance_wallet
+                        </mat-icon> Administrar cajas
+                    </button>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
                         [ngClass]="{'ms-button-selected': buttonOptions.cash.actual}" routerLink="cash/actual"
                         style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
                         *ngIf="permits.cashActualButton">
@@ -337,14 +346,15 @@
                             account_balance_wallet
                         </mat-icon> Caja actual
                     </button>
-                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+
+                    <!-- <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
                         [ngClass]="{'ms-button-selected': buttonOptions.cash.previous}" routerLink="cash/previous"
                         style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
                         (click)="toggleSideMenu()" *ngIf="permits.cashPreviousButton">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
                             account_balance_wallet
                         </mat-icon> Caja anterior
-                    </button>
+                    </button> -->
                     <p class="w3-margin-bottom"></p>
 
                 </mat-expansion-panel>

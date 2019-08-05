@@ -21,6 +21,10 @@ import { TransactionTicketEditDialogComponent } from './transaction-ticket-edit-
 import { TransactionDepartureEditDialogComponent } from './transaction-departure-edit-dialog/transaction-departure-edit-dialog.component';
 import { TransactionTicketEditConfirmComponent } from './transaction-ticket-edit-confirm/transaction-ticket-edit-confirm.component';
 import { TransactionDepartureEditConfirmComponent } from './transaction-departure-edit-confirm/transaction-departure-edit-confirm.component';
+import { CloseCashDialogComponent } from './close-cash-dialog/close-cash-dialog.component';
+import { ShowHistoryDialogComponent } from './show-history-dialog/show-history-dialog.component';
+import { ShowHistoryTransactionsDialogComponent } from './show-history-transactions-dialog/show-history-transactions-dialog.component';
+import { ShowHistoryTransactionsTotalDialogComponent } from './show-history-transactions-total-dialog/show-history-transactions-total-dialog.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +43,11 @@ import { TransactionDepartureEditConfirmComponent } from './transaction-departur
     TransactionTicketEditDialogComponent,
     TransactionDepartureEditDialogComponent,
     TransactionTicketEditConfirmComponent,
-    TransactionDepartureEditConfirmComponent
+    TransactionDepartureEditConfirmComponent,
+    CloseCashDialogComponent,
+    ShowHistoryDialogComponent,
+    ShowHistoryTransactionsDialogComponent,
+    ShowHistoryTransactionsTotalDialogComponent
   ],
   imports: [
     CommonModule,
@@ -80,7 +88,11 @@ import { TransactionDepartureEditConfirmComponent } from './transaction-departur
     TransactionTicketEditDialogComponent,
     TransactionDepartureEditDialogComponent,
     TransactionTicketEditConfirmComponent,
-    TransactionDepartureEditConfirmComponent
+    TransactionDepartureEditConfirmComponent,
+    CloseCashDialogComponent,
+    ShowHistoryDialogComponent,
+    ShowHistoryTransactionsDialogComponent,
+    ShowHistoryTransactionsTotalDialogComponent
   ]
 })
 export class ActualCashModule { }

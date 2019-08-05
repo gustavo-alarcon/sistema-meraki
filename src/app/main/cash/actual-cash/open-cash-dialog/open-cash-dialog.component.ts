@@ -105,7 +105,7 @@ export class OpenCashDialogComponent implements OnInit, OnDestroy {
       }
     }).afterClosed().subscribe(res => {
       if (res) {
-        this.dialogRef.close(this.currentCash);
+        this.dialogRef.close(true);
       }
     })
   }

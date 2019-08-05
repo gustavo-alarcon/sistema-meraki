@@ -98,7 +98,10 @@ export class AuthService {
   // ************************************************************************* //
 
   user: Observable<User> = of(null);
+
   userInteriores: User = null;
+  public dataUserInteriores = new BehaviorSubject<User>(null);
+  public currentDataUserInteriores = this.dataUserInteriores.asObservable();
 
   authLoader: boolean = false;
   now = new Date();
@@ -117,6 +120,7 @@ export class AuthService {
       if (user) {
         this.afs.doc<User>(`users/${user.uid}`).valueChanges().subscribe(user => {
           this.userInteriores = user;
+          this.dataUserInteriores.next(user);
 
           this.permitDocument = this.afs.doc<Permit>(`db/${this.userInteriores.db}/permits/${this.userInteriores.permitId}`);
           this.permitDocument.valueChanges().subscribe(res => {

@@ -1,0 +1,133 @@
+<div class="ms-font-montserrat mat-title ms-color-11">
+    <mat-icon class="ms-icons-color" style="vertical-align:middle">history</mat-icon> Historial de caja
+</div>
+<mat-divider></mat-divider>
+
+<mat-dialog-content style="min-width:300px; padding: 1em 1em">
+    <div class="mat-elevation-z8">
+        <div style=" overflow:auto">
+            <table mat-table [dataSource]="dataSource" matSort style="width:100%">
+
+                <ng-container matColumnDef="index" sticky>
+                    <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>N°</th>
+                    <td mat-cell style="padding:0px 8px" *matCellDef="let raw; let i = index">
+                        {{raw.index + 1}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="openingDate">
+                    <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por fecha"
+                        matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                        Apertura
+                    </th>
+                    <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                        <span *ngIf="raw.openingDate">{{raw.openingDate | date : 'dd/MM/yyyy'}}</span><br>
+                        <span *ngIf="raw.openingDate" class="w3-small"><b>
+                                ({{raw.openingDate | date : 'hh:mm a'}})</b></span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="closureDate">
+                    <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por fecha"
+                        matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Cierre
+                    </th>
+                    <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                        <span *ngIf="raw.closureDate">{{raw.closureDate | date : 'dd/MM/yyyy'}}</span><br>
+                        <span *ngIf="raw.closureDate" class="w3-small"><b>
+                                ({{raw.closureDate | date : 'hh:mm a'}})</b></span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="openingBalance">
+                    <th mat-header-cell style="padding:0px 8px; min-width:170px" *matHeaderCellDef
+                        matTooltip="Ordenar tabla por tipo" matTooltipPosition="above"
+                        [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Balance de apertura (EFECTIVO)</th>
+                    <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                        {{raw.openingBalance | currency : 'S/.'}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="totalImport">
+                    <th mat-header-cell style="padding:0px 8px; min-width:170px" *matHeaderCellDef
+                        matTooltip="Ordenar tabla por tipo" matTooltipPosition="above"
+                        [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Total</th>
+                    <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                        {{raw.totalImport | currency : 'S/.'}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="totalTickets">
+                    <th mat-header-cell style="padding:0px 8px; min-width:170px" *matHeaderCellDef
+                        matTooltip="Ordenar tabla por tipo" matTooltipPosition="above"
+                        [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Ingresos</th>
+                    <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                        {{raw.totalTickets | currency : 'S/.'}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="totalDepartures">
+                    <th mat-header-cell style="padding:0px 8px; min-width:170px" *matHeaderCellDef
+                        matTooltip="Ordenar tabla por tipo" matTooltipPosition="above"
+                        [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Egresos</th>
+                    <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                        {{raw.totalDepartures | currency : 'S/.'}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="closureBalance">
+                    <th mat-header-cell style="padding:0px 8px; min-width:170px" *matHeaderCellDef
+                        matTooltip="Ordenar tabla por tipo" matTooltipPosition="above"
+                        [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Balance de cierre (EFECTIVO)</th>
+                    <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                        {{raw.closureBalance | currency : 'S/.'}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="openedBy">
+                    <th mat-header-cell style="padding:0px 8px; min-width:170px" *matHeaderCellDef
+                        matTooltip="Ordenar tabla por usuario" matTooltipPosition="above"
+                        [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Abierto por</th>
+                    <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                        {{raw.openedBy}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="closedBy">
+                    <th mat-header-cell style="padding:0px 8px; min-width:170px" *matHeaderCellDef
+                        matTooltip="Ordenar tabla por usuario" matTooltipPosition="above"
+                        [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Cerrado por</th>
+                    <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                        {{raw.closedBy}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions" stickyEnd>
+                    <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
+                    <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                        <mat-menu #rawMenu="matMenu">
+                            <button mat-menu-item (click)="showTransactions(raw)">
+                                <mat-icon class="ms-icons-color">book</mat-icon> Mostrar transacciones
+                            </button>
+                            <button mat-menu-item (click)="showTotal(raw)">
+                                <mat-icon class="ms-icons-color">list</mat-icon> Ver Total
+                            </button>
+                        </mat-menu>
+                        <button mat-icon-button [matMenuTriggerFor]="rawMenu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+</mat-dialog-content>
+
+<mat-divider class="w3-margin-top"></mat-divider>
+<mat-dialog-actions align="end">
+    <button mat-stroked-button color="warn" class="w3-margin-right" mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

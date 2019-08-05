@@ -12,37 +12,40 @@
                     </span>
                 </div>
                 <div>
-                    <!-- <button mat-button style="margin:0em 0.2em 1em 0.2em" disabled>
-                        <mat-icon>view_module</mat-icon> {{dbs.currentOperations.length | number: '2.0'}} Existencias
-                    </button> -->
                     <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
-                        (click)="openCash()" *ngIf="!(dbs.currentDataCurrentCash | async).open">
+                        (click)="openCash()" *ngIf="currentCash ? !currentCash.open : true">
                         <mat-icon>attach_money</mat-icon> Abrir caja
                     </button>
 
                     <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
-                        (click)="closeCash()" *ngIf="(dbs.currentDataCurrentCash | async).open">
+                        (click)="closeCash()" *ngIf="currentCash ? currentCash.open : false">
                         <mat-icon>money_off</mat-icon> Cerrar caja
                     </button>
 
                     <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
-                        (click)="showTotal()">
+                        (click)="showTotal()" *ngIf="!!currentCash">
                         <mat-icon>list</mat-icon> Ver total
                     </button>
 
                     <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
-                        (click)="addMoney()">
+                        (click)="showHistory()" *ngIf="!!currentCash">
+                        <mat-icon>history</mat-icon> Historial
+                    </button>
+
+                    <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
+                        (click)="addMoney()" *ngIf="!!currentCash">
                         <mat-icon>add_circle</mat-icon> Agregar dinero
                     </button>
 
                     <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
-                        (click)="retriveMoney()">
+                        (click)="retriveMoney()" *ngIf="!!currentCash">
                         <mat-icon>remove_circle</mat-icon> Retirar dinero
                     </button><br>
 
+
                     <div style="display: flex">
                         <span class="mat-title ms-font-montserrat ms-color-11 w3-margin-right" style="font-weight: 600">
-                            {{(dbs.currentDataCurrentCash | async).name}}
+                            {{currentCash ? currentCash.name : '---'}}
                         </span>
 
                         <span class="ms-fill"></span>

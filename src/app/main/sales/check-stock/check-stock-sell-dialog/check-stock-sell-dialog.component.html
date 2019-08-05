@@ -75,7 +75,7 @@
                         <input matInput type="text" formControlName="cash" [matAutocomplete]="cashAuto"
                             placeholder="Nombre de caja" autocomplete="off">
                         <mat-autocomplete #cashAuto [displayWith]="showCash">
-                            <mat-option *ngFor="let item of filteredCash | async" [value]="item">
+                            <mat-option *ngFor="let item of filteredCash | async" [value]="item" [disabled]="!item.open">
                                 {{item.name}}
                             </mat-option>
                         </mat-autocomplete>

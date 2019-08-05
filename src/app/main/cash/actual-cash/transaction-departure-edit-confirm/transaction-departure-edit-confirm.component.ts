@@ -49,9 +49,9 @@ export class TransactionDepartureEditConfirmComponent implements OnInit {
     }
 
     this.dbs.cashListCollection
-      .doc(this.dbs.currentCash.id)
+      .doc(this.auth.userInteriores.currentCash.id)
       .collection('openings')
-      .doc(this.dbs.currentCash.currentOpening)
+      .doc(this.auth.userInteriores.currentCash.currentOpening)
       .collection('transactions')
       .doc(this.data.transaction.id)
       .update(data)

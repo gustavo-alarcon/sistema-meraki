@@ -32,9 +32,9 @@ export class TransactionCancelConfirmComponent implements OnInit {
     this.uploading = true;
 
     this.dbs.cashListCollection
-      .doc(this.dbs.currentCash.id)
+      .doc(this.auth.userInteriores.currentCash.id)
       .collection('openings')
-      .doc(this.dbs.currentCash.currentOpening)
+      .doc(this.auth.userInteriores.currentCash.currentOpening)
       .collection('transactions')
       .doc(this.data.transaction.id)
       .update({ verified: false, status: 'Anulado' })
