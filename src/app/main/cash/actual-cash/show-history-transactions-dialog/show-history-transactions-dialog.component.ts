@@ -15,7 +15,7 @@ import { map } from 'rxjs/operators';
 })
 export class ShowHistoryTransactionsDialogComponent implements OnInit {
 
-  displayedColumns: string[] = ['index', 'regDate', 'type', 'description', 'import', 'verified', 'user', 'paymentType', 'debt', 'approvedBy', 'actions'];
+  displayedColumns: string[] = ['index', 'regDate', 'type', 'description', 'import', 'verified', 'user', 'paymentType', 'debt', 'approvedBy'];
   dataSource = new MatTableDataSource();
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -54,7 +54,7 @@ export class ShowHistoryTransactionsDialogComponent implements OnInit {
         .pipe(
           map(res => {
             res.forEach((element, index) => {
-              element['index'] = index;
+              element['index'] = res.length - index - 1;
             });
             return res;
           })

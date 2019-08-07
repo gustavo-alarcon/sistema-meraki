@@ -75,6 +75,7 @@ export class CheckStockComponent implements OnInit {
     this.searching = true;
     if (typeof this.product.value === 'object') {
       this.dbs.currentDataStores.subscribe(stores => {
+        this.results = [];
         stores.forEach(store => {
           let sub =
             this.dbs.storesCollection

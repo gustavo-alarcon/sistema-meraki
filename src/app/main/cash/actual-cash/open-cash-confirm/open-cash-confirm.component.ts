@@ -76,8 +76,6 @@ export class OpenCashConfirmComponent implements OnInit {
             finalData.lastOpening = data.lastOpening;
             finalData.currentOpening = ref.id;
             
-            console.log(finalData);
-            
             this.dbs.usersCollection
               .doc(this.auth.userInteriores.uid)
               .update({currentCash: finalData})

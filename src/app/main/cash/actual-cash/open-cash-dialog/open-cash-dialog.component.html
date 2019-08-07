@@ -10,7 +10,7 @@
             <mat-label>Caja</mat-label>
             <mat-icon matSuffix>arrow_drop_down</mat-icon>
             <input matInput type="text" formControlName="cash" [matAutocomplete]="cashAuto" placeholder="Escriba..."
-                autocomplete="off">
+                autocomplete="disabled">
             <mat-autocomplete #cashAuto="matAutocomplete" [displayWith]="showCash"
                 (optionSelected)="selectedCash($event)">
                 <mat-option *ngFor="let item of filteredCashList | async" [value]="item" [disabled]="item.open">
@@ -20,19 +20,23 @@
             <mat-hint>Requerido *</mat-hint>
         </mat-form-field><br>
 
-        <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
+        <mat-form-field class="w3-block" appearance="outline">
             <mat-label>Contraseña</mat-label>
             <mat-pass-toggle-visibility #togglePassword matSuffix></mat-pass-toggle-visibility>
             <input matInput [type]="togglePassword.type" required placeholder="Escriba..." formControlName="password"
-                autocomplete="off">
+                autocomplete="disabled">
             <mat-hint>Requerido *</mat-hint>
-            <!-- <mat-error *ngIf="!dataFormGroup.valid">Contraseña requerida *</mat-error> -->
             <mat-error *ngIf="!rightPassword && !dataFormGroup.valid">Contraseña incorrecta **</mat-error>
             <mat-error *ngIf="alreadyOpened">Esta caja ya se encuentra abierta *</mat-error>
         </mat-form-field><br>
 
+        <span class="w3-small w3-margin-bottom" *ngIf="rightPassword">
+            <mat-icon class="w3-text-green" style="vertical-align: middle">check_circle</mat-icon>Correcto
+        </span>
+
+
         <mat-form-field class="w3-margin-bottom w3-block" appearance="outline">
-            <mat-label>Saldo inicial</mat-label>
+            <mat-label>Saldo inicial (S/. EFECTIVO)</mat-label>
             <input matInput type="number" min="0" step="1" formControlName="openingBalance" placeholder="0"
                 autocomplete="off">
             <mat-hint>Requerido *</mat-hint>

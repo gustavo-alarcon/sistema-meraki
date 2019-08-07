@@ -63,14 +63,14 @@ export class CheckStockSellDialogComponent implements OnInit {
           map(name => name ? this.dbs.documents.filter(option => option.name.toLowerCase().includes(name)) : this.dbs.documents)
         )
 
-    this.preFilteredCash = this.dbs.cashList.filter(option => option.location.name === this.data.serial.location);
+    // this.preFilteredCash = this.dbs.cashList.filter(option => option.location.name === this.data.serial.location);
 
     this.filteredCash =
       this.dataFormGroup.get('cash').valueChanges
         .pipe(
           startWith<any>(''),
           map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-          map(name => name ? this.preFilteredCash.filter(option => option.name.toLowerCase().includes(name) && (option.location.name === this.data.serial.location)) : this.preFilteredCash)
+          map(name => name ? this.dbs.cashList.filter(option => option.name.toLowerCase().includes(name)) : this.dbs.cashList)
         )
   }
 

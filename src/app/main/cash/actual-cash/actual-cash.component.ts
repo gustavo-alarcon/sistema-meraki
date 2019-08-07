@@ -111,7 +111,7 @@ export class ActualCashComponent implements OnInit, OnDestroy {
                       }
 
                       res.forEach((element, index) => {
-                        element['index'] = index;
+                        element['index'] = res.length - index - 1;
                         if (element.status === 'Aprobado') {
                           if (element.ticketType) {
                             this.totalImport += element.import;

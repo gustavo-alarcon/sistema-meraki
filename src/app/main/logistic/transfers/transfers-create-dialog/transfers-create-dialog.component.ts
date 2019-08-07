@@ -110,8 +110,8 @@ export class TransfersCreateDialogComponent implements OnInit, OnDestroy {
 
   createForm(): void {
     this.dataFormGroup = this.fb.group({
-      origin: [null, [Validators.required]],
-      destination: [null, [Validators.required]],
+      origin: [null, [Validators.required, isObjectValidator]],
+      destination: [null, [Validators.required, isObjectValidator]],
       product: [null, [Validators.required, isObjectValidator]],
       serialNumber: null
     })

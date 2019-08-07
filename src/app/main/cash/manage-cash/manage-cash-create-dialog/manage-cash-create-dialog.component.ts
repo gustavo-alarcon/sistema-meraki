@@ -112,7 +112,7 @@ export class ManageCashCreateDialogComponent implements OnInit, OnDestroy {
         name: this.dataFormGroup.value['name'].trim(),
         location: this.dataFormGroup.value['location'],
         supervisor: this.dataFormGroup.value['supervisor'],
-        password: this.dataFormGroup.valid['password'].trim(),
+        password: this.dataFormGroup.value['password'].trim(),
         lastOpening: null,
         lastClosure: null,
         currentOwner: null,

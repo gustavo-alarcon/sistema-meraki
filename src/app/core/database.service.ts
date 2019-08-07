@@ -664,7 +664,7 @@ export class DatabaseService {
         map(res => {
           try {
             let filteredList: Array<Transfer> = [];
-
+            
             res.forEach((element, index) => {
               element['index'] = index;
               if ((this.auth.userInteriores.uid === element.destination.supervisor.uid || this.auth.userInteriores.uid === element.createdByUid) && !this.auth.permit.logisticTransfersCompleteList) {
