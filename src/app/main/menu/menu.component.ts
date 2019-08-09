@@ -53,7 +53,11 @@ export class MenuComponent implements OnInit, OnDestroy {
       actual: false,
       previous: false,
       manage: false
+    },
+    purchases: {
+      registerDocuments: false,
     }
+
   }
 
   permits: Permit =
@@ -86,6 +90,24 @@ export class MenuComponent implements OnInit, OnDestroy {
       cashActualButton: false,
       cashPreviousButton: false,
       cashManageButton: false,
+      cashTransactionApproveAction: false,
+      cashTransactionEditAction: false,
+      cashTransactionCancelAction: false,
+      cashActualOpeningBalanceAction: false,
+      cashActualOpeningDateAction: false,
+      cashActualPrintAction: false,
+      cashActualExportAction: false,
+      cashManageSettingsAction: false,
+      cashManageReportsAction: false,
+      cashManageEditAction: false,
+      cashManageDeleteAction: false,
+      cashManageCreateButton: false,
+      purchasesSection: false,
+      purchasesRegisterDocumentsButton: false,
+      purchasesRegisterDocumentsCreateButton: false,
+      purchasesVerifyAction: false,
+      purchasesEditAction: false,
+      purchasesDeleteAction: false,
       regDate: 0
     };
 
@@ -182,6 +204,9 @@ export class MenuComponent implements OnInit, OnDestroy {
         actual: false,
         previous: false,
         manage: false
+      },
+      purchases: {
+        registerDocuments: false
       }
     }
   }
@@ -373,6 +398,17 @@ export class MenuComponent implements OnInit, OnDestroy {
           this.selectedTab.setValue(3);
           this.cleanButtons();
           this.buttonOptions.cash.manage = true;
+          coincidence = true;
+          break;
+      }
+    }
+
+    if (this.permits.purchasesSection) {
+      switch (route) {
+        case '/main/purchases/register-documents':
+          this.selectedTab.setValue(4);
+          this.cleanButtons();
+          this.buttonOptions.purchases.registerDocuments = true;
           coincidence = true;
           break;
       }

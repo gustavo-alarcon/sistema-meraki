@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from "@angular/fire/firestore";
-import { Requirement, Correlative, Product, Color, RawMaterial, Category, Unit, ProductionOrder, TicketRawMaterial, DepartureRawMaterial, Store, User, Transfer, DepartureProduct, Quotation, Document, Cash, CurrentCash } from './types';
+import { Requirement, Correlative, Product, Color, RawMaterial, Category, Unit, ProductionOrder, TicketRawMaterial, DepartureRawMaterial, Store, User, Transfer, DepartureProduct, Quotation, Document, Cash, Purchase, Provider } from './types';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
@@ -209,30 +209,49 @@ export class DatabaseService {
   public currentDataCashList = this.dataCashList.asObservable();
 
   /**
+   * PURCHASES
+   */
+  purchasesCollection: AngularFirestoreCollection<Purchase>;
+  purchases: Array<Purchase> = [];
+
+  public dataPurchases = new BehaviorSubject<Purchase[]>([]);
+  public currentDataPurchases = this.dataPurchases.asObservable();
+
+  /**
+   * PROVIDERS
+   */
+  providersCollection: AngularFirestoreCollection<Provider>;
+  providers: Array<Provider> = [];
+
+  public dataProviders = new BehaviorSubject<Provider[]>([]);
+  public currentDataProviders = this.dataProviders.asObservable();
+
+  /**
    * CURRENT CASH
    */
-  currentCashDocument: AngularFirestoreDocument<CurrentCash>;
-  currentCash: CurrentCash;
+  // currentCashDocument: AngularFirestoreDocument<CurrentCash>;
+  // currentCash: CurrentCash;
 
-  public dataCurrentCash = new BehaviorSubject<CurrentCash>({
-    id: '',
-    currentOwner: { displayName: '' },
-    currentOpening: '',
-    name: '',
-    location: { name: '' },
-    open: false,
-    password: '',
-    supervisor: { displayName: '' },
-    lastOpening: null,
-    lastClosure: null,
-    regDate: null,
-    createdBy: '',
-    createdByUid: '',
-    lastEditBy: '',
-    lastEditByUid: '',
-    lastEditDate: null
-  });
-  public currentDataCurrentCash = this.dataCurrentCash.asObservable();
+  // public dataCurrentCash = new BehaviorSubject<CurrentCash>({
+  //   id: '',
+  //   currentOwner: { displayName: '' },
+  //   currentOpening: '',
+  //   name: '',
+  //   location: { name: '' },
+  //   open: false,
+  //   password: '',
+  //   supervisor: { displayName: '' },
+  //   lastOpening: null,
+  //   lastClosure: null,
+  //   regDate: null,
+  //   createdBy: '',
+  //   createdByUid: '',
+  //   lastEditBy: '',
+  //   lastEditByUid: '',
+  //   lastEditDate: null
+  // });
+  // public currentDataCurrentCash = this.dataCurrentCash.asObservable();
+
 
 
 
@@ -280,7 +299,8 @@ export class DatabaseService {
         this.getTransfersCorrelative();
         this.getReceptions(from, to);
         this.getCashList();
-        this.getCurrentCash();
+        this.getPurchases(from, to);
+        this.getProviders();
       }
     })
 
@@ -709,13 +729,56 @@ export class DatabaseService {
       });
   }
 
-  getCurrentCash(): void {
-    this.currentCashDocument = this.af.doc<CurrentCash>(`db/${this.auth.userInteriores.db}/currentCash/currentCash`);
-    this.currentCashDocument.valueChanges()
+  // getCurrentCash(): void {
+  //   this.currentCashDocument = this.af.doc<CurrentCash>(`db/${this.auth.userInteriores.db}/currentCash/currentCash`);
+  //   this.currentCashDocument.valueChanges()
+  //     .subscribe(res => {
+  //       this.currentCash = res;
+  //       this.dataCurrentCash.next(res);
+  //     });
+  // }
+
+  // ***************************** PURCHASES *******************
+  getPurchases(from: number, to: number): void {
+    this.purchasesCollection = this.af.collection(`db/${this.auth.userInteriores.db}/purchases`, ref => ref.where('regDate', '>=', from).where('regDate', '<=', to));
+    this.purchasesCollection
+      .valueChanges()
+      .pipe(
+        map(res => {
+          return res.sort((a, b) => b['regDate'] - a['regDate']);
+        }),
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = res.length - index;
+          });
+          return res;
+        })
+      )
       .subscribe(res => {
-        this.currentCash = res;
-        this.dataCurrentCash.next(res);
-      });
+        this.purchases = res;
+        this.dataPurchases.next(res);
+      })
+  }
+
+  getProviders(): void {
+    this.providersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/providers`);
+    this.providersCollection
+      .valueChanges()
+      .pipe(
+        map(res => {
+          return res.sort((a, b) => b['regDate'] - a['regDate']);
+        }),
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = res.length - index;
+          });
+          return res;
+        })
+      )
+      .subscribe(res => {
+        this.providers = res;
+        this.dataProviders.next(res);
+      })
   }
 
 }

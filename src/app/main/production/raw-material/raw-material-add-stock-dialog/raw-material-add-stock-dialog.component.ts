@@ -17,7 +17,16 @@ export class RawMaterialAddStockDialogComponent implements OnInit {
 
   dataFormGroup: FormGroup;
 
-  filteredDocuments: Observable<Document[]>;
+  filteredDocuments: Observable<string[]>;
+
+  filteredTypes = [
+    'FACTURA',
+    'BOLETA',
+    'FACTURA ELECTRONICA',
+    'BOLETA ELECTRONICA',
+    'TICKET DE COMPRA',
+    'PROFORMA'
+  ]
   
   constructor(
     private dialog: MatDialog,
@@ -34,8 +43,8 @@ export class RawMaterialAddStockDialogComponent implements OnInit {
       this.dataFormGroup.get('document').valueChanges
         .pipe(
           startWith<any>(''),
-          map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-          map(name => name ? this.dbs.documents.filter(option => option.name.toLowerCase().includes(name)) : this.dbs.documents)
+          map(value => value.toLowerCase()),
+          map(name => name ? this.filteredTypes.filter(option => option.toLowerCase().includes(name)) : this.filteredTypes)
         )
   }
 

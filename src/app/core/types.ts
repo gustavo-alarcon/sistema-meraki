@@ -40,6 +40,24 @@ export interface Permit {
     cashActualButton: boolean;
     cashPreviousButton: boolean;
     cashManageButton: boolean;
+    cashTransactionApproveAction: boolean;
+    cashTransactionEditAction: boolean;
+    cashTransactionCancelAction: boolean;
+    cashActualOpeningBalanceAction: boolean;
+    cashActualOpeningDateAction: boolean;
+    cashActualPrintAction: boolean;
+    cashActualExportAction: boolean;
+    cashManageSettingsAction: boolean;
+    cashManageReportsAction: boolean;
+    cashManageEditAction: boolean;
+    cashManageDeleteAction: boolean;
+    cashManageCreateButton: boolean;
+    purchasesSection: boolean;
+    purchasesRegisterDocumentsButton: boolean;
+    purchasesRegisterDocumentsCreateButton: boolean;
+    purchasesVerifyAction: boolean;
+    purchasesEditAction: boolean;
+    purchasesDeleteAction: boolean;
     regDate: number;
 }
 
@@ -383,9 +401,10 @@ export interface TransferItem {
 export interface Provider {
     id: string;
     name: string;
-    shortName: string;
+    shortName?: string;
     address: string;
     ruc: number;
+    phone?: string;
     regDate: number;
     createdBy: string;
     createdByUid: string;
@@ -484,4 +503,33 @@ export interface TotalImports {
         'TRANSFERENCIA': number;
         'EFECTIVO': number;
     }
+}
+
+export interface Purchase {
+    id: string;
+    documentDate: number;
+    documentType: string;
+    documentSerial: number;
+    documentCorrelative: number;
+    provider: Provider;
+    description: string;
+    totalImport: number;
+    subtotalImport: number;
+    igvImport: number;
+    paymentType: string;
+    paidImport: number;
+    indebtImport: number;
+    verifiedByAccountant: boolean;
+    detractionImport?: number;
+    detractionDate?: number;
+    status: string;
+    regDate: number;
+    createdBy: string;
+    createdByUid: string;
+    editedBy: string;
+    editedByUid: string;
+    editedDate: number;
+    approvedBy: string;
+    approvedByUid: string;
+    approvedDate: number;
 }

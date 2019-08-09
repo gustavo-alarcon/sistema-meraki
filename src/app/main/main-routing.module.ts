@@ -79,6 +79,10 @@ const routes: Routes = [
         path: 'cash/manage',
         loadChildren: () => import('./cash/manage-cash/manage-cash.module').then(mod => mod.ManageCashModule)
       },
+      {
+        path: 'purchases/register-documents',
+        loadChildren: () => import('./purchases/register-documents/register-documents.module').then(mod => mod.RegisterDocumentsModule)
+      },
     ]
   },
   

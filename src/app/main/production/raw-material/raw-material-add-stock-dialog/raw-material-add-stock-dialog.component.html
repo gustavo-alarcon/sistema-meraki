@@ -10,8 +10,8 @@
             <input matInput type="text" formControlName="document" [matAutocomplete]="documentAuto"
                 placeholder="Escriba..." autocomplete="off">
             <mat-autocomplete #documentAuto="matAutocomplete">
-                <mat-option *ngFor="let item of filteredDocuments | async" [value]="item.name">
-                    {{item.name}}
+                <mat-option *ngFor="let item of filteredDocuments | async" [value]="item">
+                    {{item}}
                 </mat-option>
             </mat-autocomplete>
             <mat-hint>Requerido *</mat-hint>
