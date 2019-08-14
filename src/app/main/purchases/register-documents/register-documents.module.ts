@@ -13,6 +13,7 @@ import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, Mat
 import { PurchasesRegisterAddProviderDialogComponent } from './purchases-register-add-provider-dialog/purchases-register-add-provider-dialog.component';
 import { PurchasesRegisterEditItemDialogComponent } from './purchases-register-edit-item-dialog/purchases-register-edit-item-dialog.component';
 import { PurchasesRegisterAddRawDialogComponent } from './purchases-register-add-raw-dialog/purchases-register-add-raw-dialog.component';
+import { PurchasesRegisterShowItemsDialogComponent } from './purchases-register-show-items-dialog/purchases-register-show-items-dialog.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { PurchasesRegisterAddRawDialogComponent } from './purchases-register-add
     PurchasesRegisterVerifyConfirmComponent,
     PurchasesRegisterAddProviderDialogComponent,
     PurchasesRegisterEditItemDialogComponent,
-    PurchasesRegisterAddRawDialogComponent
+    PurchasesRegisterAddRawDialogComponent,
+    PurchasesRegisterShowItemsDialogComponent
   ],
   imports: [
     CommonModule,
@@ -58,7 +60,8 @@ import { PurchasesRegisterAddRawDialogComponent } from './purchases-register-add
     PurchasesRegisterVerifyConfirmComponent,
     PurchasesRegisterAddProviderDialogComponent,
     PurchasesRegisterEditItemDialogComponent,
-    PurchasesRegisterAddRawDialogComponent
+    PurchasesRegisterAddRawDialogComponent,
+    PurchasesRegisterShowItemsDialogComponent
   ]
 })
 export class RegisterDocumentsModule { }

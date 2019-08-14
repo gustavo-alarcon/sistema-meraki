@@ -52,7 +52,8 @@ export class MenuComponent implements OnInit, OnDestroy {
     cash: {
       actual: false,
       previous: false,
-      manage: false
+      manage: false,
+      debtsToPay: false
     },
     purchases: {
       registerDocuments: false,
@@ -102,6 +103,8 @@ export class MenuComponent implements OnInit, OnDestroy {
       cashManageEditAction: false,
       cashManageDeleteAction: false,
       cashManageCreateButton: false,
+      cashDebtsToPayButton: false,
+      cashDebtsToPayPayAction: false,
       purchasesSection: false,
       purchasesRegisterDocumentsButton: false,
       purchasesRegisterDocumentsCreateButton: false,
@@ -203,7 +206,8 @@ export class MenuComponent implements OnInit, OnDestroy {
       cash: {
         actual: false,
         previous: false,
-        manage: false
+        manage: false,
+        debtsToPay: false
       },
       purchases: {
         registerDocuments: false
@@ -387,10 +391,10 @@ export class MenuComponent implements OnInit, OnDestroy {
           coincidence = true;
           break;
 
-        case '/main/cash/previous':
+        case '/main/cash/debts-to-pay':
           this.selectedTab.setValue(3);
           this.cleanButtons();
-          this.buttonOptions.cash.previous = true;
+          this.buttonOptions.cash.debtsToPay= true;
           coincidence = true;
           break;
 

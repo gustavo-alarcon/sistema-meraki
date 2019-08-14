@@ -7,30 +7,13 @@
             <div class="w3-col s12 m10 l10">
                 <div>
                     <span class="mat-title ms-font-montserrat ms-color-11" style="font-weight: 900">
-                        <mat-icon class="ms-icons-color" style="vertical-align:middle">receipt</mat-icon>
-                        Compras <mat-icon style="vertical-align:middle">keyboard_arrow_right</mat-icon> Registrar
-                        documento
+                        <mat-icon class="ms-icons-color" style="vertical-align:middle">date_range</mat-icon>
+                        Caja <mat-icon style="vertical-align:middle">keyboard_arrow_right</mat-icon> Cuentas por pagar
                     </span>
                 </div>
                 <div>
-                    <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
-                        (click)="registerDocument()">
-                        <mat-icon>add_circle</mat-icon> Registrar
-                    </button>
-
-                    <mat-form-field class="w3-margin-left">
-                        <input matInput [matDatepicker]="dateFilter" [formControl]="monthFormControl">
-                        <mat-datepicker-toggle matSuffix [for]="dateFilter"></mat-datepicker-toggle>
-                        <mat-datepicker #dateFilter startView='year'
-                            (monthSelected)="setMonthOfView($event, dateFilter)" disabled="false">
-                        </mat-datepicker>
-                        <mat-hint>
-                            <strong>Filtrar contenido por mes y año</strong>
-                        </mat-hint>
-                    </mat-form-field>
-
                     <button mat-button style="margin:0em 0.2em 1em 0.2em" disabled>
-                        <mat-icon>receipt</mat-icon> {{dbs.purchases.length | number: '2.0'}} Documentos
+                        <mat-icon>date_range</mat-icon> {{dbs.debtsToPay.length | number: '2.0'}} Documentos
                     </button>
                     <span style="margin-right:1em">
                         <mat-form-field autocomplete="off" color="accent">
@@ -265,17 +248,9 @@
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
                                 <td mat-cell style="padding:0px 24px" *matCellDef="let raw">
                                     <mat-menu #rawMenu="matMenu">
-                                        <button mat-menu-item (click)="verifyPurchase(raw)"
-                                            *ngIf="auth.permit.purchasesVerifyAction">
-                                            <mat-icon class="ms-icons-color">check_circle</mat-icon> Verificar
-                                        </button>
-                                        <button mat-menu-item (click)="editPurchase(raw)"
-                                            *ngIf="auth.permit.purchasesEditAction">
-                                            <mat-icon class="ms-icons-color">edit</mat-icon> Editar
-                                        </button>
-                                        <button mat-menu-item (click)="deletePurchase(raw)"
-                                            *ngIf="auth.permit.purchasesDeleteAction">
-                                            <mat-icon class="ms-icons-color">delete</mat-icon> Borrar
+                                        <button mat-menu-item (click)="payDebt(raw)"
+                                            *ngIf="auth.permit.cashDebtsToPayPayAction">
+                                            <mat-icon class="ms-icons-color">gavel</mat-icon> Pagar
                                         </button>
                                     </mat-menu>
                                     <button mat-icon-button [matMenuTriggerFor]="rawMenu">

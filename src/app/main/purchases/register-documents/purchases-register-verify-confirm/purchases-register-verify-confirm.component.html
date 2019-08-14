@@ -1,1 +1,26 @@
-<p>purchases-register-verify-confirm works!</p>
+<div class="ms-font-montserrat mat-title ms-color-11">
+    <mat-icon class="ms-icons-color" style="vertical-align:middle">check_circle</mat-icon> Verificar documento
+</div>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-content style="max-width:300px">
+    <p class="ms-font-montserrat">¿Está seguro de verificar el documento:
+        <b>{{data.purchase.documentType}}-{{data.purchase.documentSerial}}-{{data.purchase.documentCorrelative}}</b>,
+        del proveedor <b>{{data.purchase.provider.name}}</b>?</p>
+
+    <mat-progress-bar mode="indeterminate" style="margin-bottom:0.5em" *ngIf="uploading"></mat-progress-bar>
+
+    <div style="display:flex; align-items:center" *ngIf="uploading">
+        <mat-icon class="w3-margin-right" [ngStyle]="{'color': flags.verified ? 'forestgreen' : 'gray'}">check_circle
+        </mat-icon>
+        <span class="w3-margin-right ms-font-montserrat w3-small">Verificando documento</span>
+    </div>
+
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+<mat-dialog-actions align="end">
+    <button mat-stroked-button class="w3-margin-right" color="warn" mat-dialog-close>Cerrar</button>
+    <button mat-raised-button color="primary" (click)="verify()">Si, verificar</button>
+</mat-dialog-actions>

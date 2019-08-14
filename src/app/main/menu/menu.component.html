@@ -157,6 +157,13 @@
                                 <mat-icon class="ms-icons-color">account_balance_wallet</mat-icon> Caja actual
                             </button><br>
                         </div>
+                        <div class="w3-border-left w3-border-lightgray w3-margin-right">
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.cash.debtsToPay}"
+                                routerLink="cash/debts-to-pay" [disabled]="!permits.cashDebtsToPayButton">
+                                <mat-icon class="ms-icons-color">date_range</mat-icon> Cuentas por pagar
+                            </button><br>
+                        </div>
                     </div>
                 </div>
             </mat-tab>
@@ -343,6 +350,15 @@
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
                             account_balance_wallet
                         </mat-icon> Administrar cajas
+                    </button>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.cash.debtsToPay}" routerLink="cash/debts-to-pay"
+                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
+                        (click)="toggleSideMenu()" *ngIf="permits.cashDebtsToPayButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            date_range
+                        </mat-icon> Cuentas por pagar
                     </button>
 
                     <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"

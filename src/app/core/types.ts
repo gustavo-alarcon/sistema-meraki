@@ -52,6 +52,8 @@ export interface Permit {
     cashManageEditAction: boolean;
     cashManageDeleteAction: boolean;
     cashManageCreateButton: boolean;
+    cashDebtsToPayButton: boolean;
+    cashDebtsToPayPayAction: boolean;
     purchasesSection: boolean;
     purchasesRegisterDocumentsButton: boolean;
     purchasesRegisterDocumentsCreateButton: boolean;
@@ -512,7 +514,13 @@ export interface Purchase {
     documentSerial: number;
     documentCorrelative: number;
     provider: Provider;
-    description: string;
+    itemsList: Array<{
+        index: number;
+        item: {name: string, code: string} | RawMaterial;
+        quantity: number;
+        import: number;
+    }>;
+    creditDate: number;
     totalImport: number;
     subtotalImport: number;
     igvImport: number;
@@ -520,8 +528,13 @@ export interface Purchase {
     paidImport: number;
     indebtImport: number;
     verifiedByAccountant: boolean;
+    detractionApplies: boolean;
+    detractionPercentage: number;
     detractionImport?: number;
+    detractionNumber?: string;
     detractionDate?: number;
+    isRawMaterial?: boolean;
+    source: string;
     status: string;
     regDate: number;
     createdBy: string;
@@ -532,4 +545,8 @@ export interface Purchase {
     approvedBy: string;
     approvedByUid: string;
     approvedDate: number;
+    verifiedBy: string;
+    verifiedByUid: string;
+    verifiedDate: number;
+    cashReference: Cash;
 }

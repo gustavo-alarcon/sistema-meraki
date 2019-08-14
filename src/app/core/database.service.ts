@@ -218,6 +218,15 @@ export class DatabaseService {
   public currentDataPurchases = this.dataPurchases.asObservable();
 
   /**
+   * DEBTSTOPAY
+   */
+  debtsToPayCollection: AngularFirestoreCollection<Purchase>;
+  debtsToPay: Array<Purchase> = [];
+
+  public dataDebtsToPay = new BehaviorSubject<Purchase[]>([]);
+  public currentDataDebtsToPay = this.dataDebtsToPay.asObservable();
+
+  /**
    * PROVIDERS
    */
   providersCollection: AngularFirestoreCollection<Provider>;
@@ -299,6 +308,7 @@ export class DatabaseService {
         this.getTransfersCorrelative();
         this.getReceptions(from, to);
         this.getCashList();
+        this.getDebtsToPay();
         this.getPurchases(from, to);
         this.getProviders();
       }
@@ -729,14 +739,23 @@ export class DatabaseService {
       });
   }
 
-  // getCurrentCash(): void {
-  //   this.currentCashDocument = this.af.doc<CurrentCash>(`db/${this.auth.userInteriores.db}/currentCash/currentCash`);
-  //   this.currentCashDocument.valueChanges()
-  //     .subscribe(res => {
-  //       this.currentCash = res;
-  //       this.dataCurrentCash.next(res);
-  //     });
-  // }
+  getDebtsToPay(): void {
+    this.debtsToPayCollection = this.af.collection(`db/${this.auth.userInteriores.db}/debtsToPay`, ref => ref.where('status', '==', 'Pendiente'));
+    this.debtsToPayCollection.valueChanges()
+      .pipe(
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = index;
+          });
+          return res;
+        })
+      )
+      .subscribe(res => {
+        this.debtsToPay = res;
+        this.dataDebtsToPay.next(res);
+      });
+  }
+
 
   // ***************************** PURCHASES *******************
   getPurchases(from: number, to: number): void {
@@ -745,9 +764,12 @@ export class DatabaseService {
       .valueChanges()
       .pipe(
         map(res => {
+          // order result from newer to oldest
           return res.sort((a, b) => b['regDate'] - a['regDate']);
         }),
         map(res => {
+          // adding inverse index number, first item will have
+          // the total lenght number of the array.
           res.forEach((element, index) => {
             element['index'] = res.length - index;
           });

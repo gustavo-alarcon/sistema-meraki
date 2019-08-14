@@ -72,8 +72,8 @@ const routes: Routes = [
         loadChildren: () => import('./cash/actual-cash/actual-cash.module').then(mod => mod.ActualCashModule)
       },
       {
-        path: 'cash/previous',
-        loadChildren: () => import('./cash/previous-cash/previous-cash.module').then(mod => mod.PreviousCashModule)
+        path: 'cash/debts-to-pay',
+        loadChildren: () => import('./cash/debts-to-pay/debts-to-pay.module').then(mod => mod.DebtsToPayModule)
       },
       {
         path: 'cash/manage',

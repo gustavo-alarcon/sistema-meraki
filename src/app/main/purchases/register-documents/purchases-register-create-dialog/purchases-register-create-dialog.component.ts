@@ -1,16 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Provider, RawMaterial } from 'src/app/core/types';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { Observable, Subscription, of, BehaviorSubject } from 'rxjs';
 import { DatabaseService } from 'src/app/core/database.service';
 import { MatDialogRef, MatSnackBar, MatDialog, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { RawMaterialCreateDialogComponent } from 'src/app/main/production/raw-material/raw-material-create-dialog/raw-material-create-dialog.component';
-import { startWith, map } from 'rxjs/operators';
+import { startWith, map, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { isObjectValidator } from 'src/app/core/is-object-validator';
 import { PurchasesRegisterAddProviderDialogComponent } from '../purchases-register-add-provider-dialog/purchases-register-add-provider-dialog.component';
 import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 import { PurchasesRegisterEditItemDialogComponent } from '../purchases-register-edit-item-dialog/purchases-register-edit-item-dialog.component';
 import { PurchasesRegisterAddRawDialogComponent } from '../purchases-register-add-raw-dialog/purchases-register-add-raw-dialog.component';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AuthService } from 'src/app/core/auth.service';
 
 @Component({
   selector: 'app-purchases-register-create-dialog',
@@ -20,6 +22,9 @@ import { PurchasesRegisterAddRawDialogComponent } from '../purchases-register-ad
 export class PurchasesRegisterCreateDialogComponent implements OnInit {
 
   loading = false;
+
+  isRawMaterial = new FormControl(false);
+  detractionApplies = new FormControl(false);
 
   dataFormGroup: FormGroup;
   itemFormGroup: FormGroup;
@@ -62,6 +67,11 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
+  duplicates = {
+    correlative: false,
+    correlativeLoading: false
+  }
+
   providerSelected: boolean = false;
   provider: Provider = {
     id: '',
@@ -84,14 +94,30 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
     'TARJETA'
   ];
 
+  subtotalImportRequired: boolean = false;
+  igvImportRequired: boolean = false;
+  creditDateRequired: boolean = false;
+
+  detractionPercentageRequired: boolean = false;
+  detractionImportRequired: boolean = false;
+  detractionDateRequired: boolean = false;
+
+  transactionObservable = new BehaviorSubject<boolean>(null);
+  dataTransactionObservable = this.transactionObservable.asObservable();
+  transactionCounter = 0;
+  transactionDone: boolean = false;
+
   subscriptions: Array<Subscription> = [];
 
   constructor(
     private fb: FormBuilder,
     public dbs: DatabaseService,
+    public auth: AuthService,
     private dialog: MatDialog,
-    private dialogRef: MatDialogRef<PurchasesRegisterCreateDialogComponent>,
-    private snackbar: MatSnackBar
+    private af: AngularFirestore,
+    private snackbar: MatSnackBar,
+    private dialogRef: MatDialogRef<PurchasesRegisterCreateDialogComponent>
+
   ) { }
 
   ngOnInit() {
@@ -116,6 +142,281 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
           map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
           map(value => value ? this.dbs.rawMaterials.filter(option => option.name.toLowerCase().includes(value) || option.code.toLowerCase().includes(value)) : this.dbs.rawMaterials)
         );
+
+    const documentTypeSub =
+      this.dataFormGroup.get('documentType').valueChanges
+        .subscribe(res => {
+          if (res === 'FACTURA') {
+            this.subtotalImportRequired = true;
+            this.igvImportRequired = true;
+          } else {
+            this.subtotalImportRequired = false;
+            this.igvImportRequired = false;
+          }
+        });
+
+    this.subscriptions.push(documentTypeSub);
+
+    const subtotalImportSub =
+      this.dataFormGroup.get('subtotalImport').valueChanges
+        .subscribe(res => {
+          try {
+            if (res > 0) {
+              this.subtotalImportRequired = false;
+            } else {
+              this.dataFormGroup.get('subtotalImport').setValue(null);
+              this.subtotalImportRequired = true;
+            }
+          } catch (error) {
+            // console.log(error);
+          }
+
+        });
+
+    this.subscriptions.push(subtotalImportSub);
+
+    const igvImportSub =
+      this.dataFormGroup.get('igvImport').valueChanges
+        .subscribe(res => {
+          try {
+            if (res > 0) {
+              this.igvImportRequired = false;
+            } else {
+              this.dataFormGroup.get('igvImport').setValue(null);
+              this.igvImportRequired = true;
+            }
+          } catch (error) {
+            // console.log(error);
+          }
+        });
+
+    this.subscriptions.push(igvImportSub);
+
+    const paymentTypeSub =
+      this.dataFormGroup.get('paymentType').valueChanges
+        .subscribe(res => {
+          if (res === 'CREDITO') {
+            this.creditDateRequired = true;
+          } else {
+            this.creditDateRequired = false;
+          }
+        });
+
+    this.subscriptions.push(paymentTypeSub);
+
+    const creditDateSub =
+      this.dataFormGroup.get('creditDate').valueChanges
+        .subscribe(res => {
+          if (res) {
+            this.creditDateRequired = false;
+          } else {
+            this.creditDateRequired = true;
+          }
+        });
+
+    this.subscriptions.push(creditDateSub);
+
+
+    const paidImportSub =
+      this.dataFormGroup.get('paidImport').valueChanges
+        .subscribe(res => {
+          try {
+            if (res <= 0) {
+              this.dataFormGroup.get('paidImport').setValue(null);
+            } else if (res > this.dataFormGroup.value['totalImport']) {
+              this.dataFormGroup.get('paidImport').setValue(this.dataFormGroup.value['totalImport']);
+            } else {
+              const debt = this.dataFormGroup.value['totalImport'] - res;
+              this.dataFormGroup.get('indebtImport').setValue(debt);
+            }
+          } catch (error) {
+            // console.log(error);
+          }
+        });
+
+    this.subscriptions.push(paidImportSub);
+
+    const detractionAppliesSub =
+      this.detractionApplies.valueChanges
+        .subscribe(res => {
+          try {
+            if (res) {
+              this.detractionPercentageRequired = true;
+              this.detractionImportRequired = true;
+              this.detractionDateRequired = true;
+            } else {
+              this.detractionPercentageRequired = false;
+              this.detractionImportRequired = false;
+              this.detractionDateRequired = false;
+            }
+          } catch (error) {
+            // console.log(error);
+          }
+        });
+
+    this.subscriptions.push(detractionAppliesSub);
+
+    const detractionPercentageSub =
+      this.dataFormGroup.get('detractionPercentage').valueChanges
+        .pipe(
+          distinctUntilChanged(),
+          debounceTime(300)
+        )
+        .subscribe(res => {
+          try {
+            if (res < 0) {
+              this.dataFormGroup.get('detractionPercentage').setValue(0);
+              this.detractionPercentageRequired = true;
+            } else if (res >= 0) {
+
+              if (res > 100) {
+                this.dataFormGroup.get('detractionPercentage').setValue(100);
+                res = 100;
+              }
+
+              let detraction = 0;
+              const total = this.dataFormGroup.value['totalImport'] ? this.dataFormGroup.value['totalImport'] : 0;
+              detraction = (total * res) / 100;
+
+              if (detraction > total) {
+                detraction = total;
+              } else if (detraction < 0) {
+                detraction = 0;
+              }
+
+              this.dataFormGroup.get('detractionImport').setValue(parseFloat(detraction.toFixed(2)));
+
+              this.detractionPercentageRequired = false;
+            }
+          } catch (error) {
+            // console.log(error);
+          }
+        });
+
+    this.subscriptions.push(detractionPercentageSub);
+
+    const detractionImportSub =
+      this.dataFormGroup.get('detractionImport').valueChanges
+        .pipe(
+          distinctUntilChanged(),
+          debounceTime(300)
+        )
+        .subscribe(res => {
+          try {
+            if (res < 0) {
+              this.dataFormGroup.get('detractionImport').setValue(0);
+              this.detractionImportRequired = true;
+            } else if (res >= 0) {
+              const total = this.dataFormGroup.value['totalImport'] ? this.dataFormGroup.value['totalImport'] : 1;
+
+              if (res > total) {
+                this.dataFormGroup.get('detractionImport').setValue(total);
+                res = total;
+                this.detractionImportRequired = false;
+              }
+
+              let percentage = 0;
+
+              percentage = (100 * res) / total;
+
+              if (percentage > 100) {
+                percentage = 100;
+              } else if (percentage < 0) {
+                percentage = 0;
+              }
+
+              this.dataFormGroup.get('detractionPercentage').setValue(parseFloat(percentage.toFixed(2)));
+              this.detractionImportRequired = false;
+            }
+          } catch (error) {
+            // console.log(error);
+          }
+        });
+
+    this.subscriptions.push(detractionImportSub);
+
+    const detractionDateSub =
+      this.dataFormGroup.get('detractionDate').valueChanges
+        .subscribe(res => {
+          if (res) {
+            this.detractionDateRequired = false;
+          } else {
+            this.detractionDateRequired = true;
+          }
+        });
+
+    this.subscriptions.push(detractionDateSub);
+
+    const serial$ =
+      this.dataFormGroup.get('documentSerial').valueChanges
+        .pipe(
+          distinctUntilChanged()
+        )
+        .subscribe(res => {
+          if (res) {
+            try {
+              const upper = res.toUpperCase();
+              this.dataFormGroup.get('documentSerial').setValue(upper);
+            } catch (error) {
+              console.log(error);
+            }
+          }
+        });
+
+    this.subscriptions.push(serial$);
+
+    const correlative$ =
+      this.dataFormGroup.get('documentCorrelative').valueChanges
+        .pipe(
+          distinctUntilChanged(),
+          tap(() => {
+            this.duplicates.correlativeLoading = true;
+          }),
+          debounceTime(500),
+          map(res => res.toUpperCase()),
+          tap(res => {
+            this.duplicates.correlative = false;
+            const find = this.dbs.purchases.filter(option =>
+              option.documentCorrelative === res &&
+              option.provider.ruc === this.dataFormGroup.value['provider']['ruc'] &&
+              option.documentSerial === this.dataFormGroup.value['documentSerial'] &&
+              option.documentType === this.dataFormGroup.value['documentType']);
+
+            if (find.length > 0) {
+              this.duplicates.correlativeLoading = false;
+              this.duplicates.correlative = true;
+              this.snackbar.open('Documento duplicado', 'Cerrar', {
+                duration: 4000
+              });
+            } else {
+              this.duplicates.correlativeLoading = false;
+            }
+          })
+        ).subscribe(res => {
+          if (res) {
+            this.dataFormGroup.get('documentCorrelative').setValue(res);
+          }
+        })
+
+    this.subscriptions.push(correlative$);
+
+    const transactionObs =
+      this.dataTransactionObservable.subscribe(res => {
+        if (res) {
+          this.transactionCounter++;
+          if (this.transactionCounter === this.itemsList.length) {
+            this.transactionDone = true;
+            this.snackbar.open('Materia prima actualizada!', 'Cerrar', {
+              duration: 6000
+            });
+          }
+        } else {
+          this.transactionDone = false;
+        }
+      });
+
+    this.subscriptions.push(transactionObs);
+
   }
 
   createForm(): void {
@@ -125,15 +426,16 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
       documentType: [null, [Validators.required]],
       documentSerial: [null, [Validators.required]],
       documentCorrelative: [null, [Validators.required]],
-      description: [null, [Validators.required]],
+      paymentType: [null, [Validators.required]],
+      creditDate: null,
       subtotalImport: null,
       igvImport: null,
       totalImport: [null, [Validators.required]],
-      paymentType: [null, [Validators.required]],
       paidImport: [null, [Validators.required]],
       indebtImport: [null, [Validators.required]],
+      detractionPercentage: null,
       detractionImport: null,
-      detractionDate: null,
+      detractionDate: null
     });
   }
 
@@ -190,9 +492,20 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
 
   addItem() {
     if (this.itemFormGroup.valid) {
+      let _item;
+
+      if (typeof this.itemFormGroup.value['item'] === 'string') {
+        _item = {
+          name: this.itemFormGroup.value['item'],
+          code: ''
+        }
+      } else if (typeof this.itemFormGroup.value['item'] === 'object') {
+        _item = this.itemFormGroup.value['item'];
+      }
+
       const data = {
         index: this.itemsList.length,
-        name: this.itemFormGroup.value['item']['name'] ? this.itemFormGroup.value['item']['name'] : this.itemFormGroup.value['item'],
+        item: _item,
         quantity: this.itemFormGroup.value['quantity'],
         import: this.itemFormGroup.value['import']
       }
@@ -241,6 +554,456 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
     });
   }
 
+  filterListRawMaterial(): void {
+    this.filteredRawMaterials =
+      this.itemFormGroup.get('item').valueChanges
+        .pipe(
+          startWith<any>(''),
+          map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+          map(value => value ? this.dbs.rawMaterials.filter(option => option.name.toLowerCase().includes(value) || option.code.toLowerCase().includes(value)) : this.dbs.rawMaterials)
+        );
+  }
 
+  register(): void {
+    if (this.dataFormGroup.valid &&
+      !this.loading &&
+      !!this.itemsList.length &&
+      !this.subtotalImportRequired &&
+      !this.igvImportRequired &&
+      !this.creditDateRequired &&
+      !this.detractionPercentageRequired &&
+      !this.detractionImportRequired &&
+      !this.detractionDateRequired) {
+
+      this.loading = true;
+
+      if (this.isRawMaterial.value) {
+        if (this.dataFormGroup.value['paymentType'] === 'CREDITO') {
+          // console.log('REGISTRANDO CON FECHA DE EXPIRACION Y ACTUALIZANDO STOCK DE MATERIA PRIMA');
+          // console.log('Formulario', this.dataFormGroup.value);
+          // console.log('Lista', this.itemsList);
+
+          try {
+            this.itemsList.forEach(element => {
+              this.af.firestore.runTransaction(t => {
+                return t.get(this.dbs.rawMaterialsCollection.doc(element.item.id).ref)
+                  .then(doc => {
+                    const newStock = doc.data().stock + element.quantity;
+                    const kardexRef = this.af.firestore.collection(doc.ref.path + '/kardex').doc()
+
+                    t.update(this.dbs.rawMaterialsCollection.doc(element.item.id).ref, {
+                      stock: newStock,
+                      purchase: (element.import / element.quantity).toFixed(2)
+                    });
+
+                    t.set(kardexRef, {
+                      id: kardexRef.id,
+                      documentDate: this.dataFormGroup.value['documentDate'].valueOf(),
+                      documentType: this.dataFormGroup.value['documentType'],
+                      documentSerial: this.dataFormGroup.value['documentSerial'],
+                      documentCorrelative: this.dataFormGroup.value['documentCorrelative'],
+                      provider: this.dataFormGroup.value['provider'],
+                      rawMaterial: element.item,
+                      saleQuantity: null,
+                      saleImport: null,
+                      saleUnitPrice: null,
+                      purchaseQuantity: element.quantity,
+                      purchaseImport: element.import,
+                      purchaseUnitPrice: (element.import / element.quantity).toFixed(2),
+                      source: 'purchases',
+                      regDate: Date.now(),
+                      createdBy: this.auth.userInteriores.displayName,
+                      createdByUid: this.auth.userInteriores.uid,
+                    });
+
+                  });
+
+              }).then(() => {
+                this.transactionObservable.next(true);
+              }).catch(err => {
+                console.log(err);
+                this.loading = false;
+                this.snackbar.open(`Hubo un error actualizando el item: ${element.item.name}`, 'Cerrar', {
+                  duration: 6000
+                });
+              });
+            });
+
+            let purchaseData = {
+              id: '',
+              documentDate: this.dataFormGroup.value['documentDate'] ? this.dataFormGroup.value['documentDate'].valueOf() : null,
+              documentType: this.dataFormGroup.value['documentType'],
+              documentSerial: this.dataFormGroup.value['documentSerial'],
+              documentCorrelative: this.dataFormGroup.value['documentCorrelative'],
+              provider: this.dataFormGroup.value['provider'],
+              itemsList: this.itemsList,
+              creditDate: this.dataFormGroup.value['creditDate'] ? this.dataFormGroup.value['creditDate'].valueOf() : null,
+              totalImport: this.dataFormGroup.value['totalImport'],
+              subtotalImport: this.dataFormGroup.value['subtotalImport'],
+              igvImport: this.dataFormGroup.value['igvImport'],
+              paymentType: this.dataFormGroup.value['paymentType'],
+              paidImport: this.dataFormGroup.value['paidImport'],
+              indebtImport: this.dataFormGroup.value['indebtImport'],
+              verifiedByAccountant: false,
+              detractionApplies: this.detractionApplies.value,
+              detractionPercentage: this.dataFormGroup.value['detractionPercentage'],
+              detractionImport: this.dataFormGroup.value['detractionImport'],
+              detractionDate: this.dataFormGroup.value['detractionDate'] ? this.dataFormGroup.value['detractionDate'].valueOf() : null,
+              isRawMaterial: this.isRawMaterial.value,
+              source: 'purchases',
+              status: 'Pendiente',
+              regDate: Date.now(),
+              createdBy: this.auth.userInteriores.displayName,
+              createdByUid: this.auth.userInteriores.uid,
+              editedBy: null,
+              editedByUid: null,
+              editedDate: null,
+              approvedBy: null,
+              approvedByUid: null,
+              approvedDate: null,
+              verifiedBy: null,
+              verifiedByUid: null,
+              verifiedDate: null,
+              cashReference: null
+            };
+
+            this.dbs.purchasesCollection
+              .add(purchaseData)
+              .then(ref => {
+
+                purchaseData.id = ref.id;
+
+                ref.update({ id: ref.id })
+                  .then(() => {
+                    this.dbs.debtsToPayCollection
+                      .add(purchaseData)
+                    this.loading = false;
+                    this.snackbar.open('Documento registrado !', 'Cerrar', {
+                      duration: 6000
+                    });
+                    this.dialogRef.close(true);
+                  })
+                  .catch(err => {
+                    console.log(err);
+                    this.loading = false;
+                    this.snackbar.open('Hubo un error grabando la cuenta por pagar', 'Cerrar', {
+                      duration: 6000
+                    });
+                  })
+              })
+              .catch(err => {
+                console.log(err);
+                this.loading = false;
+                this.snackbar.open('Hubo un error grabando la compra', 'Cerrar', {
+                  duration: 6000
+                });
+              })
+          } catch (error) {
+            console.log(error);
+            this.loading = false;
+            this.snackbar.open('Hubo un error grabando la compra', 'Cerrar', {
+              duration: 6000
+            });
+          }
+
+        } else {
+          // console.log('REGISTRANDO SIN FECHA DE EXPIRACION Y ACTUALIZANDO STOCK DE MATERIA PRIMA');
+          // console.log('Formulario', this.dataFormGroup.value);
+          // console.log('Lista', this.itemsList);
+
+          try {
+            this.itemsList.forEach(element => {
+              this.af.firestore.runTransaction(t => {
+                return t.get(this.dbs.rawMaterialsCollection.doc(element.item.id).ref)
+                  .then(doc => {
+                    const newStock = doc.data().stock + element.quantity;
+                    const kardexRef = this.af.firestore.collection(doc.ref.path + '/kardex').doc()
+
+                    t.update(this.dbs.rawMaterialsCollection.doc(element.item.id).ref, {
+                      stock: newStock,
+                      purchase: (element.import / element.quantity).toFixed(2)
+                    });
+
+                    t.set(kardexRef, {
+                      id: kardexRef.id,
+                      documentDate: this.dataFormGroup.value['documentDate'].valueOf(),
+                      documentType: this.dataFormGroup.value['documentType'],
+                      documentSerial: this.dataFormGroup.value['documentSerial'],
+                      documentCorrelative: this.dataFormGroup.value['documentCorrelative'],
+                      provider: this.dataFormGroup.value['provider'],
+                      rawMaterial: element.item,
+                      saleQuantity: null,
+                      saleImport: null,
+                      saleUnitPrice: null,
+                      purchaseQuantity: element.quantity,
+                      purchaseImport: element.import,
+                      purchaseUnitPrice: (element.import / element.quantity).toFixed(2),
+                      source: 'purchases',
+                      regDate: Date.now(),
+                      createdBy: this.auth.userInteriores.displayName,
+                      createdByUid: this.auth.userInteriores.uid,
+                    });
+
+                  });
+
+              }).then(() => {
+                this.transactionObservable.next(true);
+              }).catch(err => {
+                console.log(err);
+                this.loading = false;
+                this.snackbar.open(`Hubo un error actualizando el item: ${element.item.name}`, 'Cerrar', {
+                  duration: 6000
+                });
+              });
+            });
+
+            let purchaseData = {
+              id: '',
+              documentDate: this.dataFormGroup.value['documentDate'] ? this.dataFormGroup.value['documentDate'].valueOf() : null,
+              documentType: this.dataFormGroup.value['documentType'],
+              documentSerial: this.dataFormGroup.value['documentSerial'],
+              documentCorrelative: this.dataFormGroup.value['documentCorrelative'],
+              provider: this.dataFormGroup.value['provider'],
+              itemsList: this.itemsList,
+              creditDate: this.dataFormGroup.value['creditDate'] ? this.dataFormGroup.value['creditDate'].valueOf() : null,
+              totalImport: this.dataFormGroup.value['totalImport'],
+              subtotalImport: this.dataFormGroup.value['subtotalImport'],
+              igvImport: this.dataFormGroup.value['igvImport'],
+              paymentType: this.dataFormGroup.value['paymentType'],
+              paidImport: this.dataFormGroup.value['paidImport'],
+              indebtImport: this.dataFormGroup.value['indebtImport'],
+              verifiedByAccountant: false,
+              detractionApplies: this.detractionApplies.value,
+              detractionPercentage: this.dataFormGroup.value['detractionPercentage'],
+              detractionImport: this.dataFormGroup.value['detractionImport'],
+              detractionDate: this.dataFormGroup.value['detractionDate'] ? this.dataFormGroup.value['detractionDate'].valueOf() : null,
+              isRawMaterial: this.isRawMaterial.value,
+              source: 'purchases',
+              status: 'Pagado',
+              regDate: Date.now(),
+              createdBy: this.auth.userInteriores.displayName,
+              createdByUid: this.auth.userInteriores.uid,
+              editedBy: null,
+              editedByUid: null,
+              editedDate: null,
+              approvedBy: null,
+              approvedByUid: null,
+              approvedDate: null,
+              verifiedBy: null,
+              verifiedByUid: null,
+              verifiedDate: null,
+              cashReference: null
+            };
+
+            this.dbs.purchasesCollection
+              .add(purchaseData)
+              .then(ref => {
+
+                purchaseData.id = ref.id;
+
+                ref.update({ id: ref.id })
+                  .then(() => {
+                    this.loading = false;
+                    this.snackbar.open('Documento registrado !', 'Cerrar', {
+                      duration: 6000
+                    });
+                    this.dialogRef.close(true);
+                  })
+                  .catch(err => {
+                    console.log(err);
+                    this.loading = false;
+                    this.snackbar.open('Hubo un error grabando la cuenta por pagar', 'Cerrar', {
+                      duration: 6000
+                    });
+                  })
+              })
+              .catch(err => {
+                console.log(err);
+                this.loading = false;
+                this.snackbar.open('Hubo un error grabando la compra', 'Cerrar', {
+                  duration: 6000
+                });
+              })
+          } catch (error) {
+            console.log(error);
+            this.loading = false;
+            this.snackbar.open('Hubo un error grabando la compra', 'Cerrar', {
+              duration: 6000
+            });
+          }
+        }
+      } else {
+        if (this.dataFormGroup.value['paymentType'] === 'CREDITO') {
+          // console.log('REGISTRNDO CON FECHA DE EXPIRACION');
+          // console.log('Formulario', this.dataFormGroup.value);
+          // console.log('Lista', this.itemsList);
+          try {
+
+            let purchaseData = {
+              id: '',
+              documentDate: this.dataFormGroup.value['documentDate'] ? this.dataFormGroup.value['documentDate'].valueOf() : null,
+              documentType: this.dataFormGroup.value['documentType'],
+              documentSerial: this.dataFormGroup.value['documentSerial'],
+              documentCorrelative: this.dataFormGroup.value['documentCorrelative'],
+              provider: this.dataFormGroup.value['provider'],
+              itemsList: this.itemsList,
+              creditDate: this.dataFormGroup.value['creditDate'] ? this.dataFormGroup.value['creditDate'].valueOf() : null,
+              totalImport: this.dataFormGroup.value['totalImport'],
+              subtotalImport: this.dataFormGroup.value['subtotalImport'],
+              igvImport: this.dataFormGroup.value['igvImport'],
+              paymentType: this.dataFormGroup.value['paymentType'],
+              paidImport: this.dataFormGroup.value['paidImport'],
+              indebtImport: this.dataFormGroup.value['indebtImport'],
+              verifiedByAccountant: false,
+              detractionApplies: this.detractionApplies.value,
+              detractionPercentage: this.dataFormGroup.value['detractionPercentage'],
+              detractionImport: this.dataFormGroup.value['detractionImport'],
+              detractionDate: this.dataFormGroup.value['detractionDate'] ? this.dataFormGroup.value['detractionDate'].valueOf() : null,
+              isRawMaterial: this.isRawMaterial.value,
+              source: 'purchases',
+              status: 'Pendiente',
+              regDate: Date.now(),
+              createdBy: this.auth.userInteriores.displayName,
+              createdByUid: this.auth.userInteriores.uid,
+              editedBy: null,
+              editedByUid: null,
+              editedDate: null,
+              approvedBy: null,
+              approvedByUid: null,
+              approvedDate: null,
+              verifiedBy: null,
+              verifiedByUid: null,
+              verifiedDate: null,
+              cashReference: null
+            };
+
+            this.dbs.purchasesCollection
+              .add(purchaseData)
+              .then(ref => {
+
+                purchaseData.id = ref.id;
+
+                ref.update({ id: ref.id })
+                  .then(() => {
+                    this.dbs.debtsToPayCollection
+                      .add(purchaseData)
+                    this.loading = false;
+                    this.snackbar.open('Documento registrado !', 'Cerrar', {
+                      duration: 6000
+                    });
+                    this.dialogRef.close(true);
+                  })
+                  .catch(err => {
+                    console.log(err);
+                    this.loading = false;
+                    this.snackbar.open('Hubo un error grabando la cuenta por pagar', 'Cerrar', {
+                      duration: 6000
+                    });
+                  })
+              })
+              .catch(err => {
+                console.log(err);
+                this.loading = false;
+                this.snackbar.open('Hubo un error grabando la compra', 'Cerrar', {
+                  duration: 6000
+                });
+              })
+          } catch (error) {
+            console.log(error);
+            this.loading = false;
+            this.snackbar.open('Hubo un error grabando la compra', 'Cerrar', {
+              duration: 6000
+            });
+          }
+        } else {
+          // console.log('REGISTRNDO SIN FECHA DE EXPIRACION');
+          // console.log('Formulario', this.dataFormGroup.value);
+          // console.log('Lista', this.itemsList);
+
+          try {
+
+            let purchaseData = {
+              id: '',
+              documentDate: this.dataFormGroup.value['documentDate'] ? this.dataFormGroup.value['documentDate'].valueOf() : null,
+              documentType: this.dataFormGroup.value['documentType'],
+              documentSerial: this.dataFormGroup.value['documentSerial'],
+              documentCorrelative: this.dataFormGroup.value['documentCorrelative'],
+              provider: this.dataFormGroup.value['provider'],
+              itemsList: this.itemsList,
+              creditDate: this.dataFormGroup.value['creditDate'] ? this.dataFormGroup.value['creditDate'].valueOf() : null,
+              totalImport: this.dataFormGroup.value['totalImport'],
+              subtotalImport: this.dataFormGroup.value['subtotalImport'],
+              igvImport: this.dataFormGroup.value['igvImport'],
+              paymentType: this.dataFormGroup.value['paymentType'],
+              paidImport: this.dataFormGroup.value['paidImport'],
+              indebtImport: this.dataFormGroup.value['indebtImport'],
+              verifiedByAccountant: false,
+              detractionApplies: this.detractionApplies.value,
+              detractionPercentage: this.dataFormGroup.value['detractionPercentage'],
+              detractionImport: this.dataFormGroup.value['detractionImport'],
+              detractionDate: this.dataFormGroup.value['detractionDate'] ? this.dataFormGroup.value['detractionDate'].valueOf() : null,
+              isRawMaterial: this.isRawMaterial.value,
+              source: 'purchases',
+              status: 'Pagado',
+              regDate: Date.now(),
+              createdBy: this.auth.userInteriores.displayName,
+              createdByUid: this.auth.userInteriores.uid,
+              editedBy: null,
+              editedByUid: null,
+              editedDate: null,
+              approvedBy: null,
+              approvedByUid: null,
+              approvedDate: null,
+              verifiedBy: null,
+              verifiedByUid: null,
+              verifiedDate: null,
+              cashReference: null
+            };
+
+            this.dbs.purchasesCollection
+              .add(purchaseData)
+              .then(ref => {
+
+                purchaseData.id = ref.id;
+
+                ref.update({ id: ref.id })
+                  .then(() => {
+                    this.loading = false;
+                    this.snackbar.open('Documento registrado !', 'Cerrar', {
+                      duration: 6000
+                    });
+                    this.dialogRef.close(true);
+                  })
+                  .catch(err => {
+                    console.log(err);
+                    this.loading = false;
+                    this.snackbar.open('Hubo un error grabando la cuenta por pagar', 'Cerrar', {
+                      duration: 6000
+                    });
+                  })
+              })
+              .catch(err => {
+                console.log(err);
+                this.loading = false;
+                this.snackbar.open('Hubo un error grabando la compra', 'Cerrar', {
+                  duration: 6000
+                });
+              })
+          } catch (error) {
+            console.log(error);
+            this.loading = false;
+            this.snackbar.open('Hubo un error grabando la compra', 'Cerrar', {
+              duration: 6000
+            });
+          }
+        }
+      }
+    } else {
+      this.loading = false;
+      this.snackbar.open('Formulario o condición incompleta', 'Cerrar', {
+        duration: 6000
+      });
+    }
+  }
 
 }

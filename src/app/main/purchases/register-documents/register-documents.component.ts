@@ -8,6 +8,8 @@ import { PurchasesRegisterCreateDialogComponent } from './purchases-register-cre
 import { PurchasesRegisterEditDialogComponent } from './purchases-register-edit-dialog/purchases-register-edit-dialog.component';
 import { PurchasesRegisterDeleteConfirmComponent } from './purchases-register-delete-confirm/purchases-register-delete-confirm.component';
 import { PurchasesRegisterVerifyConfirmComponent } from './purchases-register-verify-confirm/purchases-register-verify-confirm.component';
+import { AuthService } from 'src/app/core/auth.service';
+import { PurchasesRegisterShowItemsDialogComponent } from './purchases-register-show-items-dialog/purchases-register-show-items-dialog.component';
 
 @Component({
   selector: 'app-register-documents',
@@ -28,7 +30,7 @@ export class RegisterDocumentsComponent implements OnInit {
 
   filteredPurchases: Array<Purchase> = [];
 
-  displayedColumns: string[] = ['index', 'regDate', 'documentDate', 'description', 'documentType', 'documentSerial', 'documentCorrelative', 'provider', 'totalImport', 'subtotalImport', 'igvImport', 'paymentType', 'paidImport', 'indebtImport', 'verifiedByAccountant', 'status', 'detractionImport', 'detractionDate', 'createdBy', 'editedBy', 'approvedBy', 'actions'];
+  displayedColumns: string[] = ['index', 'regDate', 'documentDate', 'itemsList', 'documentType', 'documentSerial', 'documentCorrelative', 'provider', 'totalImport', 'subtotalImport', 'igvImport', 'paymentType', 'status', 'paidImport', 'indebtImport', 'detractionImport', 'detractionNumber', 'detractionDate', 'creditDate','createdBy', 'editedBy', 'approvedBy', 'verifiedByAccountant', 'actions'];
 
 
   dataSource = new MatTableDataSource();
@@ -41,6 +43,7 @@ export class RegisterDocumentsComponent implements OnInit {
 
   constructor(
     public dbs: DatabaseService,
+    public auth: AuthService,
     private dialog: MatDialog,
     private snackbar: MatSnackBar
   ) { }
@@ -72,8 +75,8 @@ export class RegisterDocumentsComponent implements OnInit {
       option.provider.ruc.toString().includes(ref) ||
       option.documentCorrelative.toString().includes(ref) ||
       option.createdBy.toLowerCase().includes(ref) ||
-      option.editedBy.toLowerCase().includes(ref) ||
-      option.approvedBy.toLowerCase().includes(ref) ||
+      (option.editedBy ? option.editedBy.toLowerCase().includes(ref) : false) ||
+      (option.approvedBy ? option.approvedBy.toLowerCase().includes(ref) : false) ||
       option.status.toLowerCase().includes(ref));
     this.dataSource.data = this.filteredPurchases; 
   }
@@ -101,6 +104,14 @@ export class RegisterDocumentsComponent implements OnInit {
 
   registerDocument(): void {
     this.dialog.open(PurchasesRegisterCreateDialogComponent);
+  }
+
+  showItemsList(list: any): void {
+    this.dialog.open(PurchasesRegisterShowItemsDialogComponent, {
+      data: {
+        itemsList: list
+      }
+    });
   }
 
   editPurchase(purchase: Purchase): void {

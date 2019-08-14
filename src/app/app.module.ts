@@ -12,6 +12,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFirePerformanceModule } from '@angular/fire/performance';
 
 import { DatabaseService } from './core/database.service';
 import { AuthService } from './core/auth.service';
@@ -27,6 +28,7 @@ import { MatPasswordStrengthModule } from '@angular-material-extensions/password
     AppRoutingModule,
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase, 'Sistema interiores'),
+    AngularFirePerformanceModule,
     AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
     AngularFireStorageModule,
