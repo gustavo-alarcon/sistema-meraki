@@ -159,12 +159,20 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
 
     const subtotalImportSub =
       this.dataFormGroup.get('subtotalImport').valueChanges
+        .pipe(
+          debounceTime(300),
+          distinctUntilChanged()
+        )
         .subscribe(res => {
           try {
             if (res > 0) {
               this.subtotalImportRequired = false;
+              const igv = res * 0.18;
+              const total = res + igv;
+              this.dataFormGroup.get('igvImport').setValue(parseFloat(igv.toFixed(2)));
+              this.dataFormGroup.get('totalImport').setValue(parseFloat(total.toFixed(2)));
             } else {
-              this.dataFormGroup.get('subtotalImport').setValue(null);
+              this.dataFormGroup.get('subtotalImport').setValue(0);
               this.subtotalImportRequired = true;
             }
           } catch (error) {
@@ -177,6 +185,10 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
 
     const igvImportSub =
       this.dataFormGroup.get('igvImport').valueChanges
+        .pipe(
+          debounceTime(300),
+          distinctUntilChanged()
+        )
         .subscribe(res => {
           try {
             if (res > 0) {
@@ -191,6 +203,32 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
         });
 
     this.subscriptions.push(igvImportSub);
+
+    const totalImportSub =
+      this.dataFormGroup.get('totalImport').valueChanges
+        .pipe(
+          debounceTime(300),
+          distinctUntilChanged()
+        )
+        .subscribe(res => {
+          try {
+            if (res > 0) {
+              if(this.dataFormGroup.value['paymentType'] === 'CREDITO'){
+                const total = this.dataFormGroup.value['totalImport'];
+                this.dataFormGroup.get('indebtImport').setValue(total);
+              }else{
+                const total = this.dataFormGroup.value['totalImport'];
+                this.dataFormGroup.get('paidImport').setValue(total);
+              }
+            } else {
+              this.dataFormGroup.get('totalImport').setValue(0);
+            }
+          } catch (error) {
+            // console.log(error);
+          }
+        });
+
+    this.subscriptions.push(totalImportSub);
 
     const paymentTypeSub =
       this.dataFormGroup.get('paymentType').valueChanges
@@ -221,13 +259,13 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
       this.dataFormGroup.get('paidImport').valueChanges
         .subscribe(res => {
           try {
-            if (res <= 0) {
-              this.dataFormGroup.get('paidImport').setValue(null);
+            if (res < 0) {
+              this.dataFormGroup.get('paidImport').setValue(0);
             } else if (res > this.dataFormGroup.value['totalImport']) {
               this.dataFormGroup.get('paidImport').setValue(this.dataFormGroup.value['totalImport']);
             } else {
               const debt = this.dataFormGroup.value['totalImport'] - res;
-              this.dataFormGroup.get('indebtImport').setValue(debt);
+              this.dataFormGroup.get('indebtImport').setValue(parseFloat(debt.toFixed(2)));
             }
           } catch (error) {
             // console.log(error);
@@ -431,8 +469,8 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
       subtotalImport: null,
       igvImport: null,
       totalImport: [null, [Validators.required]],
-      paidImport: [null, [Validators.required]],
-      indebtImport: [null, [Validators.required]],
+      paidImport: [0, [Validators.required]],
+      indebtImport: [0, [Validators.required]],
       detractionPercentage: null,
       detractionImport: null,
       detractionDate: null
@@ -637,6 +675,7 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
               documentCorrelative: this.dataFormGroup.value['documentCorrelative'],
               provider: this.dataFormGroup.value['provider'],
               itemsList: this.itemsList,
+              payments: [],
               creditDate: this.dataFormGroup.value['creditDate'] ? this.dataFormGroup.value['creditDate'].valueOf() : null,
               totalImport: this.dataFormGroup.value['totalImport'],
               subtotalImport: this.dataFormGroup.value['subtotalImport'],
@@ -663,8 +702,7 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
               approvedDate: null,
               verifiedBy: null,
               verifiedByUid: null,
-              verifiedDate: null,
-              cashReference: null
+              verifiedDate: null
             };
 
             this.dbs.purchasesCollection
@@ -675,12 +713,16 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
 
                 ref.update({ id: ref.id })
                   .then(() => {
+
                     this.dbs.debtsToPayCollection
-                      .add(purchaseData)
+                      .doc(ref.id)
+                      .set(purchaseData)
+
                     this.loading = false;
                     this.snackbar.open('Documento registrado !', 'Cerrar', {
                       duration: 6000
                     });
+
                     this.dialogRef.close(true);
                   })
                   .catch(err => {
@@ -765,6 +807,14 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
               documentCorrelative: this.dataFormGroup.value['documentCorrelative'],
               provider: this.dataFormGroup.value['provider'],
               itemsList: this.itemsList,
+              payments: [{
+                type: 'TOTAL',
+                import: this.dataFormGroup.value['totalImport'],
+                cashReference: null,
+                paidBy: null,
+                paidByUid: null,
+                regDate: Date.now()
+              }],
               creditDate: this.dataFormGroup.value['creditDate'] ? this.dataFormGroup.value['creditDate'].valueOf() : null,
               totalImport: this.dataFormGroup.value['totalImport'],
               subtotalImport: this.dataFormGroup.value['subtotalImport'],
@@ -791,8 +841,7 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
               approvedDate: null,
               verifiedBy: null,
               verifiedByUid: null,
-              verifiedDate: null,
-              cashReference: null
+              verifiedDate: null
             };
 
             this.dbs.purchasesCollection
@@ -803,6 +852,7 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
 
                 ref.update({ id: ref.id })
                   .then(() => {
+
                     this.loading = false;
                     this.snackbar.open('Documento registrado !', 'Cerrar', {
                       duration: 6000
@@ -847,6 +897,7 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
               documentCorrelative: this.dataFormGroup.value['documentCorrelative'],
               provider: this.dataFormGroup.value['provider'],
               itemsList: this.itemsList,
+              payments: [],
               creditDate: this.dataFormGroup.value['creditDate'] ? this.dataFormGroup.value['creditDate'].valueOf() : null,
               totalImport: this.dataFormGroup.value['totalImport'],
               subtotalImport: this.dataFormGroup.value['subtotalImport'],
@@ -873,8 +924,7 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
               approvedDate: null,
               verifiedBy: null,
               verifiedByUid: null,
-              verifiedDate: null,
-              cashReference: null
+              verifiedDate: null
             };
 
             this.dbs.purchasesCollection
@@ -885,8 +935,11 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
 
                 ref.update({ id: ref.id })
                   .then(() => {
+
                     this.dbs.debtsToPayCollection
-                      .add(purchaseData)
+                      .doc(ref.id)
+                      .set(purchaseData)
+
                     this.loading = false;
                     this.snackbar.open('Documento registrado !', 'Cerrar', {
                       duration: 6000
@@ -930,6 +983,14 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
               documentCorrelative: this.dataFormGroup.value['documentCorrelative'],
               provider: this.dataFormGroup.value['provider'],
               itemsList: this.itemsList,
+              payments: [{
+                type: 'TOTAL',
+                import: this.dataFormGroup.value['totalImport'],
+                cashReference: null,
+                paidBy: null,
+                paidByUid: null,
+                regDate: Date.now()
+              }],
               creditDate: this.dataFormGroup.value['creditDate'] ? this.dataFormGroup.value['creditDate'].valueOf() : null,
               totalImport: this.dataFormGroup.value['totalImport'],
               subtotalImport: this.dataFormGroup.value['subtotalImport'],
@@ -956,8 +1017,7 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
               approvedDate: null,
               verifiedBy: null,
               verifiedByUid: null,
-              verifiedDate: null,
-              cashReference: null
+              verifiedDate: null
             };
 
             this.dbs.purchasesCollection

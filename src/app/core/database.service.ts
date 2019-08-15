@@ -740,7 +740,7 @@ export class DatabaseService {
   }
 
   getDebtsToPay(): void {
-    this.debtsToPayCollection = this.af.collection(`db/${this.auth.userInteriores.db}/debtsToPay`, ref => ref.where('status', '==', 'Pendiente'));
+    this.debtsToPayCollection = this.af.collection(`db/${this.auth.userInteriores.db}/purchases`, ref => ref.where('status', '==', 'Pendiente'));
     this.debtsToPayCollection.valueChanges()
       .pipe(
         map(res => {

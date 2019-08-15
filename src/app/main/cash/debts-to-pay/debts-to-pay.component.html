@@ -161,20 +161,25 @@
                                 </td>
                             </ng-container>
 
+                            <ng-container matColumnDef="payments">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Pagos</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    <ng-container *ngIf="raw.payments; else notPayments">
+                                        <button mat-raised-button color="primary" (click)="showPayments(raw)"
+                                            [disabled]="!raw.payments.lenght"></button>
+                                    </ng-container>
+                                    <ng-template #notPayments>
+                                        ---
+                                    </ng-template>
+                                </td>
+                            </ng-container>
+
                             <ng-container matColumnDef="detractionImport">
                                 <th mat-header-cell style="padding:0px 8px; min-width:130px" *matHeaderCellDef>
                                     Detracción</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     {{raw.detractionPercentage ? ('(' + raw.detractionPercentage + '%)') : ''}}
                                     {{raw.detractionImport ? (raw.detractionImport | currency : 'S/.') : '---'}}
-                                </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="detractionNumber">
-                                <th mat-header-cell style="padding:0px 8px; min-width:130px" *matHeaderCellDef>Número de
-                                    detracción</th>
-                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
-                                    {{raw.detractionNumber ? raw.detractionNumber : '---'}}
                                 </td>
                             </ng-container>
 
@@ -248,9 +253,13 @@
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
                                 <td mat-cell style="padding:0px 24px" *matCellDef="let raw">
                                     <mat-menu #rawMenu="matMenu">
-                                        <button mat-menu-item (click)="payDebt(raw)"
-                                            *ngIf="auth.permit.cashDebtsToPayPayAction">
-                                            <mat-icon class="ms-icons-color">gavel</mat-icon> Pagar
+                                        <button mat-menu-item (click)="payTotalDebt(raw)"
+                                            *ngIf="auth.permit.cashDebtsToPayTotalPayAction">
+                                            <mat-icon class="ms-icons-color">gavel</mat-icon> Pago total
+                                        </button>
+                                        <button mat-menu-item (click)="payPartialDebt(raw)"
+                                            *ngIf="auth.permit.cashDebtsToPayPartialPayAction">
+                                            <mat-icon class="ms-icons-color">gavel</mat-icon> Pago parcial
                                         </button>
                                     </mat-menu>
                                     <button mat-icon-button [matMenuTriggerFor]="rawMenu">

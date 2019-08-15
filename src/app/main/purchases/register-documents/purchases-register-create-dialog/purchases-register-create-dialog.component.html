@@ -125,8 +125,8 @@
                         <mat-form-field class="ms-fill w3-margin-right w3-margin-bottom animated fadeInRight"
                             appearance="outline" *ngIf="dataFormGroup.value['documentType'] === 'FACTURA'">
                             <mat-label>IGV (S/.)</mat-label>
-                            <input matInput type="number" step="0.01" formControlName="igvImport" autocomplete="off">
-                            <mat-hint>Requerido *</mat-hint>
+                            <input matInput type="number" step="0.01" formControlName="igvImport" autocomplete="off" readonly>
+                            <mat-hint>Solo lectura *</mat-hint>
                             <mat-error *ngIf="!dataFormGroup.valid">IGV requerido *</mat-error>
                         </mat-form-field>
 
@@ -148,8 +148,7 @@
 
                         <mat-form-field class="ms-fill w3-margin-right w3-margin-bottom" appearance="outline">
                             <mat-label>En deuda (S/.)</mat-label>
-                            <input matInput type="number" step="0.01" formControlName="indebtImport" autocomplete="off"
-                                readonly>
+                            <input matInput type="number" [max]="dataFormGroup.value['totalImport']" step="0.01" formControlName="indebtImport" autocomplete="off">
                             <mat-hint>Requerido *</mat-hint>
                             <mat-error *ngIf="!dataFormGroup.valid">Importe de deuda requerido *</mat-error>
                         </mat-form-field>

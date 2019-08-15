@@ -7,12 +7,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatAutocompleteModule, MatCheckboxModule, MatTooltipModule, MatDividerModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSnackBarModule, MatProgressSpinnerModule, MatProgressBarModule, MatMenuModule, MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 import { DebtsToPayShowItemsDialogComponent } from './debts-to-pay-show-items-dialog/debts-to-pay-show-items-dialog.component';
 import { DebtsToPayPayDialogComponent } from './debts-to-pay-pay-dialog/debts-to-pay-pay-dialog.component';
+import { DebtsToPayPartialPayDialogComponent } from './debts-to-pay-partial-pay-dialog/debts-to-pay-partial-pay-dialog.component';
 
 @NgModule({
   declarations: [
     DebtsToPayComponent,
     DebtsToPayShowItemsDialogComponent,
-    DebtsToPayPayDialogComponent
+    DebtsToPayPayDialogComponent,
+    DebtsToPayPartialPayDialogComponent
   ],
   imports: [
     CommonModule,
@@ -40,7 +42,8 @@ import { DebtsToPayPayDialogComponent } from './debts-to-pay-pay-dialog/debts-to
   ],
   entryComponents: [
     DebtsToPayShowItemsDialogComponent,
-    DebtsToPayPayDialogComponent
+    DebtsToPayPayDialogComponent,
+    DebtsToPayPartialPayDialogComponent
   ]
 })
 export class DebtsToPayModule { }

@@ -10,6 +10,7 @@ import { PurchasesRegisterDeleteConfirmComponent } from './purchases-register-de
 import { PurchasesRegisterVerifyConfirmComponent } from './purchases-register-verify-confirm/purchases-register-verify-confirm.component';
 import { AuthService } from 'src/app/core/auth.service';
 import { PurchasesRegisterShowItemsDialogComponent } from './purchases-register-show-items-dialog/purchases-register-show-items-dialog.component';
+import { PurchasesRegisterShowPaymentsDialogComponent } from './purchases-register-show-payments-dialog/purchases-register-show-payments-dialog.component';
 
 @Component({
   selector: 'app-register-documents',
@@ -30,13 +31,13 @@ export class RegisterDocumentsComponent implements OnInit {
 
   filteredPurchases: Array<Purchase> = [];
 
-  displayedColumns: string[] = ['index', 'regDate', 'documentDate', 'itemsList', 'documentType', 'documentSerial', 'documentCorrelative', 'provider', 'totalImport', 'subtotalImport', 'igvImport', 'paymentType', 'status', 'paidImport', 'indebtImport', 'detractionImport', 'detractionNumber', 'detractionDate', 'creditDate','createdBy', 'editedBy', 'approvedBy', 'verifiedByAccountant', 'actions'];
+  displayedColumns: string[] = ['index', 'regDate', 'documentDate', 'itemsList', 'documentType', 'documentSerial', 'documentCorrelative', 'provider', 'totalImport', 'subtotalImport', 'igvImport', 'paymentType', 'status', 'paidImport', 'indebtImport', 'payments', 'detractionImport', 'detractionNumber', 'detractionDate', 'creditDate', 'createdBy', 'editedBy', 'approvedBy', 'verifiedByAccountant', 'actions'];
 
 
   dataSource = new MatTableDataSource();
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   subscriptions: Array<Subscription> = [];
 
@@ -54,15 +55,15 @@ export class RegisterDocumentsComponent implements OnInit {
     this.currentYear = this.monthFormControl.value.getFullYear();
 
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort  = this.sort;
+    this.dataSource.sort = this.sort;
 
     const purchase$ =
-    this.dbs.currentDataPurchases.subscribe(res => {
-      if(res) {
-        this.filteredPurchases = res;
-        this.dataSource.data = res;
-      }
-    });
+      this.dbs.currentDataPurchases.subscribe(res => {
+        if (res) {
+          this.filteredPurchases = res;
+          this.dataSource.data = res;
+        }
+      });
 
     this.subscriptions.push(purchase$);
   }
@@ -78,7 +79,7 @@ export class RegisterDocumentsComponent implements OnInit {
       (option.editedBy ? option.editedBy.toLowerCase().includes(ref) : false) ||
       (option.approvedBy ? option.approvedBy.toLowerCase().includes(ref) : false) ||
       option.status.toLowerCase().includes(ref));
-    this.dataSource.data = this.filteredPurchases; 
+    this.dataSource.data = this.filteredPurchases;
   }
 
   setMonthOfView(event, datepicker): void {
@@ -110,6 +111,14 @@ export class RegisterDocumentsComponent implements OnInit {
     this.dialog.open(PurchasesRegisterShowItemsDialogComponent, {
       data: {
         itemsList: list
+      }
+    });
+  }
+
+  showPayments(purchase: Purchase): void {
+    this.dialog.open(PurchasesRegisterShowPaymentsDialogComponent, {
+      data: {
+        purchase: purchase
       }
     });
   }

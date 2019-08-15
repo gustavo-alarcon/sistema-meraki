@@ -118,8 +118,8 @@
                                 <th mat-header-cell style="padding:0px 8px; min-width:170px" *matHeaderCellDef>Proveedor
                                 </th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
-                                    <span>Proveedor:<br>{{raw.provider.name}}</span><br>
-                                    <span>RUC:<br>{{raw.provider.ruc}}</span><br>
+                                    <span>{{raw.provider.name}}</span><br>
+                                    <span>{{raw.provider.ruc}}</span><br>
                                 </td>
                             </ng-container>
 
@@ -175,6 +175,19 @@
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Importe adeudado</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     {{raw.indebtImport ? (raw.indebtImport | currency : 'S/.') : '---'}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="payments">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Pagos</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    <ng-container *ngIf="raw.payments; else notPayments">
+                                        <button mat-raised-button color="primary" (click)="showPayments(raw)"
+                                            [disabled]="!raw.payments.length"><mat-icon>list</mat-icon> Pagos</button>
+                                    </ng-container>
+                                    <ng-template #notPayments>
+                                        ---
+                                    </ng-template>
                                 </td>
                             </ng-container>
 

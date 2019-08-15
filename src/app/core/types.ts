@@ -520,6 +520,14 @@ export interface Purchase {
         quantity: number;
         import: number;
     }>;
+    payments: Array<{
+        type: string;
+        import: number;
+        cashReference: Cash;
+        paidBy: string;
+        paidByUid: string;
+        regDate: number;
+    }>;
     creditDate: number;
     totalImport: number;
     subtotalImport: number;
@@ -531,7 +539,6 @@ export interface Purchase {
     detractionApplies: boolean;
     detractionPercentage: number;
     detractionImport?: number;
-    detractionNumber?: string;
     detractionDate?: number;
     isRawMaterial?: boolean;
     source: string;
@@ -548,5 +555,4 @@ export interface Purchase {
     verifiedBy: string;
     verifiedByUid: string;
     verifiedDate: number;
-    cashReference: Cash;
 }

@@ -14,6 +14,7 @@ import { PurchasesRegisterAddProviderDialogComponent } from './purchases-registe
 import { PurchasesRegisterEditItemDialogComponent } from './purchases-register-edit-item-dialog/purchases-register-edit-item-dialog.component';
 import { PurchasesRegisterAddRawDialogComponent } from './purchases-register-add-raw-dialog/purchases-register-add-raw-dialog.component';
 import { PurchasesRegisterShowItemsDialogComponent } from './purchases-register-show-items-dialog/purchases-register-show-items-dialog.component';
+import { PurchasesRegisterShowPaymentsDialogComponent } from './purchases-register-show-payments-dialog/purchases-register-show-payments-dialog.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { PurchasesRegisterShowItemsDialogComponent } from './purchases-register-
     PurchasesRegisterAddProviderDialogComponent,
     PurchasesRegisterEditItemDialogComponent,
     PurchasesRegisterAddRawDialogComponent,
-    PurchasesRegisterShowItemsDialogComponent
+    PurchasesRegisterShowItemsDialogComponent,
+    PurchasesRegisterShowPaymentsDialogComponent
   ],
   imports: [
     CommonModule,
@@ -61,7 +63,8 @@ import { PurchasesRegisterShowItemsDialogComponent } from './purchases-register-
     PurchasesRegisterAddProviderDialogComponent,
     PurchasesRegisterEditItemDialogComponent,
     PurchasesRegisterAddRawDialogComponent,
-    PurchasesRegisterShowItemsDialogComponent
+    PurchasesRegisterShowItemsDialogComponent,
+    PurchasesRegisterShowPaymentsDialogComponent
   ]
 })
 export class RegisterDocumentsModule { }

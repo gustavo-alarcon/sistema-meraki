@@ -6,6 +6,8 @@ import { Subscription } from 'rxjs';
 import { DatabaseService } from 'src/app/core/database.service';
 import { AuthService } from 'src/app/core/auth.service';
 import { DebtsToPayShowItemsDialogComponent } from './debts-to-pay-show-items-dialog/debts-to-pay-show-items-dialog.component';
+import { DebtsToPayPayDialogComponent } from './debts-to-pay-pay-dialog/debts-to-pay-pay-dialog.component';
+import { DebtsToPayPartialPayDialogComponent } from './debts-to-pay-partial-pay-dialog/debts-to-pay-partial-pay-dialog.component';
 
 @Component({
   selector: 'app-debts-to-pay',
@@ -18,7 +20,7 @@ export class DebtsToPayComponent implements OnInit {
 
   filteredDebtsToPay: Array<Purchase> = [];
 
-  displayedColumns: string[] = ['index', 'regDate', 'documentDate', 'itemsList', 'documentType', 'documentSerial', 'documentCorrelative', 'provider', 'totalImport', 'subtotalImport', 'igvImport', 'paymentType', 'status', 'paidImport', 'indebtImport', 'detractionImport', 'detractionNumber', 'detractionDate', 'creditDate','createdBy', 'editedBy', 'approvedBy', 'verifiedByAccountant', 'actions'];
+  displayedColumns: string[] = ['index', 'regDate', 'documentDate', 'itemsList', 'documentType', 'documentSerial', 'documentCorrelative', 'provider', 'totalImport', 'subtotalImport', 'igvImport', 'paymentType', 'status', 'paidImport', 'indebtImport', 'payments', 'detractionImport', 'detractionDate', 'creditDate','createdBy', 'editedBy', 'approvedBy', 'verifiedByAccountant', 'actions'];
 
 
   dataSource = new MatTableDataSource();
@@ -73,8 +75,20 @@ export class DebtsToPayComponent implements OnInit {
     });
   }
 
-  payDebt(debt: Purchase): void {
-    
+  payTotalDebt(debt: Purchase): void {
+    this.dialog.open(DebtsToPayPayDialogComponent, {
+      data: {
+        debt: debt
+      }
+    });
+  }
+
+  payPartialDebt(debt: Purchase): void {
+    this.dialog.open(DebtsToPayPartialPayDialogComponent, {
+      data: {
+        debt: debt
+      }
+    });
   }
 
 }
