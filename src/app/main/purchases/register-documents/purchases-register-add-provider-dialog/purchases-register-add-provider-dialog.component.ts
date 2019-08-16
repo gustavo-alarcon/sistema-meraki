@@ -31,7 +31,6 @@ export class PurchasesRegisterAddProviderDialogComponent implements OnInit {
   createForm(): void {
     this.dataFormGroup = this.fb.group({
       name: [null, [Validators.required]],
-      shortName: null,
       ruc: [null, [Validators.required]],
       address: [null, [Validators.required]],
       phone: null
@@ -44,7 +43,6 @@ export class PurchasesRegisterAddProviderDialogComponent implements OnInit {
     const data = {
       id: '',
       name: this.dataFormGroup.value['name'],
-      shortName: this.dataFormGroup.value['shortName'],
       address: this.dataFormGroup.value['address'],
       ruc: this.dataFormGroup.value['ruc'],
       regDate: Date.now(),

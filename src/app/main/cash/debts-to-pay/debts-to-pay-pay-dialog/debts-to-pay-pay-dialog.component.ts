@@ -20,6 +20,9 @@ export class DebtsToPayPayDialogComponent implements OnInit {
 
   filteredCashList: Observable<Cash[]>;
 
+  paidSum: number = 0;
+  currentIndebt: number = 0;
+
   originAccounts = [
     'CUENTA SHIRLEY',
     'CUENTA INTERIORES',
@@ -44,6 +47,9 @@ export class DebtsToPayPayDialogComponent implements OnInit {
 
     this.createForm();
 
+    this.paidSum = this.getPaymentsSum(this.data.debt);
+    this.currentIndebt = this.data.debt.totalImport - this.paidSum;
+
     this.filteredCashList =
       this.dataFormGroup.get('cash').valueChanges
         .pipe(
@@ -61,6 +67,16 @@ export class DebtsToPayPayDialogComponent implements OnInit {
     })
   }
 
+  getPaymentsSum(debt: Purchase): number {
+    let sum = 0;
+
+    debt.payments.forEach(element => {
+      sum += element.import
+    });
+
+    return sum;
+  }
+
   showCash(cash: Cash): string | null {
     return cash ? cash.name : null;
   }
@@ -73,7 +89,8 @@ export class DebtsToPayPayDialogComponent implements OnInit {
       if (this.data.debt.payments) {
         this.data.debt.payments.push({
           type: 'TOTAL',
-          import: this.data.debt.indebtImport,
+          paymentType: this.dataFormGroup.value['paymentType'],
+          import: this.currentIndebt,
           cashReference: this.dataFormGroup.value['cash'],
           paidBy: this.auth.userInteriores.displayName,
           paidByUid: this.auth.userInteriores.uid,
@@ -82,7 +99,8 @@ export class DebtsToPayPayDialogComponent implements OnInit {
       } else {
         this.data.debt['payments'] = [{
           type: 'TOTAL',
-          import: this.data.debt.indebtImport,
+          paymentType: this.dataFormGroup.value['paymentType'],
+          import: this.currentIndebt,
           cashReference: this.dataFormGroup.value['cash'],
           paidBy: this.auth.userInteriores.displayName,
           paidByUid: this.auth.userInteriores.uid,
@@ -113,7 +131,7 @@ export class DebtsToPayPayDialogComponent implements OnInit {
                   regDate: Date.now(),
                   type: this.data.debt.isRawMaterial ? 'MATERIA PRIMA' : 'GASTO',
                   description: `${this.data.debt.provider.name}, ${this.data.debt.documentType} Serie: ${this.data.debt.documentSerial}, Correlativo: ${this.data.debt.documentCorrelative}`,
-                  import: this.data.debt.indebtImport,
+                  import: this.currentIndebt,
                   user: this.auth.userInteriores,
                   verified: false,
                   status: 'Grabado',

@@ -35,6 +35,8 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
   documentTypes = [
     'FACTURA',
     'BOLETA',
+    'RECIBO POR HONORARIOS',
+    'TICKET'
     // 'Recibo por honorarios electrónico',
     // 'Factura electrónica',
     // 'Boleta electrónica',

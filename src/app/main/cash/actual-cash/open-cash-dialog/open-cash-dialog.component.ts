@@ -51,19 +51,30 @@ export class OpenCashDialogComponent implements OnInit, OnDestroy {
           debounceTime(300),
         )
         .subscribe(res => {
-          if (res === this.currentCash.password) {
-            if (this.currentCash.open) {
-              this.snackbar.open(`Caja ${this.currentCash.name} ya se encuentra abierta`, 'Cerrar', {
-                duration: 6000
-              });
-              this.alreadyOpened = true;
-            } else {
-              this.rightPassword = true;
-              this.alreadyOpened = false;
+          try {
+            if (this.currentCash) {
+              if (res === this.currentCash.password) {
+                if (this.currentCash.open) {
+                  this.snackbar.open(`Caja ${this.currentCash.name} ya se encuentra abierta`, 'Cerrar', {
+                    duration: 6000
+                  });
+                  this.alreadyOpened = true;
+                } else {
+                  this.rightPassword = true;
+                  this.alreadyOpened = false;
+                }
+              } else {
+                this.rightPassword = false;
+                this.snackbar.open('Contraseña incorrecta', 'Cerrar', {
+                  duration: 6000
+                });
+              }
             }
-          } else {
-            this.rightPassword = false;
+          } catch (error) {
+            console.log(error);
           }
+
+
         });
 
     this.subscriptions.push(pass);

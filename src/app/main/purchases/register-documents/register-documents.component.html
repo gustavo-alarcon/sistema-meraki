@@ -8,8 +8,7 @@
                 <div>
                     <span class="mat-title ms-font-montserrat ms-color-11" style="font-weight: 900">
                         <mat-icon class="ms-icons-color" style="vertical-align:middle">receipt</mat-icon>
-                        Compras <mat-icon style="vertical-align:middle">keyboard_arrow_right</mat-icon> Registrar
-                        documento
+                        Compras <mat-icon style="vertical-align:middle">keyboard_arrow_right</mat-icon> Documentos
                     </span>
                 </div>
                 <div>
@@ -165,14 +164,14 @@
                             </ng-container>
 
                             <ng-container matColumnDef="paidImport">
-                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Importe pagado</th>
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Importe pagado<br><small>(INICIAL)</small></th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     {{raw.paidImport ? (raw.paidImport | currency : 'S/.') : '---'}}
                                 </td>
                             </ng-container>
 
                             <ng-container matColumnDef="indebtImport">
-                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Importe adeudado</th>
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Importe adeudado<br><small>(INICIAL)</small></th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     {{raw.indebtImport ? (raw.indebtImport | currency : 'S/.') : '---'}}
                                 </td>
@@ -183,7 +182,7 @@
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <ng-container *ngIf="raw.payments; else notPayments">
                                         <button mat-raised-button color="primary" (click)="showPayments(raw)"
-                                            [disabled]="!raw.payments.length"><mat-icon>list</mat-icon> Pagos</button>
+                                            [disabled]="!raw.payments.length"><mat-icon>list</mat-icon> Pagos a cuenta</button>
                                     </ng-container>
                                     <ng-template #notPayments>
                                         ---
@@ -256,7 +255,7 @@
                             </ng-container> -->
 
                             <ng-container matColumnDef="verifiedByAccountant">
-                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Verificado por contador
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Verificado por
                                 </th>
                                 <td mat-cell style="padding:0px 24px 0px 8px" *matCellDef="let raw">
                                     <span style="padding: 0.5em 0.5em; border-radius: 10px"

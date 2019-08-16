@@ -119,6 +119,7 @@ export class DebtsToPayPartialPayDialogComponent implements OnInit {
       if (this.data.debt.payments) {
         this.data.debt.payments.push({
           type: type,
+          paymentType: this.dataFormGroup.value['paymentType'],
           import: this.dataFormGroup.value['import'],
           cashReference: this.dataFormGroup.value['cash'],
           paidBy: this.auth.userInteriores.displayName,
@@ -128,6 +129,7 @@ export class DebtsToPayPartialPayDialogComponent implements OnInit {
       } else {
         this.data.debt['payments'] = [{
           type: type,
+          paymentType: this.dataFormGroup.value['paymentType'],
           import: this.dataFormGroup.value['import'],
           cashReference: this.dataFormGroup.value['cash'],
           paidBy: this.auth.userInteriores.displayName,

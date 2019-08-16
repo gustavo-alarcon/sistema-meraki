@@ -31,7 +31,7 @@ export class RegisterDocumentsComponent implements OnInit {
 
   filteredPurchases: Array<Purchase> = [];
 
-  displayedColumns: string[] = ['index', 'regDate', 'documentDate', 'itemsList', 'documentType', 'documentSerial', 'documentCorrelative', 'provider', 'totalImport', 'subtotalImport', 'igvImport', 'paymentType', 'status', 'paidImport', 'indebtImport', 'payments', 'detractionImport', 'detractionDate', 'creditDate', 'createdBy', 'editedBy', 'verifiedByAccountant', 'actions'];
+  displayedColumns: string[] = ['index', 'regDate', 'documentDate', , 'documentType', 'documentSerial', 'documentCorrelative', 'provider','itemsList', 'subtotalImport', 'igvImport', 'totalImport', 'paymentType', 'status', 'paidImport', 'indebtImport', 'payments', 'detractionImport', 'detractionDate', 'creditDate', 'createdBy', 'editedBy', 'verifiedByAccountant', 'actions'];
 
 
   dataSource = new MatTableDataSource();

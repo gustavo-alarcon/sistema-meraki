@@ -522,6 +522,7 @@ export interface Purchase {
     }>;
     payments: Array<{
         type: string;
+        paymentType: string;
         import: number;
         cashReference: Cash;
         paidBy: string;
