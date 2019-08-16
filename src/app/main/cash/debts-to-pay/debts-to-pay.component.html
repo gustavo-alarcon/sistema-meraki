@@ -166,7 +166,7 @@
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <ng-container *ngIf="raw.payments; else notPayments">
                                         <button mat-raised-button color="primary" (click)="showPayments(raw)"
-                                            [disabled]="!raw.payments.lenght"></button>
+                                            [disabled]="!raw.payments.length"><mat-icon>list</mat-icon> Pagos</button>
                                     </ng-container>
                                     <ng-template #notPayments>
                                         ---
@@ -222,19 +222,6 @@
                                     <span *ngIf="raw.editedDate">{{raw.editedDate | date : 'dd/MM/yyyy'}}</span><br>
                                     <span *ngIf="raw.editedDate" class="w3-small"><b>
                                             ({{raw.editedDate | date : 'hh:mm a'}})</b></span>
-                                </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="approvedBy">
-                                <th mat-header-cell style="padding:0px 8px; min-width:150px" *matHeaderCellDef
-                                    matTooltip="Ordenar tabla por solicitante" matTooltipPosition="above"
-                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
-                                    Aprobado por</th>
-                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
-                                    <span>{{raw.approvedBy ? raw.approvedBy : '---' }}</span><br>
-                                    <span *ngIf="raw.approvedDate">{{raw.approvedDate | date : 'dd/MM/yyyy'}}</span><br>
-                                    <span *ngIf="raw.approvedDate" class="w3-small"><b>
-                                            ({{raw.approvedDate | date : 'hh:mm a'}})</b></span>
                                 </td>
                             </ng-container>
 

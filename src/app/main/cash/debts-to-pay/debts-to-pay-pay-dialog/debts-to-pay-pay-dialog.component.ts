@@ -20,6 +20,17 @@ export class DebtsToPayPayDialogComponent implements OnInit {
 
   filteredCashList: Observable<Cash[]>;
 
+  originAccounts = [
+    'CUENTA SHIRLEY',
+    'CUENTA INTERIORES',
+    'CUENTA FERNANDO'
+  ]
+
+  paymentTypes = [
+    'EFECTIVO',
+    'TRANSFERENCIA'
+  ]
+
   constructor(
     public dbs: DatabaseService,
     public auth: AuthService,
@@ -44,7 +55,9 @@ export class DebtsToPayPayDialogComponent implements OnInit {
 
   createForm(): void {
     this.dataFormGroup = this.fb.group({
-      cash: [null, [Validators.required]]
+      cash: [null, [Validators.required]],
+      paymentType: [null, [Validators.required]],
+      originAccount: null
     })
   }
 
@@ -79,10 +92,7 @@ export class DebtsToPayPayDialogComponent implements OnInit {
 
       const data = {
         payments: this.data.debt.payments,
-        status: 'Pagado',
-        approvedBy: this.auth.userInteriores.displayName,
-        approvedByUid: this.auth.userInteriores.uid,
-        approvedDate: Date.now()
+        status: 'Pagado'
       };
 
       this.dbs.debtsToPayCollection
@@ -93,11 +103,48 @@ export class DebtsToPayPayDialogComponent implements OnInit {
             .doc(this.data.debt.id)
             .update(data)
             .then(() => {
-              this.loading = false;
-              this.snackbar.open(`Cuenta pagada con caja : ${this.dataFormGroup.value['cash'].name}.`, 'Cerrar', {
-                duration: 15000
-              });
-              this.dialogRef.close(true);
+              this.dbs.cashListCollection
+                .doc(this.dataFormGroup.value['cash'].id)
+                .collection('openings')
+                .doc(this.dataFormGroup.value['cash'].currentOpening)
+                .collection('transactions')
+                .add({
+                  id: '',
+                  regDate: Date.now(),
+                  type: this.data.debt.isRawMaterial ? 'MATERIA PRIMA' : 'GASTO',
+                  description: `${this.data.debt.provider.name}, ${this.data.debt.documentType} Serie: ${this.data.debt.documentSerial}, Correlativo: ${this.data.debt.documentCorrelative}`,
+                  import: this.data.debt.indebtImport,
+                  user: this.auth.userInteriores,
+                  verified: false,
+                  status: 'Grabado',
+                  ticketType: null,
+                  paymentType: this.dataFormGroup.value['paymentType'],
+                  expenseType: null,
+                  departureType: this.data.debt.isRawMaterial ? 'MATERIA PRIMA' : 'GASTO',
+                  originAccount: this.dataFormGroup.value['originAccount'],
+                  debt: 0,
+                  lastEditBy: null,
+                  lastEditUid: null,
+                  lastEditDate: null,
+                  approvedBy: null,
+                  approvedByUid: null,
+                  approvedDate: null
+                })
+                .then(ref => {
+                  ref.update({ id: ref.id })
+                  this.loading = false;
+                  this.snackbar.open(`Cuenta pagada con caja : ${this.dataFormGroup.value['cash'].name}.`, 'Cerrar', {
+                    duration: 15000
+                  });
+                  this.dialogRef.close(true);
+                })
+                .catch(err => {
+                  this.loading = false;
+                  console.log(err);
+                  this.snackbar.open('Hubo un error transfiriendo el egreso a caja!', 'Cerrar', {
+                    duration: 6000
+                  });
+                })
             })
             .catch(err => {
               console.log(err);
@@ -109,10 +156,10 @@ export class DebtsToPayPayDialogComponent implements OnInit {
         })
         .catch(err => {
           console.log(err);
-              this.loading = false;
-              this.snackbar.open('Hubo un error actualizando el documento en CUENTAS POR PAGAR!', 'Cerrar', {
-                duration: 6000
-              });
+          this.loading = false;
+          this.snackbar.open('Hubo un error actualizando el documento en CUENTAS POR PAGAR!', 'Cerrar', {
+            duration: 6000
+          });
         });
     }
 

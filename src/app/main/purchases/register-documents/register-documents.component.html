@@ -200,14 +200,6 @@
                                 </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="detractionNumber">
-                                <th mat-header-cell style="padding:0px 8px; min-width:130px" *matHeaderCellDef>Número de
-                                    detracción</th>
-                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
-                                    {{raw.detractionNumber ? raw.detractionNumber : '---'}}
-                                </td>
-                            </ng-container>
-
                             <ng-container matColumnDef="detractionDate">
                                 <th mat-header-cell style="padding:0px 8px; min-width:80px" *matHeaderCellDef>Fecha pago
                                     detracción</th>
@@ -250,7 +242,7 @@
                                 </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="approvedBy">
+                            <!-- <ng-container matColumnDef="approvedBy">
                                 <th mat-header-cell style="padding:0px 8px; min-width:150px" *matHeaderCellDef
                                     matTooltip="Ordenar tabla por solicitante" matTooltipPosition="above"
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
@@ -261,7 +253,7 @@
                                     <span *ngIf="raw.approvedDate" class="w3-small"><b>
                                             ({{raw.approvedDate | date : 'hh:mm a'}})</b></span>
                                 </td>
-                            </ng-container>
+                            </ng-container> -->
 
                             <ng-container matColumnDef="verifiedByAccountant">
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Verificado por contador

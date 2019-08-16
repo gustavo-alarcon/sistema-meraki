@@ -3,11 +3,11 @@ import { MatTableDataSource, MatPaginator, MatSort, MAT_DIALOG_DATA } from '@ang
 import { Purchase } from 'src/app/core/types';
 
 @Component({
-  selector: 'app-purchases-register-show-payments-dialog',
-  templateUrl: './purchases-register-show-payments-dialog.component.html',
+  selector: 'app-debts-to-pay-show-payments-dialog',
+  templateUrl: './debts-to-pay-show-payments-dialog.component.html',
   styles: []
 })
-export class PurchasesRegisterShowPaymentsDialogComponent implements OnInit {
+export class DebtsToPayShowPaymentsDialogComponent implements OnInit {
 
   displayedColumns: string[] = ['index', 'regDate', 'type', 'import', 'paidBy', 'cashReference'];
 
@@ -17,11 +17,11 @@ export class PurchasesRegisterShowPaymentsDialogComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { purchase: Purchase }
+    @Inject(MAT_DIALOG_DATA) public data: { debt: Purchase }
   ) { }
 
   ngOnInit() {
-    this.dataSource.data = this.data.purchase.payments;
+    this.dataSource.data = this.data.debt.payments;
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }

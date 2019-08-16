@@ -178,6 +178,14 @@
                                 <td mat-footer-cell *matFooterCellDef></td>
                             </ng-container>
 
+                            <ng-container matColumnDef="originAccount">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Cuenta de origen<br><small>(TRANSFERENCIA)</small></th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.originAccount ? raw.originAccount : '---'}}
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
                             <ng-container matColumnDef="approvedBy">
                                 <th mat-header-cell style="padding:0px 8px; min-width:170px" *matHeaderCellDef
                                     matTooltip="Ordenar tabla por precio de compra" matTooltipPosition="above"

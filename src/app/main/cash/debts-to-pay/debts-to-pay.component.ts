@@ -8,6 +8,7 @@ import { AuthService } from 'src/app/core/auth.service';
 import { DebtsToPayShowItemsDialogComponent } from './debts-to-pay-show-items-dialog/debts-to-pay-show-items-dialog.component';
 import { DebtsToPayPayDialogComponent } from './debts-to-pay-pay-dialog/debts-to-pay-pay-dialog.component';
 import { DebtsToPayPartialPayDialogComponent } from './debts-to-pay-partial-pay-dialog/debts-to-pay-partial-pay-dialog.component';
+import { DebtsToPayShowPaymentsDialogComponent } from './debts-to-pay-show-payments-dialog/debts-to-pay-show-payments-dialog.component';
 
 @Component({
   selector: 'app-debts-to-pay',
@@ -20,7 +21,7 @@ export class DebtsToPayComponent implements OnInit {
 
   filteredDebtsToPay: Array<Purchase> = [];
 
-  displayedColumns: string[] = ['index', 'regDate', 'documentDate', 'itemsList', 'documentType', 'documentSerial', 'documentCorrelative', 'provider', 'totalImport', 'subtotalImport', 'igvImport', 'paymentType', 'status', 'paidImport', 'indebtImport', 'payments', 'detractionImport', 'detractionDate', 'creditDate','createdBy', 'editedBy', 'approvedBy', 'verifiedByAccountant', 'actions'];
+  displayedColumns: string[] = ['index', 'regDate', 'documentDate', 'itemsList', 'documentType', 'documentSerial', 'documentCorrelative', 'provider', 'totalImport', 'subtotalImport', 'igvImport', 'paymentType', 'status', 'paidImport', 'indebtImport', 'payments', 'detractionImport', 'detractionDate', 'creditDate','createdBy', 'editedBy', 'verifiedByAccountant', 'actions'];
 
 
   dataSource = new MatTableDataSource();
@@ -67,10 +68,18 @@ export class DebtsToPayComponent implements OnInit {
     this.dataSource.data = this.filteredDebtsToPay; 
   }
 
-  showItemsList(list: any): void {
+  showItemsList(debt: Purchase): void {
     this.dialog.open(DebtsToPayShowItemsDialogComponent, {
       data: {
-        itemsList: list
+        debt: debt
+      }
+    });
+  }
+
+  showPayments(debt: Purchase): void {
+    this.dialog.open(DebtsToPayShowPaymentsDialogComponent, {
+      data: {
+        debt: debt
       }
     });
   }
@@ -90,5 +99,7 @@ export class DebtsToPayComponent implements OnInit {
       }
     });
   }
+
+
 
 }

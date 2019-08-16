@@ -4,13 +4,13 @@
 <mat-divider></mat-divider>
 <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
 
-<mat-dialog-content>
+<mat-dialog-content style="max-width:300px">
     <form [formGroup]="dataFormGroup">
         <p class="ms-font-montserrat ms-color-11 mat-body">El monto a pagar será dirigido a la caja seleccionada *</p>
-        <mat-form-field class="ms-fill w3-margin-right w3-margin-bottom" appearance="outline">
-            <mat-label>Caja destino</mat-label>
+        <mat-form-field class="ms-fill w3-margin-right w3-margin-bottom w3-block" appearance="outline">
+            <mat-label>Caja origen</mat-label>
             <mat-icon matSuffix>arrow_drop_down</mat-icon>
-            <input matInput type="text" formControlName="cash" [matAutocomplete]="cashAuto" placeholder="Tipo..."
+            <input matInput type="text" formControlName="cash" [matAutocomplete]="cashAuto" placeholder="Nombre..."
                 autocomplete="off">
             <mat-autocomplete #cashAuto="matAutocomplete" [displayWith]="showCash">
                 <mat-option *ngFor="let item of filteredCashList | async" [value]="item" [disabled]="!item.open">
@@ -19,6 +19,24 @@
             </mat-autocomplete>
             <mat-hint>Requerido *</mat-hint>
             <mat-error *ngIf="!dataFormGroup.valid">Seleccione una caja *</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="ms-fill w3-margin-right w3-margin-bottom w3-block" appearance="outline">
+            <mat-label>Tipo de pago</mat-label>
+            <mat-select formControlName="paymentType">
+                <mat-option *ngFor="let item of paymentTypes" [value]="item">{{item}}</mat-option>
+            </mat-select>
+            <mat-hint>Requerido *</mat-hint>
+            <mat-error *ngIf="!dataFormGroup.valid">Seleccione un tipo de pago*</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="ms-fill w3-margin-right w3-margin-bottom w3-block" appearance="outline" *ngIf="dataFormGroup.value['paymentType'] === 'TRANSFERENCIA'">
+            <mat-label>Cuenta de origen</mat-label>
+            <mat-select formControlName="originAccount">
+                <mat-option *ngFor="let item of originAccounts" [value]="item">{{item}}</mat-option>
+            </mat-select>
+            <mat-hint>Requerido *</mat-hint>
+            <mat-error *ngIf="!dataFormGroup.valid">Seleccione una cuenta de origen*</mat-error>
         </mat-form-field>
     </form>
 </mat-dialog-content>
