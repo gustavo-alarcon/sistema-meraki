@@ -162,7 +162,7 @@
                             </ng-container>
 
                             <ng-container matColumnDef="payments">
-                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Pagos</th>
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Pagos a cuenta</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <ng-container *ngIf="raw.payments; else notPayments">
                                         <button mat-raised-button color="primary" (click)="showPayments(raw)"

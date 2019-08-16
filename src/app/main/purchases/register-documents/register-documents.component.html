@@ -178,11 +178,11 @@
                             </ng-container>
 
                             <ng-container matColumnDef="payments">
-                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Pagos</th>
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Pagos a cuenta</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <ng-container *ngIf="raw.payments; else notPayments">
                                         <button mat-raised-button color="primary" (click)="showPayments(raw)"
-                                            [disabled]="!raw.payments.length"><mat-icon>list</mat-icon> Pagos a cuenta</button>
+                                            [disabled]="!raw.payments.length"><mat-icon>list</mat-icon> Pagos</button>
                                     </ng-container>
                                     <ng-template #notPayments>
                                         ---
@@ -255,7 +255,7 @@
                             </ng-container> -->
 
                             <ng-container matColumnDef="verifiedByAccountant">
-                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Verificado por
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Verificado
                                 </th>
                                 <td mat-cell style="padding:0px 24px 0px 8px" *matCellDef="let raw">
                                     <span style="padding: 0.5em 0.5em; border-radius: 10px"
