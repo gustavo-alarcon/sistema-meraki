@@ -811,6 +811,7 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
               itemsList: this.itemsList,
               payments: [{
                 type: 'TOTAL',
+                paymentType: this.dataFormGroup.value['paymentType'],
                 import: this.dataFormGroup.value['totalImport'],
                 cashReference: null,
                 paidBy: null,
@@ -987,6 +988,7 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
               itemsList: this.itemsList,
               payments: [{
                 type: 'TOTAL',
+                paymentType: this.dataFormGroup.value['paymentType'],
                 import: this.dataFormGroup.value['totalImport'],
                 cashReference: null,
                 paidBy: null,

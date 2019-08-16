@@ -9,7 +9,7 @@ import { Purchase } from 'src/app/core/types';
 })
 export class PurchasesRegisterShowPaymentsDialogComponent implements OnInit {
 
-  displayedColumns: string[] = ['index', 'regDate', 'type', 'import', 'paidBy', 'cashReference'];
+  displayedColumns: string[] = ['index', 'regDate', 'type', 'paymentType', 'import', 'paidBy', 'cashReference'];
 
   dataSource = new MatTableDataSource();
 
