@@ -21,8 +21,9 @@ export class DebtsToPayComponent implements OnInit {
 
   filteredDebtsToPay: Array<Purchase> = [];
 
-  displayedColumns: string[] = ['index', 'regDate', 'documentDate', 'itemsList', 'documentType', 'documentSerial', 'documentCorrelative', 'provider', 'totalImport', 'subtotalImport', 'igvImport', 'paymentType', 'status', 'paidImport', 'indebtImport', 'payments', 'detractionImport', 'detractionDate', 'creditDate','createdBy', 'editedBy', 'verifiedByAccountant', 'actions'];
+  currentDate = Date.now();
 
+  displayedColumns: string[] = ['index', 'regDate', 'documentDate', 'itemsList', 'documentType', 'documentSerial', 'documentCorrelative', 'provider', 'totalImport', 'subtotalImport', 'igvImport', 'paymentType', 'status', 'creditDate', 'paymentDate', 'paidImport', 'indebtImport', 'payments', 'detractionImport', 'detractionDate','createdBy', 'editedBy', 'verifiedByAccountant', 'actions'];
 
   dataSource = new MatTableDataSource();
 

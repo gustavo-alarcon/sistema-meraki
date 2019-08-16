@@ -679,6 +679,7 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
               itemsList: this.itemsList,
               payments: [],
               creditDate: this.dataFormGroup.value['creditDate'] ? this.dataFormGroup.value['creditDate'].valueOf() : null,
+              paymentDate: null,
               totalImport: this.dataFormGroup.value['totalImport'],
               subtotalImport: this.dataFormGroup.value['subtotalImport'],
               igvImport: this.dataFormGroup.value['igvImport'],
@@ -819,6 +820,7 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
                 regDate: Date.now()
               }],
               creditDate: this.dataFormGroup.value['creditDate'] ? this.dataFormGroup.value['creditDate'].valueOf() : null,
+              paymentDate: null,
               totalImport: this.dataFormGroup.value['totalImport'],
               subtotalImport: this.dataFormGroup.value['subtotalImport'],
               igvImport: this.dataFormGroup.value['igvImport'],
@@ -902,6 +904,7 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
               itemsList: this.itemsList,
               payments: [],
               creditDate: this.dataFormGroup.value['creditDate'] ? this.dataFormGroup.value['creditDate'].valueOf() : null,
+              paymentDate: null,
               totalImport: this.dataFormGroup.value['totalImport'],
               subtotalImport: this.dataFormGroup.value['subtotalImport'],
               igvImport: this.dataFormGroup.value['igvImport'],
@@ -996,6 +999,7 @@ export class PurchasesRegisterCreateDialogComponent implements OnInit {
                 regDate: Date.now()
               }],
               creditDate: this.dataFormGroup.value['creditDate'] ? this.dataFormGroup.value['creditDate'].valueOf() : null,
+              paymentDate: null,
               totalImport: this.dataFormGroup.value['totalImport'],
               subtotalImport: this.dataFormGroup.value['subtotalImport'],
               igvImport: this.dataFormGroup.value['igvImport'],

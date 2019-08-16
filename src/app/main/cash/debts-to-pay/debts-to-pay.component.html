@@ -142,7 +142,10 @@
                                     [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Estado</th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     <span style="padding: 8px 8px; border-radius: 10px"
-                                        [ngClass]="{'w3-green': raw.status === 'Pagado', 'w3-amber': raw.status === 'Pendiente', 'w3-black': raw.status === 'Anulado' }">{{raw.status}}</span>
+                                        [ngClass]="{'w3-green': raw.status === 'Pagado',
+                                                    'w3-amber': (raw.status === 'Pendiente' && (currentDate < raw.creditDate)),
+                                                    'w3-black': raw.status === 'Anulado',
+                                                    'w3-red': (raw.status === 'Pendiente' && (currentDate >= raw.creditDate))}">{{raw.status}}</span>
                                 </td>
                                 <td mat-footer-cell *matFooterCellDef></td>
                             </ng-container>
@@ -192,10 +195,17 @@
                             </ng-container>
 
                             <ng-container matColumnDef="creditDate">
-                                <th mat-header-cell style="padding:0px 8px; min-width:80px" *matHeaderCellDef>Fecha pago
-                                    documento<br> <small>(si fue CREDITO)</small></th>
+                                <th mat-header-cell style="padding:0px 8px; min-width:80px" *matHeaderCellDef>Fecha de vencimiento<br> <small>(CREDITO)</small></th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     {{raw.creditDate ? (raw.creditDate | date : 'dd/MM/yyyy') : '---'}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="paymentDate">
+                                <th mat-header-cell style="padding:0px 8px; min-width:80px" *matHeaderCellDef>Fecha pago
+                                    documento<br> <small>(CREDITO)</small></th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.paymentDate ? (raw.paymentDate | date : 'dd/MM/yyyy') : '---'}}
                                 </td>
                             </ng-container>
 

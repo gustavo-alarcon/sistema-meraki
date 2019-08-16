@@ -530,6 +530,7 @@ export interface Purchase {
         regDate: number;
     }>;
     creditDate: number;
+    paymentDate: number;
     totalImport: number;
     subtotalImport: number;
     igvImport: number;

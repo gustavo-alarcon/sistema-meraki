@@ -110,7 +110,10 @@ export class DebtsToPayPayDialogComponent implements OnInit {
 
       const data = {
         payments: this.data.debt.payments,
-        status: 'Pagado'
+        paidImport: this.data.debt.paidImport + this.dataFormGroup.value['import'],
+        indebtImport: this.data.debt.indebtImport - this.dataFormGroup.value['import'],
+        status: 'Pagado',
+        paymentDate: Date.now()
       };
 
       this.dbs.debtsToPayCollection

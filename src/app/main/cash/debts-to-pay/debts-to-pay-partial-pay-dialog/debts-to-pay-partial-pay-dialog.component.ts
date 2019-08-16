@@ -143,11 +143,16 @@ export class DebtsToPayPartialPayDialogComponent implements OnInit {
       if (this.dataFormGroup.value['import'] === this.currentIndebt) {
         data = {
           payments: this.data.debt.payments,
-          status: 'Pagado'
+          paidImport: this.data.debt.paidImport + this.dataFormGroup.value['import'],
+          indebtImport: this.data.debt.indebtImport - this.dataFormGroup.value['import'],
+          status: 'Pagado',
+          paymentDate: Date.now()
         };
       } else {
         data = {
-          payments: this.data.debt.payments
+          payments: this.data.debt.payments,
+          paidImport: this.data.debt.paidImport + this.dataFormGroup.value['import'],
+          indebtImport: this.data.debt.indebtImport - this.dataFormGroup.value['import'],
         };
       }
 

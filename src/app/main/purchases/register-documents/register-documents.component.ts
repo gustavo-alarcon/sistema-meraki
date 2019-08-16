@@ -31,7 +31,9 @@ export class RegisterDocumentsComponent implements OnInit {
 
   filteredPurchases: Array<Purchase> = [];
 
-  displayedColumns: string[] = ['index', 'regDate', 'documentDate', 'documentType', 'documentSerial', 'documentCorrelative', 'provider','itemsList', 'subtotalImport', 'igvImport', 'totalImport', 'paymentType', 'status', 'paidImport', 'indebtImport', 'payments', 'detractionImport', 'detractionDate', 'creditDate', 'createdBy', 'editedBy', 'verifiedByAccountant', 'actions'];
+  currentDate = Date.now();
+
+  displayedColumns: string[] = ['index', 'regDate', 'documentDate', 'documentType', 'documentSerial', 'documentCorrelative', 'provider','itemsList', 'subtotalImport', 'igvImport', 'totalImport', 'paymentType', 'status', 'creditDate', 'paymentDate', 'paidImport', 'indebtImport', 'payments', 'detractionImport', 'detractionDate', 'createdBy', 'editedBy', 'verifiedByAccountant', 'actions'];
 
 
   dataSource = new MatTableDataSource();
