@@ -220,7 +220,7 @@
                             </mat-option>
                             <ng-container *ngIf="isRawMaterial.value">
                                 <mat-option *ngFor="let item of filteredRawMaterials | async" [value]="item">
-                                    <span>{{item.name}}<br><small>{{item.brand}}</small></span>
+                                    <span>{{item.name}} | {{item.brand}}</span>
                                 </mat-option>
                             </ng-container>
 

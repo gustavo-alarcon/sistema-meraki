@@ -188,7 +188,7 @@
 
                             <ng-container matColumnDef="detractionDate">
                                 <th mat-header-cell style="padding:0px 8px; min-width:80px" *matHeaderCellDef>Fecha pago
-                                    detracción</th>
+                                    detracción<br><small>REFERENCIAL</small></th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     {{raw.detractionDate ? (raw.detractionDate | date : 'dd/MM/yyyy') : '---'}}
                                 </td>
