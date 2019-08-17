@@ -1,0 +1,101 @@
+<div class="ms-font-montserrat mat-title ms-color-11">
+    <mat-icon class="ms-icons-color" style="vertical-align:middle">list</mat-icon> Total
+</div>
+<mat-divider></mat-divider>
+
+<mat-dialog-content style="min-width:300px">
+    <div class="w3-row">
+        <div class="w3-third">
+            <div class="w3-margin">
+                <p class="ms-font-montserrat mat-subheading-2 ms-color-11">Caja (EFECTIVO)</p>
+                <table class="w3-table w3-striped w3-border mat-elevation-z8">
+                    <tr>
+                        <th style="min-width:150px">Fuente</th>
+                        <th>Importe</th>
+                    </tr>
+                    <tr>
+                        <td>Balance inicial:</td>
+                        <td>{{currentOpening ? (currentOpening.openingBalance | currency : 'S/.') : '---'}}</td>
+                    </tr>
+                    <tr>
+                        <td>Ingresos:</td>
+                        <td>{{data.totalTicketsByPaymentType['EFECTIVO'] | currency : 'S/.'}}</td>
+                    </tr>
+                    <tr>
+                        <td>Egresos:</td>
+                        <td>{{data.totalDeparturesByPaymentType['EFECTIVO'] | currency : 'S/.'}}</td>
+                    </tr>
+                    <tr class="w3-border-top w3-border-gray">
+                        <td>Total</td>
+                        <td>{{((data.totalTicketsByPaymentType['EFECTIVO'] - data.totalDeparturesByPaymentType['EFECTIVO']) + (currentOpening ? currentOpening.openingBalance : 0)) | currency : 'S/.'}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="w3-third">
+            <div class="w3-margin">
+                <p class="ms-font-montserrat mat-subheading2 ms-color-11">Ingresos por tipo</p>
+                <table class="w3-table w3-striped w3-border mat-elevation-z8">
+                    <tr>
+                        <th style="min-width:150px">Fuente</th>
+                        <th>Importe</th>
+                    </tr>
+                    <tr>
+                        <td>TARJETA VISA:</td>
+                        <td>{{data.totalTicketsByPaymentType['TARJETA VISA'] | currency : 'S/.'}}</td>
+                    </tr>
+                    <tr>
+                        <td>TARJETA MASTERCARD:</td>
+                        <td>{{data.totalTicketsByPaymentType['TARJETA MASTERCARD'] | currency : 'S/.'}}</td>
+                    </tr>
+                    <tr>
+                        <td>TARJETA ESTILOS:</td>
+                        <td>{{data.totalTicketsByPaymentType['TARJETA ESTILOS'] | currency : 'S/.'}}</td>
+                    </tr>
+                    <tr>
+                        <td>EFECTIVO:</td>
+                        <td>{{data.totalTicketsByPaymentType['EFECTIVO'] | currency : 'S/.'}}</td>
+                    </tr>
+                    <tr class="w3-border-top w3-border-gray">
+                        <td>Total</td>
+                        <td>{{data.totalTickets | currency : 'S/.'}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="w3-third">
+            <div class="w3-margin">
+                <p class="ms-font-montserrat mat-subheading2 ms-color-11">Egresos por tipo</p>
+                <table class="w3-table w3-striped w3-border mat-elevation-z8">
+                    <tr>
+                        <th style="min-width:150px">Fuente</th>
+                        <th>Importe</th>
+                    </tr>
+                    <tr>
+                        <td>TRANSFERENCIA:</td>
+                        <td>{{data.totalDeparturesByPaymentType['TRANSFERENCIA'] | currency : 'S/.'}}</td>
+                    </tr>
+                    <tr>
+                        <td>EFECTIVO:</td>
+                        <td>{{data.totalDeparturesByPaymentType['EFECTIVO'] | currency : 'S/.'}}</td>
+                    </tr>
+                    <tr class="w3-border-top w3-border-gray">
+                        <td>Total</td>
+                        <td>{{data.totalDepartures | currency : 'S/.'}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- <p class="ms-font-montserrat ms-color-11 mat-subheading-1">Balance inicial: <span>{{}}</span></p>
+    <p class="ms-font-montserrat ms-color-11 mat-subheading-1">Ingresos: <span>+ {{}}</span></p>
+    <p class="ms-font-montserrat ms-color-11 mat-subheading-1">Egresos: <span>- {{}}</span></p>
+    <p class="ms-font-montserrat ms-color-11 mat-subheading-1">Total: <span>{{}}</span></p> -->
+</mat-dialog-content>
+
+<mat-divider class="w3-margin-top"></mat-divider>
+<mat-dialog-actions align="end">
+    <button mat-stroked-button color="warn" class="w3-margin-right" mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

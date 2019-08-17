@@ -1,0 +1,229 @@
+<div style="min-height:100vh; background:rgba(230, 230, 250, 0.5)">
+    <div class="animated fadeInUpBig w3-margin-bottom" style="padding:16px">
+        <div class="w3-row w3-margin-bottom">
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+            <div class="w3-col s12 m10 l10">
+                <div>
+                    <span class="mat-title ms-font-montserrat ms-color-11" style="font-weight: 900">
+                        <mat-icon class="ms-icons-color" style="vertical-align:middle">book</mat-icon>
+                        Ventas <mat-icon style="vertical-align:middle">keyboard_arrow_right</mat-icon> Cotizaciones
+                    </span>
+                </div>
+                <div>
+                    <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
+                        (click)="createQuotation()">
+                        <mat-icon>add_circle</mat-icon> Crear
+                    </button>
+
+                    <mat-form-field class="w3-margin-left">
+                        <input matInput [matDatepicker]="dateFilter" [formControl]="monthFormControl">
+                        <mat-datepicker-toggle matSuffix [for]="dateFilter"></mat-datepicker-toggle>
+                        <mat-datepicker #dateFilter startView='year'
+                            (monthSelected)="setMonthOfView($event, dateFilter)" disabled="false">
+                        </mat-datepicker>
+                        <mat-hint>
+                            <strong>Filtrar contenido por mes y año</strong>
+                        </mat-hint>
+                    </mat-form-field>
+
+                    <button mat-button style="margin:0em 0.2em 1em 0.2em" disabled>
+                        <mat-icon>book</mat-icon> {{dbs.quotations.length | number: '2.0'}} Cotizaciones
+                    </button>
+                    <span style="margin-right:1em">
+                        <mat-form-field autocomplete="off" color="accent">
+                            <mat-label>Filtrar</mat-label>
+                            <mat-icon matPrefix style="margin-right:0.5em; vertical-align:text-bottom">filter_list
+                            </mat-icon>
+                            <input matInput type="text" placeholder="Escriba ..."
+                                (input)="filterData($event.target.value)" autocomplete="off">
+                        </mat-form-field>
+                    </span>
+                </div>
+                <mat-divider style="margin-top:16px"></mat-divider>
+                <p class="ms-font-montserrat ms-color-11" style="font-weight:600">{{currentMonth}} {{currentYear}}</p>
+            </div>
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+        </div>
+
+        <div class="w3-row">
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+            <div class="w3-col s12 m10 l10">
+                <div class="mat-elevation-z8">
+                    <div style=" overflow:auto">
+                        <table mat-table [dataSource]="dataSource" matSort style="width:100%">
+
+                            <ng-container matColumnDef="correlative" sticky>
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por código" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Correlativo</th>
+                                <td mat-cell style="padding:0px 8px" class="w3-border-right w3-border-lightgray"
+                                    *matCellDef="let raw">
+                                    {{'COT' + raw.correlative}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="regDate">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por fecha" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                                    Fecha</th>
+                                <td mat-cell style="padding:0px 8px" class="w3-center" *matCellDef="let req">
+                                    <span>{{req.regDate | date : 'dd/MM/yyyy'}}</span><br>
+                                    <span class="w3-small"><b> ({{req.regDate | date : 'hh:mm a'}})</b></span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="description">
+                                <th mat-header-cell style="padding:0px 8px; min-width:300px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por nombre" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Descripcion</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.description}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="deliveryDate">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Fecha de entrega
+                                    solicitada</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.deliveryDate | date: 'dd/MM/yyyy'}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="quantity">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Cantidad</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.quantity}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="files">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>
+                                    Archivos</th>
+                                <td mat-cell style="padding-right:8px; min-width:110px" *matCellDef="let req">
+                                    <ul>
+                                        <li class="w3-small" *ngIf="req.image1"><a [href]="req.image1"
+                                                target="_blank">Imagen 1</a></li>
+                                        <li class="w3-small" *ngIf="req.image2"><a [href]="req.image2"
+                                                target="_blank">Imagen 2</a></li>
+                                        <li class="w3-small" *ngIf="req.file1"><a [href]="req.file1" target="_blank">PDF
+                                                1</a></li>
+                                        <li class="w3-small" *ngIf="req.file2"><a [href]="req.file2" target="_blank">PDF
+                                                2</a></li>
+                                    </ul>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por estado" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                                    Estado</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let req">
+                                    <span style="padding: 8px 8px; border-radius: 10px"
+                                        [ngClass]="{'w3-amber': req.status === 'Enviado', 'w3-red': req.status === 'Rechazado', 'w3-green': req.status === 'Respondida', 'w3-black': req.status === 'Anulado', 'w3-purple': req.status === 'Referenciada'}">{{req.status}}</span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="orderReference">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Orden de pedido</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.orderReference ? ('OPe' + raw.orderReference) : '---'}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="recommendations">
+                                <th mat-header-cell style="padding:0px 8px; min-width:300px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Recomendaciones</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.recommendations ? raw.recommendations : '---'}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="import">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Costo</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.import ? (raw.import | currency : 'S/.') : '---'}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="proposedDate">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Fecha de entrega
+                                    propuesta</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.proposedDate ? (raw.proposedDate | date: 'dd/MM/yyyy') : '---'}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="quotationPDF">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por categoría" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Cotización PDF</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    <ul>
+                                        <li class="w3-small" *ngIf="raw.quotationPDF"><a [href]="raw.quotationPDF"
+                                                target="_blank">Imagen 1</a></li>
+                                    </ul>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="actions" stickyEnd>
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let req">
+                                    <mat-menu #reqMenu="matMenu">
+                                        <button mat-menu-item (click)="previewQuotation(req)">
+                                            <mat-icon class="ms-icons-color">description</mat-icon> Vista previa
+                                        </button>
+                                        <button mat-menu-item (click)="printQuotation(req)">
+                                            <mat-icon class="ms-icons-color">print</mat-icon> Imprimir
+                                        </button>
+                                        <button mat-menu-item (click)="editQuotation(req)"
+                                            *ngIf="req.status !== 'Referenciada' || req.status === 'Anulado'">
+                                            <mat-icon class="ms-icons-color">edit</mat-icon> Editar
+                                        </button>
+                                        <button mat-menu-item (click)="cancelQuotation(req)"
+                                            *ngIf="req.status === 'Enviado'">
+                                            <mat-icon class="ms-icons-color">cancel</mat-icon> Anular
+                                        </button>
+                                        <button mat-menu-item (click)="restoreQuotation(req)"
+                                            *ngIf="req.status === 'Anulado'">
+                                            <mat-icon class="ms-icons-color">history</mat-icon> Restaurar
+                                        </button>
+                                    </mat-menu>
+                                    <button mat-icon-button [matMenuTriggerFor]="reqMenu">
+                                        <mat-icon>more_vert</mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                        </table>
+                    </div>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                </div>
+            </div>
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>

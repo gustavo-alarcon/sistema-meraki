@@ -1,0 +1,23 @@
+<div class="ms-font-montserrat mat-title ms-color-11">
+    <mat-icon class="ms-icons-color" style="vertical-align:middle">check_circle</mat-icon> Anular transacción
+</div>
+
+<mat-dialog-content>
+    <p class="ms-font-montserrat">¿Está seguro de anular el importe: <b>{{data.transaction.import}}</b>?</p>
+    <p class="ms-font-montserrat">Tipo: <b>{{data.transaction.type}}</b></p>
+    <p class="ms-font-montserrat">Descripción: <b>{{data.transaction.description}}</b></p>
+
+    <mat-progress-bar mode="indeterminate" style="margin-bottom:0.5em" *ngIf="uploading"></mat-progress-bar>
+
+    <div style="display:flex; align-items:center" *ngIf="uploading">
+        <mat-icon class="w3-margin-right" [ngStyle]="{'color': flags.canceled ? 'forestgreen' : 'gray'}">check_circle
+        </mat-icon>
+        <span class="w3-margin-right ms-font-montserrat w3-small">Cancelando transacción</span>
+    </div>
+</mat-dialog-content>
+
+<mat-divider class="w3-margin-top"></mat-divider>
+<mat-dialog-actions align="end">
+    <button mat-stroked-button color="warn" class="w3-margin-right" mat-dialog-close>No</button>
+    <button mat-raised-button color="primary" (click)="cancel()" [disabled]="uploading">Si, anular</button>
+</mat-dialog-actions>

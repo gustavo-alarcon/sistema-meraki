@@ -1,0 +1,53 @@
+<h2 class="ms-font-montserrat mat-title" mat-dialog-title>
+    <mat-icon class="ms-icons-color" style="vertical-align:middle">edit</mat-icon> Editar requerimiento
+</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+    <p class="ms-font-montserrat w3-margin-bottom">¿Está seguro de modificar el requerimiento OR{{data.req.correlative}}?</p>
+
+    <mat-progress-bar mode="indeterminate" style="margin-bottom:0.5em" *ngIf="uploading"></mat-progress-bar>
+
+    <div style="display:flex; align-items:center animated fadeInLeft" *ngIf="uploading">
+        <mat-icon class="w3-margin-right" [ngStyle]="{'color': flags.created ? 'forestgreen' : 'gray'}">check_circle
+        </mat-icon>
+        <span class="w3-margin-right ms-font-montserrat w3-small">Documento guardado</span>
+    </div>
+
+    <div style="display:flex; align-items:center animated fadeInLeft" *ngIf="data['image1'] && uploading">
+        <mat-icon class="w3-margin-right" [ngStyle]="{'color': flags.upload1 ? 'forestgreen' : 'gray'}">check_circle
+        </mat-icon>
+        <span class="w3-margin-right ms-font-montserrat w3-small"> Imagen 1</span>
+        <mat-progress-bar color="accent" mode="buffer" [value]="uploadPercent1 | async" *ngIf="uploading1">
+        </mat-progress-bar>
+    </div>
+
+    <div style="display:flex; align-items:center animated fadeInLeft" *ngIf="data['image2'] && uploading">
+        <mat-icon class="w3-margin-right" [ngStyle]="{'color': flags.upload2 ? 'forestgreen' : 'gray'}">check_circle
+        </mat-icon>
+        <span class="w3-margin-right ms-font-montserrat w3-small"> Imagen 2</span>
+        <mat-progress-bar color="accent" mode="buffer" [value]="uploadPercent2 | async" *ngIf="uploading2">
+        </mat-progress-bar>
+    </div>
+
+    <div style="display:flex; align-items:center animated fadeInLeft" *ngIf="data['file1'] && uploading">
+        <mat-icon class="w3-margin-right" [ngStyle]="{'color': flags.upload3 ? 'forestgreen' : 'gray'}">check_circle
+        </mat-icon>
+        <span class="w3-margin-right ms-font-montserrat w3-small"> Archivo 1</span>
+        <mat-progress-bar color="accent" mode="buffer" [value]="uploadPercent3 | async" *ngIf="uploading3">
+        </mat-progress-bar>
+    </div>
+
+    <div style="display:flex; align-items:center animated fadeInLeft" *ngIf="data['file2'] && uploading">
+        <mat-icon class="w3-margin-right" [ngStyle]="{'color': flags.upload4 ? 'forestgreen' : 'gray'}">check_circle
+        </mat-icon>
+        <span class="w3-margin-right ms-font-montserrat w3-small"> Archivo 2</span>
+        <mat-progress-bar color="accent" mode="buffer" [value]="uploadPercent4 | async" *ngIf="uploading4">
+        </mat-progress-bar>
+    </div>
+
+
+</mat-dialog-content>
+<mat-dialog-actions class="w3-margin-top w3-margin-bottom">
+    <button mat-stroked-button color="warn" class="w3-margin-right" mat-dialog-close>No</button>
+    <button mat-raised-button color="primary" (click)="save()">Si, editar</button>
+</mat-dialog-actions>

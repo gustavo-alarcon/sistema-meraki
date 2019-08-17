@@ -1,0 +1,42 @@
+<div style="min-height:100vh; background:rgba(230, 230, 250, 0.5)">
+    <div class="animated fadeInUpBig w3-margin-bottom" style="padding:16px"> 
+
+        <div class="w3-row">
+            <div class="w3-col s0 m2 l2">
+                <p></p>
+            </div>
+            <div class="w3-col s12 m8 l8">
+                <div>
+                    <span class="mat-title ms-font-montserrat  ms-color-11" style="font-weight: 900">
+                        <mat-icon class="ms-icons-color" style="vertical-align:middle">assignment</mat-icon>
+                        Ventas <mat-icon style="vertical-align:middle">keyboard_arrow_right</mat-icon> Requerimientos
+                    </span>
+                </div>
+
+                <nav mat-tab-nav-bar>
+                    <a mat-tab-link *ngFor="let link of navLinks" [routerLink]="link.path" routerLinkActive
+                        #rla="routerLinkActive" [active]="rla.isActive">
+                        {{link.label}}
+                    </a>
+                </nav>
+            </div>
+            <div class="w3-col s0 m2 l2">
+                <p></p>
+            </div>
+        </div>
+
+        <div class="w3-row">
+            <div class="w3-col s0 m2 l2">
+                <p></p>
+            </div>
+            <div class="w3-col s12 m8 l8">
+                <div class="w3-padding-bottom">
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+            <div class="w3-col s0 m2 l2">
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>

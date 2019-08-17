@@ -1,0 +1,390 @@
+<div>
+    <div class="mat-elevation-z8">
+        <div style="display:flex; align-items:center; padding: 16px 24px 0px 24px"
+            [ngStyle]="{'padding-bottom': deviceFormat === 'mobile' ? '16px' : '0px', 'justify-content':deviceFormat === 'mobile' ? 'space-between' : ''}">
+            <button mat-fab style="background:#321937; color:white" (click)="toggleSideMenu()"
+                *ngIf="deviceFormat === 'mobile'">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <span class="ms-fill"*ngIf="deviceFormat === 'mobile'"></span>
+            <img src="../../../assets/images/logo.png" alt="logo interiores" style="height:8vh">
+            <span class="ms-fill" ></span>
+            <button mat-button class="mat-subheading-1" style="margin:0px; border:1px solid #321937; border-radius:10px"
+                [matMenuTriggerFor]="accountMenu" *ngIf="deviceFormat !== 'mobile'">
+                <mat-icon class="ms-icons-color" style="vertical-align:middle">account_circle</mat-icon>
+                {{auth.userInteriores ? auth.userInteriores.displayName : '---'}}
+                <mat-icon class="ms-icons-color" style="vertical-align:middle">keyboard_arrow_down</mat-icon>
+            </button>
+            <button mat-button class="mat-subheading-1" style="margin:0px; border:1px solid #321937; border-radius:10px"
+                [matMenuTriggerFor]="accountMenu" *ngIf="deviceFormat === 'mobile'">
+                <mat-icon class="ms-icons-color" style="vertical-align:middle">account_circle</mat-icon>
+                <mat-icon class="ms-icons-color" style="vertical-align:middle">keyboard_arrow_down</mat-icon>
+            </button>
+            <mat-menu #accountMenu="matMenu">
+                <button mat-menu-item *ngIf="deviceFormat === 'mobile'" disabled>
+                    <mat-icon>account_circle</mat-icon>
+                    {{auth.userInteriores ? auth.userInteriores.displayName : '---'}}
+                </button>
+                <button mat-menu-item>
+                    <mat-icon>settings</mat-icon> Configuración
+                </button>
+                <button mat-menu-item>
+                    <mat-icon>vpn_key</mat-icon> Cambiar clave
+                </button>
+                <button mat-menu-item (click)="auth.signOut()">
+                    <mat-icon>eject</mat-icon> Cerrar sesión
+                </button>
+                <button mat-menu-item>
+                    <mat-icon>info</mat-icon> Ayuda
+                </button>
+                <button mat-menu-item disabled>version 1.4.0b</button>
+            </mat-menu>
+        </div>
+
+        <mat-tab-group dynamicHeight *ngIf="deviceFormat === 'web' || deviceFormat === 'tablet'"
+            [selectedIndex]="selectedTab.value" (selectedIndexChange)="selectedTab.setValue($event)">
+            <mat-tab label="Ventas" [disabled]="!permits.salesSection">
+                <div class="w3-padding w3-border-bottom w3-border-lightgray">
+                    <div style="display:flex">
+                        <div class="w3-margin-right">
+                            <button mat-button class="w3-small"
+                                [ngClass]="{'ms-button-selected': buttonOptions.sales.requirements}"
+                                routerLink="sales/requirements/form" [disabled]="!permits.salesRequirementsButton">
+                                <mat-icon class="ms-icons-color">assignment</mat-icon> Requerimientos
+                            </button><br>
+                            <button mat-button class="w3-small"
+                                [ngClass]="{'ms-button-selected': buttonOptions.sales.orders}"
+                                routerLink="sales/orders/form" [disabled]="!permits.salesOrdersButton">
+                                <mat-icon class="ms-icons-color">assignment</mat-icon> Pedidos
+                            </button><br>
+                        </div>
+                        <div class="w3-margin-right">
+                            <button mat-button class="w3-small"
+                                [ngClass]="{'ms-button-selected': buttonOptions.sales.quotations}"
+                                routerLink="sales/quotations" [disabled]="!permits.salesQuotationsButton">
+                                <mat-icon class="ms-icons-color">book</mat-icon> Cotizaciones
+                            </button><br>
+                        </div>
+                        <div class="w3-border-left w3-border-lightgray w3-margin-right">
+                            <button mat-button class="w3-small"
+                                [ngClass]="{'ms-button-selected': buttonOptions.sales.stores}" routerLink="sales/stores"
+                                [disabled]="!permits.salesStoresButton">
+                                <mat-icon class="ms-icons-color">store</mat-icon> Tiendas
+                            </button><br>
+                            <button mat-button class="w3-small"
+                                [ngClass]="{'ms-button-selected': buttonOptions.sales.checkStock}"
+                                routerLink="sales/check-stock" [disabled]="!permits.salesCheckStockButton">
+                                <mat-icon class="ms-icons-color">search</mat-icon> Consultar
+                            </button><br>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Producción" [disabled]="!permits.productionSection">
+                <div class="w3-padding  w3-border-bottom w3-border-lightgray">
+                    <div style="display:flex">
+                        <div>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.production.requirements}"
+                                routerLink="production/requirements" [disabled]="!permits.productionRequirementsButton">
+                                <mat-icon class="ms-icons-color">assignment</mat-icon> Requerimientos
+                            </button><br>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.production.orders}"
+                                routerLink="production/orders" [disabled]="!permits.productionOrdersButton">
+                                <mat-icon class="ms-icons-color">assignment</mat-icon> Pedidos
+                            </button><br>
+                        </div>
+                        <div class="w3-margin-right">
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.production.quotations}"
+                                routerLink="production/quotations" [disabled]="!permits.productionQuotationsButton">
+                                <mat-icon class="ms-icons-color">book</mat-icon> Cotizaciones
+                            </button><br>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.production.production}"
+                                routerLink="production/production"
+                                [disabled]="!permits.productionProductionOrdersButton">
+                                <mat-icon class="ms-icons-color">build</mat-icon> Producción
+                            </button><br>
+                        </div>
+                        <div class="w3-border-left w3-border-lightgray w3-margin-right">
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.production.materials}"
+                                routerLink="production/raw-material" [disabled]="!permits.productionRawMaterialsButton">
+                                <mat-icon class="ms-icons-color">view_module</mat-icon> Materia prima
+                            </button><br>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.production.finishedProducts}"
+                                routerLink="production/finished-products"
+                                [disabled]="!permits.productionFinishedProductsButton">
+                                <mat-icon class="ms-icons-color">local_offer</mat-icon> Productos acabados
+                            </button><br>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Logística" [disabled]="!permits.logisticSection">
+                <div class="w3-padding  w3-border-bottom w3-border-lightgray">
+                    <div style="display:flex">
+                        <div>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.logistic.receptions}"
+                                routerLink="logistic/receptions" [disabled]="!permits.logisticReceptionsButton">
+                                <mat-icon class="ms-icons-color">play_for_work</mat-icon> Recepciones
+                            </button><br>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.logistic.transfers}"
+                                routerLink="logistic/transfers" [disabled]="!permits.logisticTransfersButton">
+                                <mat-icon class="ms-icons-color">local_shipping</mat-icon> Traslados
+                            </button><br>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Caja" [disabled]="!permits.cashSection">
+                <div class="w3-padding  w3-border-bottom w3-border-lightgray">
+                    <div style="display:flex">
+                        <div>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.cash.manage}" routerLink="cash/manage"
+                                [disabled]="!permits.cashManageButton">
+                                <mat-icon class="ms-icons-color">local_atm</mat-icon> Administrar cajas
+                            </button><br>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.cash.actual}" routerLink="cash/actual"
+                                [disabled]="!permits.cashActualButton">
+                                <mat-icon class="ms-icons-color">account_balance_wallet</mat-icon> Caja actual
+                            </button><br>
+                        </div>
+                        <div class="w3-border-left w3-border-lightgray w3-margin-right">
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.cash.debtsToPay}"
+                                routerLink="cash/debts-to-pay" [disabled]="!permits.cashDebtsToPayButton">
+                                <mat-icon class="ms-icons-color">date_range</mat-icon> Cuentas por pagar
+                            </button><br>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Compras" [disabled]="!permits.purchasesSection">
+                <div class="w3-padding">
+                    <div style="display:flex">
+                        <div>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.purchases.registerDocuments}"
+                                routerLink="purchases/register-documents"
+                                [disabled]="!permits.purchasesRegisterDocumentsButton">
+                                <mat-icon class="ms-icons-color">receipt</mat-icon> Documentos
+                            </button><br>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+    <mat-progress-bar mode="indeterminate" *ngIf="loadingRouteConfig"></mat-progress-bar>
+
+    <router-outlet *ngIf="deviceFormat === 'web' || deviceFormat === 'tablet'">
+    </router-outlet>
+
+
+    <mat-sidenav-container *ngIf="deviceFormat === 'mobile'">
+        <mat-sidenav mode="over" #sideMenu [(opened)]="openedMenu" class="mat-elevation-z8">
+            <div>
+                <mat-expansion-panel style="width:15em; box-shadow:none; border-radius:0px 0px 0px 0px"
+                    class="w3-border-top w3-border-light-grey" [ngClass]="{'ms-expansion-panel-menu':salesOpenedFlag}"
+                    (opened)="salesOpened()" (closed)="salesClosed()">
+                    <mat-expansion-panel-header *ngIf="permits.salesSection">
+                        <mat-panel-title style="font-weight:500"
+                            [ngClass]="{'ms-expansion-panel-title':salesOpenedFlag}">
+                            <mat-icon style="vertical-align:middle; margin-right:0.3em">shopping_cart</mat-icon>
+                            Ventas
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.sales.quotations}" routerLink="sales/quotations"
+                        style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
+                        *ngIf="permits.salesQuotationsButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">book
+                        </mat-icon> Cotizaciones
+                    </button>
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.sales.requirements}"
+                        routerLink="sales/requirements/form" style="text-align:left;border-radius:0px 0px 0px 0px"
+                        (click)="toggleSideMenu()" *ngIf="permits.salesRequirementsButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">assignment
+                        </mat-icon> Requerimiento
+                    </button>
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.sales.orders}" routerLink="sales/orders/form"
+                        style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
+                        *ngIf="permits.salesOrdersButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            assignment_turned_in
+                        </mat-icon> Pedidos
+                    </button>
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.sales.stores}" routerLink="sales/stores"
+                        style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
+                        *ngIf="permits.salesStoresButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">store
+                        </mat-icon> Tiendas
+                    </button>
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.sales.checkStock}"
+                        routerLink="sales/check-stock"
+                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
+                        (click)="toggleSideMenu()" *ngIf="permits.salesCheckStockButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">search
+                        </mat-icon> Consultar stock
+                    </button>
+                    <p class="w3-margin-bottom"></p>
+
+                </mat-expansion-panel>
+                <mat-expansion-panel style="width:15em; box-shadow:none; border-radius:0px 0px 0px 0px"
+                    class="w3-border-top w3-border-light-grey"
+                    [ngClass]="{'ms-expansion-panel-menu':productionOpenedFlag}" (opened)="productionOpened()"
+                    (closed)="productionClosed()">
+                    <mat-expansion-panel-header *ngIf="permits.productionSection">
+                        <mat-panel-title style="font-weight:500"
+                            [ngClass]="{'ms-expansion-panel-title':productionOpenedFlag}">
+                            <mat-icon style="vertical-align:middle; margin-right:0.3em">build</mat-icon>
+                            Producción
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.production.quotations}"
+                        routerLink="production/quotations" style="text-align:left;border-radius:0px 0px 0px 0px"
+                        (click)="toggleSideMenu()" *ngIf="permits.productionQuotationsButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">book
+                        </mat-icon> Cotizaciones
+                    </button>
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.production.requirements}"
+                        routerLink="production/requirements" style="text-align:left;border-radius:0px 0px 0px 0px"
+                        (click)="toggleSideMenu()" *ngIf="permits.productionRequirementsButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">assignment
+                        </mat-icon> Requerimiento
+                    </button>
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.production.orders}"
+                        routerLink="production/orders" style="text-align:left;border-radius:0px 0px 0px 0px"
+                        (click)="toggleSideMenu()" *ngIf="permits.productionOrdersButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            assignment_turned_in
+                        </mat-icon> Pedidos
+                    </button>
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.production.production}"
+                        routerLink="production/production" style="text-align:left;border-radius:0px 0px 0px 0px"
+                        (click)="toggleSideMenu()" *ngIf="permits.productionProductionOrdersButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">build
+                        </mat-icon> Producción
+                    </button>
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.production.materials}"
+                        routerLink="production/raw-material" style="text-align:left;border-radius:0px 0px 0px 0px"
+                        (click)="toggleSideMenu()" *ngIf="permits.productionRawMaterialsButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">view_module
+                        </mat-icon> Materia prima
+                    </button>
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.production.finishedProducts}"
+                        routerLink="production/finished-products"
+                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
+                        (click)="toggleSideMenu()" *ngIf="permits.productionFinishedProductsButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">local_offer
+                        </mat-icon> Productos acabados
+                    </button>
+                    <p class="w3-margin-bottom"></p>
+
+                </mat-expansion-panel>
+                <mat-expansion-panel style="width:15em; box-shadow:none; border-radius:0px 0px 0px 0px"
+                    class="w3-border-top w3-border-light-grey"
+                    [ngClass]="{'ms-expansion-panel-menu':logisticOpenedFlag}" (opened)="logisticOpened()"
+                    (closed)="logisticClosed()">
+                    <mat-expansion-panel-header *ngIf="permits.logisticSection">
+                        <mat-panel-title style="font-weight:500"
+                            [ngClass]="{'ms-expansion-panel-title':logisticOpenedFlag}">
+                            <mat-icon style="vertical-align:middle; margin-right:0.3em">local_shipping</mat-icon>
+                            Logística
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.logistic.receptions}"
+                        routerLink="logistic/receptions" style="text-align:left;border-radius:0px 0px 0px 0px"
+                        (click)="toggleSideMenu()" *ngIf="permits.logisticReceptionsButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">play_for_work
+                        </mat-icon> Recepciones
+                    </button>
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.logistic.transfers}"
+                        routerLink="logistic/transfers"
+                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
+                        (click)="toggleSideMenu()" *ngIf="permits.logisticTransfersButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">local_offer
+                        </mat-icon> Traslados
+                    </button>
+                    <p class="w3-margin-bottom"></p>
+
+                </mat-expansion-panel>
+                <mat-expansion-panel style="width:15em; box-shadow:none; border-radius:0px 0px 0px 0px"
+                    class="w3-border-top w3-border-light-grey" [ngClass]="{'ms-expansion-panel-menu':cashOpenedFlag}"
+                    (opened)="cashOpened()" (closed)="cashClosed()">
+                    <mat-expansion-panel-header *ngIf="permits.cashSection">
+                        <mat-panel-title style="font-weight:500"
+                            [ngClass]="{'ms-expansion-panel-title':cashOpenedFlag}">
+                            <mat-icon style="vertical-align:middle; margin-right:0.3em">account_balance</mat-icon>
+                            Caja
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.cash.mange}" routerLink="cash/manage"
+                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
+                        (click)="toggleSideMenu()" *ngIf="permits.cashManageButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            account_balance_wallet
+                        </mat-icon> Administrar cajas
+                    </button>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.cash.debtsToPay}" routerLink="cash/debts-to-pay"
+                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
+                        (click)="toggleSideMenu()" *ngIf="permits.cashDebtsToPayButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            date_range
+                        </mat-icon> Cuentas por pagar
+                    </button>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.cash.actual}" routerLink="cash/actual"
+                        style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
+                        *ngIf="permits.cashActualButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            account_balance_wallet
+                        </mat-icon> Caja actual
+                    </button>
+
+                    <!-- <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.cash.previous}" routerLink="cash/previous"
+                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
+                        (click)="toggleSideMenu()" *ngIf="permits.cashPreviousButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            account_balance_wallet
+                        </mat-icon> Caja anterior
+                    </button> -->
+                    <p class="w3-margin-bottom"></p>
+
+                </mat-expansion-panel>
+            </div>
+        </mat-sidenav>
+        <mat-sidenav-content style="min-height:82vh">
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

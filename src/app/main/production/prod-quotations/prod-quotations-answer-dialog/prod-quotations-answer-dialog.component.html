@@ -1,0 +1,45 @@
+<div class="ms-font-montserrat mat-title ms-color-11">
+    <mat-icon class="ms-icons-color" style="vertical-align:middle">check_circle</mat-icon> Responder cotización
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+<mat-dialog-content style="max-width:300px">
+    <form [formGroup]="dataFormGroup">
+
+        <mat-form-field class="w3-margin-right w3-block" appearance="outline">
+            <mat-label>Recomendaciones</mat-label>
+            <textarea matInput placeholder="Describa las recomendaciones ..." cols="10" rows="5"
+                formControlName="recommendations"></textarea>
+            <mat-hint>requerido *</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
+            <mat-label>Costo/Importe</mat-label>
+            <input matInput type="number" min="0" step="1" formControlName="import" placeholder="Escriba...">
+            <mat-hint>requerido *</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
+            <mat-label>Fecha propuesta</mat-label>
+            <input matInput [matDatepicker]="myDatepicker" [min]="minDate" formControlName="proposedDate">
+            <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #myDatepicker></mat-datepicker>
+            <mat-hint>requerido *</mat-hint>
+        </mat-form-field>
+
+        <input #fileInput5 style="display: none" type="file" (change)="onFileSelected5($event)">
+        <button class="ms-icons-color w3-margin-right w3-margin-bottom" mat-stroked-button
+            (click)="fileInput5.click()">Adjuntar Cotización PDF
+            <mat-icon *ngIf="selectedFile5">check_circle</mat-icon>
+            <span class="w3-small">{{selectedFile5 ? selectedFile5.name.substring(0,25) : '' }}</span>
+        </button><br>
+
+    </form>
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+<mat-dialog-actions align="end">
+    <button mat-stroked-button class="w3-margin-right" color="warn" mat-dialog-close>Cancelar</button>
+    <button mat-raised-button class="w3-margin-right" color="primary" (click)="answer()"
+        [disabled]="!dataFormGroup.valid">Responder</button>
+</mat-dialog-actions>

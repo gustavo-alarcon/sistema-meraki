@@ -1,0 +1,244 @@
+<div style="min-height:100vh; background:rgba(230, 230, 250, 0.5)">
+    <div class="animated fadeInUpBig w3-margin-bottom" style="padding:16px">
+        <div class="w3-row w3-margin-bottom">
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+            <div class="w3-col s12 m10 l10">
+                <div style="margin-bottom: 8px">
+                    <span class="mat-title ms-font-montserrat ms-color-11" style="font-weight: 900">
+                        <mat-icon class="ms-icons-color" style="vertical-align:middle">account_balance_wallet</mat-icon>
+                        Caja <mat-icon style="vertical-align:middle">keyboard_arrow_right</mat-icon> Caja actual
+                    </span>
+                </div>
+                <div>
+                    <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
+                        (click)="openCash()" *ngIf="currentCash ? !currentCash.open : true">
+                        <mat-icon>attach_money</mat-icon> Abrir caja
+                    </button>
+
+                    <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
+                        (click)="closeCash()" *ngIf="currentCash ? currentCash.open : false">
+                        <mat-icon>money_off</mat-icon> Cerrar caja
+                    </button>
+
+                    <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
+                        (click)="showTotal()" *ngIf="!!currentCash">
+                        <mat-icon>list</mat-icon> Ver total
+                    </button>
+
+                    <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
+                        (click)="showHistory()" *ngIf="!!currentCash">
+                        <mat-icon>history</mat-icon> Historial
+                    </button>
+
+                    <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
+                        (click)="addMoney()" *ngIf="!!currentCash">
+                        <mat-icon>add_circle</mat-icon> Agregar dinero
+                    </button>
+
+                    <button mat-raised-button class="ms-icons-color" style="margin:0em 0.2em 1em 0.2em"
+                        (click)="retriveMoney()" *ngIf="!!currentCash">
+                        <mat-icon>remove_circle</mat-icon> Retirar dinero
+                    </button><br>
+
+
+                    <div style="display: flex">
+                        <span class="mat-title ms-font-montserrat ms-color-11 w3-margin-right" style="font-weight: 600">
+                            {{currentCash ? currentCash.name : '---'}}
+                        </span>
+
+                        <span class="ms-fill"></span>
+
+                        <mat-menu #rawMenu="matMenu">
+                            <button mat-menu-item (click)="editOpeningBalance()">
+                                <mat-icon class="ms-icons-color">attach_money</mat-icon> Alterar saldo inicial de caja
+                            </button>
+                            <button mat-menu-item (click)="editOpeningDate()">
+                                <mat-icon class="ms-icons-color">av_timer</mat-icon> Corregir fecha y hora de apertura
+                            </button>
+                            <button mat-menu-item (click)="printCash()">
+                                <mat-icon class="ms-icons-color">print</mat-icon> Imprimir
+                            </button>
+                            <button mat-menu-item (click)="exportCash()">
+                                <mat-icon class="ms-icons-color">open_in_new</mat-icon> Exportar
+                            </button>
+                        </mat-menu>
+                        <button mat-icon-button [matMenuTriggerFor]="rawMenu">
+                            <mat-icon>more_horiz</mat-icon>
+                        </button>
+                    </div>
+
+
+
+                    <mat-form-field autocomplete="off" class="w3-block">
+                        <mat-label>Filtrar</mat-label>
+                        <mat-icon matPrefix style="margin-right:0.5em; vertical-align:text-bottom">filter_list
+                        </mat-icon>
+                        <input matInput type="text" placeholder="Escriba ..." (input)="filterData($event.target.value)"
+                            autocomplete="off">
+                    </mat-form-field>
+
+
+                </div>
+                <!-- <mat-divider></mat-divider> -->
+            </div>
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+        </div>
+
+        <div class="w3-row">
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+            <div class="w3-col s12 m10 l10">
+                <div class="mat-elevation-z8">
+                    <div style=" overflow:auto">
+                        <table mat-table [dataSource]="dataSource" matSort style="width:100%">
+
+                            <ng-container matColumnDef="index" sticky>
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>N°</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw; let i = index">
+                                    {{raw.index + 1}}
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="regDate">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por fecha" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Fecha</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    <span *ngIf="raw.regDate">{{raw.regDate | date : 'dd/MM/yyyy'}}</span><br>
+                                    <span *ngIf="raw.regDate" class="w3-small"><b>
+                                            ({{raw.regDate | date : 'hh:mm a'}})</b></span>
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="type">
+                                <th mat-header-cell style="padding:0px 8px; min-width:170px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por tipo" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Tipo</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.type}}
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="description">
+                                <th mat-header-cell style="padding:0px 8px; min-width:170px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por descripción" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Descripción</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.description}}
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef style="text-align:right; padding-right:8px"> <b>Total</b></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="import">
+                                <th mat-header-cell style="padding:0px 8px; min-width:150px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por importe" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Importe</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    <span [ngClass]="{'w3-text-gray': raw.status === 'Anulado'}"><mat-icon style="vertical-align:middle; margin-right:0.2em">{{raw.ticketType ? 'add_circle' : 'remove_circle'}}</mat-icon>{{raw.import | currency : 'S/.'}}</span>
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef class="w3-topbar" style="padding: 0px 8px"> <mat-icon style="vertical-align:middle;margin-right:0.2em">attach_money</mat-icon> {{totalImport | currency : 'S./'}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="user">
+                                <th mat-header-cell style="padding:0px 8px; min-width:180px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por usuario" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Usuario</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.user.displayName}}
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="verified">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por estado" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Verificado</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    <span style="padding: 8px 8px; border-radius: 10px"
+                                        [ngClass]="{'w3-green': raw.status === 'Aprobado', 'w3-amber': !raw.verified, 'w3-black': raw.status === 'Anulado' }">{{raw.status}}</span>
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="paymentType">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por tipo de pago" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Tipo de pago</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.paymentType}}
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="originAccount">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Cuenta de origen<br><small>(TRANSFERENCIA)</small></th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.originAccount ? raw.originAccount : '---'}}
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="approvedBy">
+                                <th mat-header-cell style="padding:0px 8px; min-width:170px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por precio de compra" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>Aprobado por</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.approvedBy}}
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="debt">
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef
+                                    matTooltip="Ordenar tabla por precio de compra" matTooltipPosition="above"
+                                    [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>En deuda</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    {{raw.debt | currency : 'S/.'}}
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="actions" stickyEnd>
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
+                                <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                                    <mat-menu #rawMenu="matMenu">
+                                        <button mat-menu-item (click)="approveTransaction(raw)">
+                                            <mat-icon class="ms-icons-color">check_circle</mat-icon> Aprobar
+                                        </button>
+                                        <button mat-menu-item (click)="editTransaction(raw)">
+                                            <mat-icon class="ms-icons-color">edit</mat-icon> Editar
+                                        </button>
+                                        <button mat-menu-item (click)="cancelTransaction(raw)">
+                                            <mat-icon class="ms-icons-color">cancel</mat-icon> Anular
+                                        </button>
+                                    </mat-menu>
+                                    <button mat-icon-button [matMenuTriggerFor]="rawMenu">
+                                        <mat-icon>more_vert</mat-icon>
+                                    </button>
+                                </td>
+                                <td mat-footer-cell *matFooterCellDef></td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+
+                        </table>
+                    </div>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                </div>
+            </div>
+            <div class="w3-col s0 m1 l1">
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>

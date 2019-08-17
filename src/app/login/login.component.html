@@ -1,0 +1,54 @@
+<div class="w3-display-container animated fadeIn delay-5 slower ms-login-bg" style="min-height:100vh">
+
+    <div class="w3-display-middle ms-login-card mat-elevation-z8" style="background:white"
+        *ngIf="!auth.userInteriores; else getStarted">
+        <img style="width:100%; margin-bottom:1em" src="../../assets/images/logo.png" alt="logo interiores">
+        <mat-divider color="primary"></mat-divider>
+
+        <mat-progress-bar mode="indeterminate" *ngIf="auth.authLoader"></mat-progress-bar>
+
+        <mat-form-field class="w3-block w3-margin-right w3-margin-bottom w3-margin-top" appearance="outline">
+            <mat-label>Correo</mat-label>
+            <input matInput type="email" required placeholder="Escriba..." [formControl]="email">
+
+            <mat-hint>
+                requerido *
+            </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field class="w3-block w3-margin-right w3-margin-bottom" appearance="outline">
+            <mat-label>Contraseña</mat-label>
+            <mat-pass-toggle-visibility #togglePassword matSuffix></mat-pass-toggle-visibility>
+            <input matInput [type]="togglePassword.type" required placeholder="Escriba..." (keyup.enter)="checkAuth()"
+                [formControl]="password">
+
+            <mat-hint>
+                requerido *
+            </mat-hint>
+        </mat-form-field>
+
+        <br>
+        <div (click)="checkAuth()" class="w3-center w3-btn w3-block w3-round ms-login-btn">Ingresar</div>
+    </div>
+
+    <ng-template #getStarted>
+        <div class="w3-display-middle ms-login-card mat-elevation-z8 w3-center" style="background:white">
+            <div class="w3-padding">
+                <img style="width:100%" src="../../assets/images/logo.png" alt="logo interriores">
+            </div>
+            <mat-divider></mat-divider>
+            <div style="margin:16px 0px">
+                <span class="ms-font-montserrat ms-color-11 mat-display-1" style="font-weight:900">Hola,
+                    {{auth.userInteriores.name}} {{auth.userInteriores.lastname}}</span>
+            </div>
+            <div (click)="goToDashboard()" class="w3-center w3-btn w3-block ms-login-btn w3-round">Ir al dashboard</div>
+            <br>
+            <div (click)="auth.signOut()" class="w3-center w3-blue-gray w3-btn w3-block w3-round">Cerrar sesión</div>
+        </div>
+    </ng-template>
+
+    <div class="w3-display-bottomright">
+        <p style="color: white; margin-right:1em">v1.4.0b</p>
+    </div>
+
+</div>

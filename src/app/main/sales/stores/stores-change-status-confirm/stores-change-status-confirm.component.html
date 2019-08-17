@@ -1,0 +1,18 @@
+<h2 class="ms-font-montserrat mat-title" mat-dialog-title>
+    <mat-icon class="ms-icons-color" style="vertical-align:middle">edit_attributes</mat-icon> Cambiar estado
+</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+    <mat-progress-bar mode="indeterminate" style="margin-bottom:0.5em" *ngIf="uploading"></mat-progress-bar>
+
+    <mat-form-field class="w3-margin-bottom" appearance="outline">
+        <mat-label>Estado</mat-label>
+        <mat-select [formControl]="status">
+            <mat-option *ngFor="let status of statusList" [value]="status">{{status}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions class="w3-margin-bottom" align="end">
+    <button mat-stroked-button color="warn" class="w3-margin-right" mat-dialog-close>No</button>
+    <button mat-raised-button color="primary" (click)="change()">Cambiar</button>
+</mat-dialog-actions>

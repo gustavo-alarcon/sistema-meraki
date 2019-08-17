@@ -1,0 +1,136 @@
+<div class="ms-font-montserrat mat-title ms-color-11">
+    <mat-icon class="ms-icons-color" style="vertical-align:middle">local_shipping</mat-icon> Nuevo traslado
+</div>
+
+<mat-dialog-content>
+    <form [formGroup]="dataFormGroup">
+        <div class="w3-row">
+            <div class="w3-half">
+                <div class="w3-margin">
+                    <span class="ms-color-11 mat-subheading-1 w3-margin-bottom"><b>Lugares</b></span>
+                    <mat-divider class="w3-margin-bottom"></mat-divider>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Origen</mat-label>
+                        <mat-icon matSuffix>arrow_drop_down</mat-icon>
+                        <input matInput type="text" formControlName="origin" [matAutocomplete]="originAuto"
+                            placeholder="Escriba..." autocomplete="off">
+                        <mat-autocomplete #originAuto="matAutocomplete" [displayWith]="showStore"
+                            (optionSelected)="selectedOrigin($event)">
+                            <mat-option *ngFor="let item of filteredOriginStores | async" [value]="item">
+                                {{item.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint>Requerido *</mat-hint>
+                        <mat-error *ngIf="!dataFormGroup.valid">Seleccione un origen *</mat-error>
+                    </mat-form-field><br>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Destino</mat-label>
+                        <mat-icon matSuffix>arrow_drop_down</mat-icon>
+                        <input matInput type="text" formControlName="destination" [matAutocomplete]="destinationAuto"
+                            placeholder="Escriba..." autocomplete="off">
+                        <mat-autocomplete #destinationAuto="matAutocomplete" [displayWith]="showStore">
+                            <mat-option *ngFor="let item of filteredDestinationStores | async" [value]="item">
+                                {{item.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint>Requerido *</mat-hint>
+                        <mat-error *ngIf="!dataFormGroup.valid">Seleccione un destino *</mat-error>
+                    </mat-form-field><br>
+                </div>
+            </div>
+            <div class="w3-half">
+                <div class="w3-margin">
+                    <span class="ms-color-11 mat-subheading-1 w3-margin-bottom"><b>Items</b></span>
+                    <mat-divider class="w3-margin-bottom"></mat-divider>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Producto</mat-label>
+                        <mat-icon matSuffix>arrow_drop_down</mat-icon>
+                        <input matInput type="text" formControlName="product" [matAutocomplete]="productAuto"
+                            placeholder="Escriba..." autocomplete="off">
+                        <mat-hint>Requerido *</mat-hint>
+                        <mat-autocomplete #productAuto="matAutocomplete" [displayWith]="showProduct"
+                            (optionSelected)="selectedProduct($event)">
+                            <mat-option *ngFor="let item of filteredProducts | async" [value]="item">
+                                {{item.name}} | {{item.code}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Serie</mat-label>
+                        <mat-icon matSuffix>arrow_drop_down</mat-icon>
+                        <input matInput type="text" formControlName="serialNumber" [matAutocomplete]="serialNumberAuto"
+                            placeholder="Escriba..." autocomplete="off">
+                        <mat-hint>Requerido *</mat-hint>
+                        <mat-autocomplete #serialNumberAuto="matAutocomplete" [displayWith]="showSerialNumber"
+                            (optionSelected)="selectedSerialNumber($event)">
+                            <ng-container *ngFor="let item of filteredSerialNumbers | async; let i = index ">
+                                <mat-option [value]="item" *ngIf="!selectedSerials[currentSerialIndex][i] && !(item.status === 'Traslado') && !(item.status === 'Vendido')">
+                                    #{{item.serie | number: '2.'}} | {{item.color}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field><br>
+                </div>
+            </div>
+        </div>
+        <div class="mat-elevation-z8 w3-margin-top w3-margin-bottom">
+            <div style=" overflow:auto">
+                <table mat-table [dataSource]="dataSource" matSort style="width:100%">
+
+                    <ng-container matColumnDef="serie">
+                        <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Serie</th>
+                        <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                            #{{raw.serie | number : '2.'}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef mat-sort-header>Nombre
+                        </th>
+                        <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                            {{raw.name}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="color">
+                        <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef mat-sort-header>Color
+                        </th>
+                        <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                            {{raw.color}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef mat-sort-header>Estado
+                        </th>
+                        <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
+                            {{raw.status}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Acciones</th>
+                        <td mat-cell style="padding:0px 8px" *matCellDef="let raw; let i = index">
+                            <button mat-icon-button (click)="removeProduct(i, raw)">
+                                <mat-icon class="ms-icons-color">delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+                </table>
+            </div>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+    </form>
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+<mat-dialog-actions align="end">
+    <button mat-stroked-button class="w3-margin-right" color="warn" mat-dialog-close>Cancelar</button>
+    <button mat-raised-button class="w3-margin-right" color="primary" (click)="transfer()"
+        [disabled]="!dataFormGroup.valid">Trasladar</button>
+</mat-dialog-actions>
