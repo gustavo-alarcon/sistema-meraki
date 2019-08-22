@@ -13,6 +13,8 @@ import {LayoutModule} from '@angular/cdk/layout';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MenuShowReleaseNotesDialogComponent } from './menu-show-release-notes-dialog/menu-show-release-notes-dialog.component';
+import { MatDividerModule, MatDialogModule } from '@angular/material';
 
 
 
@@ -20,7 +22,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
-    MenuComponent
+    MenuComponent,
+    MenuShowReleaseNotesDialogComponent
   ],
   imports: [
     CommonModule,
@@ -32,10 +35,15 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatMenuModule,
     MatSidenavModule,
     MatExpansionModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatDividerModule,
+    MatDialogModule
   ],
   exports: [
     MenuComponent
+  ],
+  entryComponents: [
+    MenuShowReleaseNotesDialogComponent
   ]
 })
 export class MenuModule { }

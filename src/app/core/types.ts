@@ -8,6 +8,7 @@ export interface User {
     password: string;
     permitId: string;
     db: string;
+    releaseNotesSeen: string;
     regDate: number;
 }
 
