@@ -71,12 +71,39 @@
                 </td>
             </ng-container>
 
-            <ng-container matColumnDef="quantity">
-                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por cantidad"
+            <ng-container matColumnDef="totalImport">
+                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por importe total"
                     matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
-                    Cantidad</th>
+                    Importe total</th>
                 <td mat-cell style="padding:0px 8px" *matCellDef="let req">
-                    {{req.quantity | number : '2.2'}}
+                    {{req.totalImport ? (req.totalImport | currency : 'S/.') : '---'}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="paidImport">
+                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por importe pagado"
+                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                    Importe a cuenta</th>
+                <td mat-cell style="padding:0px 8px" *matCellDef="let req">
+                    {{req.paidImport ? (req.paidImport | currency : 'S/.') : '---'}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="indebtImport">
+                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por importe en deuda"
+                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                    Importe en deuda</th>
+                <td mat-cell style="padding:0px 8px" *matCellDef="let req">
+                    {{req.indebtImport ? (req.indebtImport | currency : 'S/.') : '---'}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="cash">
+                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef matTooltip="Ordenar tabla por caja"
+                    matTooltipPosition="above" [matTooltipDisabled]="!disableTooltips.value" mat-sort-header>
+                    Caja</th>
+                <td mat-cell style="padding:0px 8px" *matCellDef="let req">
+                    {{req.cash ? req.cash.name : '---'}}
                 </td>
             </ng-container>
 

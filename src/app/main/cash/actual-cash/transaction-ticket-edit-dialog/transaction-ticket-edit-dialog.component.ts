@@ -27,6 +27,8 @@ export class TransactionTicketEditDialogComponent implements OnInit {
   ticketTypes = [
     'VENTA',
     'SERVICIO',
+    'PEDIDO',
+    'SEPARACION',
     'OTRO'
   ]
 

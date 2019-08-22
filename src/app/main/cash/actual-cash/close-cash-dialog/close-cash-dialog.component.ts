@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 export class CloseCashDialogComponent implements OnInit, OnDestroy {
 
   uploading: boolean = false;
+  
   rightPassword: boolean = false;
 
   dataFormGroup: FormGroup;

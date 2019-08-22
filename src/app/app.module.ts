@@ -28,7 +28,6 @@ import { MatPasswordStrengthModule } from '@angular-material-extensions/password
     AppRoutingModule,
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase, 'Sistema interiores'),
-    AngularFirePerformanceModule,
     AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
     AngularFireStorageModule,

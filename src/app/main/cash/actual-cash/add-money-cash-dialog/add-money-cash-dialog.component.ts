@@ -28,6 +28,8 @@ export class AddMoneyCashDialogComponent implements OnInit {
   ticketTypes = [
     'VENTA',
     'SERVICIO',
+    'PEDIDO',
+    'SEPARACION',
     'OTRO'
   ]
 

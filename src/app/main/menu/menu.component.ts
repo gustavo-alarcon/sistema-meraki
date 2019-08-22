@@ -6,6 +6,9 @@ import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Permit } from 'src/app/core/types';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { MatDialog } from '@angular/material';
+import { MenuShowReleaseNotesDialogComponent } from './menu-show-release-notes-dialog/menu-show-release-notes-dialog.component';
+import { DatabaseService } from 'src/app/core/database.service';
 
 @Component({
   selector: 'app-menu',
@@ -119,7 +122,9 @@ export class MenuComponent implements OnInit, OnDestroy {
   constructor(
     breakpointObserver: BreakpointObserver,
     private router: Router,
-    public auth: AuthService
+    public auth: AuthService,
+    public dbs: DatabaseService,
+    private dialog: MatDialog
   ) {
     breakpointObserver.observe([
       Breakpoints.HandsetLandscape,
@@ -149,11 +154,21 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
     const permit$ =
       this.auth.currentDataPermit.subscribe(res => {
         if (res.name) {
           this.permits = res;
           this.checkRoute(this.router.url);
+
+          this.dbs.currentDataReleaseNotes
+            .subscribe(res => {
+              if (res) {
+                if (res.value !== this.auth.userInteriores.releaseNotesSeen) {
+                  this.openReleaseNotes();
+                }
+              }
+            });
         }
       });
 
@@ -394,7 +409,7 @@ export class MenuComponent implements OnInit, OnDestroy {
         case '/main/cash/debts-to-pay':
           this.selectedTab.setValue(3);
           this.cleanButtons();
-          this.buttonOptions.cash.debtsToPay= true;
+          this.buttonOptions.cash.debtsToPay = true;
           coincidence = true;
           break;
 
@@ -422,6 +437,15 @@ export class MenuComponent implements OnInit, OnDestroy {
       this.selectedTab.setValue(0);
       this.router.navigate(['/main']);
     }
+  }
+
+  openReleaseNotes(): void {
+    this.dialog.open(MenuShowReleaseNotesDialogComponent)
+      .afterClosed().subscribe(res => {
+        this.dbs.usersCollection
+          .doc(this.auth.userInteriores.uid)
+          .update({ releaseNotesSeen: this.dbs.releaseNotes.value })
+      });
   }
 
 }

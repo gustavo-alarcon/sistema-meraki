@@ -1,14 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Provider, RawMaterial } from 'src/app/core/types';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { Observable, Subscription, of, BehaviorSubject } from 'rxjs';
+import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { DatabaseService } from 'src/app/core/database.service';
 import { MatDialogRef, MatSnackBar, MatDialog, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
-import { RawMaterialCreateDialogComponent } from 'src/app/main/production/raw-material/raw-material-create-dialog/raw-material-create-dialog.component';
 import { startWith, map, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { isObjectValidator } from 'src/app/core/is-object-validator';
 import { PurchasesRegisterAddProviderDialogComponent } from '../purchases-register-add-provider-dialog/purchases-register-add-provider-dialog.component';
-import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 import { PurchasesRegisterEditItemDialogComponent } from '../purchases-register-edit-item-dialog/purchases-register-edit-item-dialog.component';
 import { PurchasesRegisterAddRawDialogComponent } from '../purchases-register-add-raw-dialog/purchases-register-add-raw-dialog.component';
 import { AngularFirestore } from '@angular/fire/firestore';

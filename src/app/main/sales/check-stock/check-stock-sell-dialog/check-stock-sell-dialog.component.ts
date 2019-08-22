@@ -129,7 +129,6 @@ export class CheckStockSellDialogComponent implements OnInit {
           ref.update({ id: ref.id })
             .then(() => {
               const store = this.dbs.stores.filter(option => option.name === this.data.serial.location);
-              console.log(store);
               this.dbs.storesCollection
                 .doc(store[0].id)
                 .collection('products')

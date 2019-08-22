@@ -41,5 +41,5 @@
 <mat-dialog-actions align="end">
     <button mat-stroked-button class="w3-margin-right" color="warn" mat-dialog-close>Cancelar</button>
     <button mat-raised-button class="w3-margin-right" color="primary" (click)="answer()"
-        [disabled]="!dataFormGroup.valid">Responder</button>
+        [disabled]="!dataFormGroup.valid || loading">Responder</button>
 </mat-dialog-actions>

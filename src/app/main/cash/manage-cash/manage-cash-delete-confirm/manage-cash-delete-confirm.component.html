@@ -20,5 +20,5 @@
 <mat-divider class="w3-margin-top"></mat-divider>
 <mat-dialog-actions align="end">
     <button mat-stroked-button  class="w3-margin-right" mat-dialog-close>No</button>
-    <button mat-raised-button color="warn" (click)="delete()">Si, borrar</button>
+    <button mat-raised-button color="warn" (click)="delete()" [disabled]="uploading">Si, borrar</button>
 </mat-dialog-actions>

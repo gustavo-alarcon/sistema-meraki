@@ -8,6 +8,7 @@ export interface User {
     password: string;
     permitId: string;
     db: string;
+    releaseNotesSeen: string;
     regDate: number;
 }
 
@@ -159,6 +160,10 @@ export interface Order {
     proposedDate?: number;
     status: string;
     quantity: number;
+    totalImport: number;
+    paidImport: number;
+    indebtImport: number;
+    cash: Cash;
     description: string;
     image1: string;
     image2: string;
@@ -269,6 +274,10 @@ export interface ProductionOrder {
     status: string;
     color?: string;
     quantity: number;
+    totalImport?: number;
+    paidImport?: number;
+    indebtImport?: number;
+    cash?: Cash;
     description: string;
     image1: string;
     image2: string;

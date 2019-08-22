@@ -124,13 +124,13 @@
                                             (click)="receiveTransfer(raw)">
                                             <mat-icon class="ms-icons-color">assignment_turned_in</mat-icon> Recibir
                                         </button>
-                                        <button mat-menu-item *ngIf="raw.status === 'Solicitado'"
+                                        <!-- <button mat-menu-item *ngIf="raw.status === 'Solicitado'"
                                             (click)="cancelTransfer(raw)">
                                             <mat-icon class="ms-icons-color">cancel</mat-icon> Anular
-                                        </button>
+                                        </button> -->
                                     </mat-menu>
                                     <button mat-icon-button [matMenuTriggerFor]="rawMenu"
-                                        [disabled]="raw.status === 'Anulado' || raw.status === 'Rechazado' || raw.status === 'Recibido'">
+                                        [disabled]="raw.status !== 'Aprobado'">
                                         <mat-icon>more_vert</mat-icon>
                                     </button>
                                 </td>

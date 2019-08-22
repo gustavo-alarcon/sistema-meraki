@@ -24,8 +24,8 @@
         </mat-form-field>
 
         <mat-form-field class="ms-fill w3-margin-right w3-margin-bottom w3-block" appearance="outline">
-            <mat-label>Importe</mat-label>
-            <input matInput type="number" [min]="0" formControlName="import" autocomplete="off" [placeholder]="currentIndebt">
+            <mat-label>Importe (S/.)</mat-label>
+            <input matInput type="number" [min]="0" formControlName="import" autocomplete="off" [placeholder]="currentIndebt | currency : 'S/.'">
             <mat-hint>Requerido *</mat-hint>
             <mat-error *ngIf="!dataFormGroup.valid">Debe asignar una cantidad *</mat-error>
         </mat-form-field>
