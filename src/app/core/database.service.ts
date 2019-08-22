@@ -236,6 +236,15 @@ export class DatabaseService {
   public currentDataProviders = this.dataProviders.asObservable();
 
   /**
+   * RELEASE NOTES
+   */
+  releaseNotesDocument: AngularFirestoreDocument<any>;
+  releaseNotes: any = '';
+
+  public dataReleaseNotes = new BehaviorSubject<any>('');
+  public currentDataReleaseNotes = this.dataReleaseNotes.asObservable();
+
+  /**
    * CURRENT CASH
    */
   // currentCashDocument: AngularFirestoreDocument<CurrentCash>;
@@ -286,6 +295,7 @@ export class DatabaseService {
 
     this.auth.currentDataPermit.subscribe(res => {
       if (res.name) {
+        this.getReleaseNotes();
         this.getUsers();
         this.getDocuments();
         this.getRequirements(from, to);
@@ -314,6 +324,17 @@ export class DatabaseService {
       }
     })
 
+  }
+
+  getReleaseNotes(): void {
+    this.releaseNotesDocument = this.af.doc(`db/${this.auth.userInteriores.db}/releaseNotes/current`);
+    this.releaseNotesDocument.valueChanges()
+      .subscribe(res => {
+        if (res) {
+          this.releaseNotes = res;
+          this.dataReleaseNotes.next(res);
+        }
+      })
   }
 
   getUsers(): void {
@@ -438,10 +459,10 @@ export class DatabaseService {
     this.quotationsToReferenceCollection = this.af.collection<Quotation>(`db/${this.auth.userInteriores.db}/quotations`, ref => ref.where('status', '==', 'Respondida'));
 
     this.quotationsToReferenceCollection.valueChanges()
-    .subscribe(res => {
-      this.quotationsToReference = res;
-      this.dataQuotationsToReference.next(res);
-    });
+      .subscribe(res => {
+        this.quotationsToReference = res;
+        this.dataQuotationsToReference.next(res);
+      });
   }
 
   getQuotations(from?: number, to?: number): void {
@@ -694,7 +715,7 @@ export class DatabaseService {
         map(res => {
           try {
             let filteredList: Array<Transfer> = [];
-            
+
             res.forEach((element, index) => {
               element['index'] = index;
               if ((this.auth.userInteriores.uid === element.destination.supervisor.uid || this.auth.userInteriores.uid === element.createdByUid) && !this.auth.permit.logisticTransfersCompleteList) {
