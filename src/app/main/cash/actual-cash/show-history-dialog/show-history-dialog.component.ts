@@ -44,7 +44,7 @@ export class ShowHistoryDialogComponent implements OnInit {
         .pipe(
           map(res => {
             res.forEach((element, index) => {
-              element['index'] = index;
+              element['index'] = res.length - index;
             });
             return res;
           })

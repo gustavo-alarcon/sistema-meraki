@@ -18,5 +18,5 @@
 <mat-divider class="w3-margin-top"></mat-divider>
 <mat-dialog-actions align="end">
     <button mat-stroked-button color="warn" class="w3-margin-right" mat-dialog-close>No</button>
-    <button mat-raised-button color="primary" (click)="add()">Si, agregar</button>
+    <button mat-raised-button color="primary" (click)="add()" [disabled]="uploading">Si, agregar</button>
 </mat-dialog-actions>

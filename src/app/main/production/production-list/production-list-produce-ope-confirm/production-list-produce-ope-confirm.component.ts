@@ -18,6 +18,10 @@ export class ProductionListProduceOpeConfirmComponent implements OnInit, OnDestr
 
   dataFormGroup: FormGroup;
 
+  year: number;
+  date: Date;
+  name: string;
+
   duplicate = {
     name: false,
     nameLoading: false,
@@ -39,66 +43,19 @@ export class ProductionListProduceOpeConfirmComponent implements OnInit, OnDestr
   ) { }
 
   ngOnInit() {
-    this.createForm();
+    
+    this.date = new Date();
+    this.year = this.date.getFullYear();
+    this.name = this.year + 'P' + (this.data.orderNote ? this.data.orderNote : '---');
 
+    this.createForm();
+    
     this.filteredCategories = this.dataFormGroup.get('category').valueChanges
       .pipe(
         startWith<any>(''),
         map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
         map(name => name ? this.dbs.categories.filter(option => option['name'].toLowerCase().includes(name) && option.source === 'product') : this.dbs.categories)
       );
-
-    const name$ =
-      this.dataFormGroup.get('name').valueChanges
-        .pipe(
-          tap(() => {
-            this.duplicate.nameLoading = true;
-          }),
-          debounceTime(500),
-          tap(res => {
-
-            this.duplicate.name = false;
-            const find = this.dbs.finishedProducts.filter(option => option.name === res);
-
-            if (find.length > 0) {
-              this.duplicate.nameLoading = false;
-              this.duplicate.name = true;
-              this.snackbar.open('Nombre duplicado', 'Cerrar', {
-                duration: 4000
-              });
-            } else {
-              this.duplicate.nameLoading = false;
-            }
-          })
-        ).subscribe()
-
-    this.subscriptions.push(name$);
-
-    const code$ =
-      this.dataFormGroup.get('code').valueChanges
-        .pipe(
-          tap(() => {
-            this.duplicate.codeLoading = true;
-          }),
-          debounceTime(500),
-          tap(res => {
-
-            this.duplicate.code = false;
-            const find = this.dbs.finishedProducts.filter(option => option.code === res);
-
-            if (find.length > 0) {
-              this.duplicate.codeLoading = false;
-              this.duplicate.code = true;
-              this.snackbar.open('Código duplicado', 'Cerrar', {
-                duration: 4000
-              });
-            } else {
-              this.duplicate.codeLoading = false;
-            }
-          })
-        ).subscribe()
-
-    this.subscriptions.push(code$);
 
   }
 
@@ -108,13 +65,13 @@ export class ProductionListProduceOpeConfirmComponent implements OnInit, OnDestr
 
   createForm(): void {
     this.dataFormGroup = this.fb.group({
-      code: ['19P' + (this.data.orderNote ? this.data.orderNote : '---'), [Validators.required]],
-      name: [null, [Validators.required]],
+      code: [this.name, [Validators.required]],
+      name: [this.name, [Validators.required]],
       correlative: 0,
       stock: 0,
       category: [null, [Validators.required]],
       description: null,
-      sale: [0, [Validators.required]],
+      sale: [this.data.indebtImport, [Validators.required]],
     })
   }
 

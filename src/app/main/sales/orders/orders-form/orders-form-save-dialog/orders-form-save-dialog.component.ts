@@ -5,7 +5,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { AuthService } from 'src/app/core/auth.service';
 import { DatabaseService } from 'src/app/core/database.service';
 import { AngularFirestoreDocument } from '@angular/fire/firestore';
-import { Correlative, Order, Quotation } from './../../../../../core/types';
+import { Correlative, Order, Quotation, Transaction } from './../../../../../core/types';
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { Observable, BehaviorSubject, Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -116,6 +116,10 @@ export class OrdersFormSaveDialogComponent implements OnInit, OnDestroy {
             this.currentCorrelative = newCorrelative;
             this.orderRef = this.dbs.ordersCollection.doc<Order>(`OPe${newCorrelative}`);
 
+            const cashPath = this.dbs.cashListCollection.doc(this.data['form']['cash'].id).ref.path;
+            const currentOpeningId = this.data['form']['cash']['currentOpening'];
+            let transactionDoc = this.af.firestore.collection(cashPath + '/openings/' + currentOpeningId + '/transactions').doc();
+
             if (this.data['form']['quotation']) {
               let quoteRef = this.dbs.quotationsCollection.doc<Quotation>(this.data['form']['quotation']['id']).ref;
               t.update(quoteRef, { status: 'Referenciada', orderReference: newCorrelative });
@@ -126,12 +130,17 @@ export class OrdersFormSaveDialogComponent implements OnInit, OnDestroy {
               correlative: newCorrelative,
               status: 'Enviado',
               quotationCorrelative: this.data['form']['quotation'] ? this.data['form']['quotation']['correlative'] : '',
+              orderNote: this.data['form']['orderNote'],
               document: this.data['form']['document'],
               documentSerial: this.data['form']['documentSerial'],
               documentCorrelative: this.data['form']['documentCorrelative'],
               deliveryDate: this.data['form']['deliveryDate'].valueOf(),
               color: '',
               quantity: this.data['form']['quantity'],
+              totalImport: this.data['form']['totalImport'],
+              paidImport: this.data['form']['paidImport'],
+              indebtImport: this.data['form']['indebtImport'],
+              cash: this.data['form']['cash'],
               description: this.data['form']['description'],
               image1: this.data['imageSrc1'],
               image2: this.data['imageSrc2'],
@@ -142,8 +151,27 @@ export class OrdersFormSaveDialogComponent implements OnInit, OnDestroy {
               createdByUid: this.auth.userInteriores.uid
             };
 
-            console.log(data);
+            let cashData = {
+              id: transactionDoc.id,
+              type: 'PEDIDO',
+              description: `${this.data['form']['document'].name}-${this.data['form']['documentSerial']}-${this.data['form']['documentCorrelative']} #Pedido: ${this.data['form']['orderNote']}`,
+              import: this.data['form']['paidImport'],
+              debt: this.data['form']['indebtImport'],
+              user: this.auth.userInteriores,
+              verified: false,
+              status: 'Grabado',
+              ticketType: 'PEDIDO',
+              paymentType: 'EFECTIVO',
+              lastEditBy: null,
+              lastEditUid: null,
+              lastEditDate: null,
+              approvedBy: null,
+              approvedByUid: null,
+              approvedDate: null,
+              regDate: Date.now()
+            }
 
+            t.set(transactionDoc, cashData)
             t.set(this.orderRef.ref, data);
             t.update(this.dbs.orderCorrelativeDocument.ref, { correlative: newCorrelative });
 

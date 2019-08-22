@@ -44,5 +44,5 @@
 <mat-dialog-actions align="end">
     <button mat-stroked-button class="w3-margin-right" color="warn" mat-dialog-close>Cancelar</button>
     <button mat-raised-button class="w3-margin-right" color="primary" (click)="transfer()"
-        [disabled]="!dataFormGroup.valid">Trasladar</button>
+        [disabled]="!dataFormGroup.valid || loading">Trasladar</button>
 </mat-dialog-actions>

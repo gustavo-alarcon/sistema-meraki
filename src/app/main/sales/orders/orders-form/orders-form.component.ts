@@ -1,12 +1,11 @@
-import { Document, Quotation } from './../../../../core/types';
+import { Document, Quotation, Cash } from './../../../../core/types';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { OrdersFormSaveDialogComponent } from './orders-form-save-dialog/orders-form-save-dialog.component';
-import { ActivatedRoute } from '@angular/router';
-import { map, startWith } from 'rxjs/operators';
+import { map, startWith, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { DatabaseService } from 'src/app/core/database.service';
 import { Ng2ImgMaxService } from 'ng2-img-max';
 import { isObjectValidator } from 'src/app/core/is-object-validator';
@@ -40,6 +39,10 @@ export class OrdersFormComponent implements OnInit {
 
   approvedQuotations: Array<Quotation> = [];
   filteredQuotations: Observable<Quotation[]>;
+
+  filteredCashList: Observable<Cash[]>;
+
+  subscriptions: Array<Subscription> = [];
 
   constructor(
     private fb: FormBuilder,
@@ -81,13 +84,105 @@ export class OrdersFormComponent implements OnInit {
         )
 
     this.filteredDocuments =
-          this.dataFormGroup.get('document').valueChanges
-          .pipe(
-            startWith<any>(''),
-            map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-            map(name => name ? this.dbs.documents.filter(option => option.name.toLowerCase().includes(name)) : this.dbs.documents)
-          )
+      this.dataFormGroup.get('document').valueChanges
+        .pipe(
+          startWith<any>(''),
+          map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+          map(name => name ? this.dbs.documents.filter(option => option.name.toLowerCase().includes(name)) : this.dbs.documents)
+        )
 
+    this.filteredCashList =
+      this.dataFormGroup.get('cash').valueChanges
+        .pipe(
+          startWith<any>(''),
+          map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+          map(name => name ? this.dbs.cashList.filter(option => option.name.toLowerCase().includes(name)) : this.dbs.cashList)
+        )
+
+    const totalImport$ =
+      this.dataFormGroup.get('totalImport').valueChanges
+        .pipe(
+          debounceTime(300),
+          distinctUntilChanged()
+        )
+        .subscribe(res => {
+          if (res) {
+            if (res < 0) {
+              this.dataFormGroup.get('totalImport').setValue(0);
+              this.snackbar.open('No puede asignar valores negativos', 'Cerrar', {
+                duration: 3000
+              });
+            } else {
+              this.dataFormGroup.get('indebtImport').setValue(res);
+            }
+          }
+        });
+
+    this.subscriptions.push(totalImport$);
+
+    const paidImport$ =
+      this.dataFormGroup.get('paidImport').valueChanges
+        .pipe(
+          debounceTime(300),
+          distinctUntilChanged()
+        )
+        .subscribe(res => {
+          if (res) {
+            if (res < 0) {
+              this.dataFormGroup.get('paidImport').setValue(0);
+              this.snackbar.open('No puede asignar valores negativos', 'Cerrar', {
+                duration: 3000
+              });
+            } else {
+              const total = this.dataFormGroup.value['totalImport'];
+
+              if (res > total) {
+                res = total;
+                this.dataFormGroup.get('paidImport').setValue(res);
+                this.snackbar.open('No puede asignar valores mayores al importe total', 'Cerrar', {
+                  duration: 3000
+                });
+              }
+
+              const indebt = total - res;
+              this.dataFormGroup.get('indebtImport').setValue(parseFloat(indebt.toFixed(2)));
+            }
+          }
+        });
+
+    this.subscriptions.push(paidImport$);
+
+    const indebtImport$ =
+      this.dataFormGroup.get('indebtImport').valueChanges
+        .pipe(
+          debounceTime(300),
+          distinctUntilChanged()
+        )
+        .subscribe(res => {
+          if (res) {
+            if (res < 0) {
+              this.dataFormGroup.get('indebtImport').setValue(0);
+              this.snackbar.open('No puede asignar valores negativos', 'Cerrar', {
+                duration: 3000
+              });
+            } else {
+              const total = this.dataFormGroup.value['totalImport'];
+
+              if (res > total) {
+                res = total;
+                this.dataFormGroup.get('indebtImport').setValue(res);
+                this.snackbar.open('No puede asignar valores mayores al importe total', 'Cerrar', {
+                  duration: 3000
+                });
+              }
+
+              const paid = total - res;
+              this.dataFormGroup.get('paidImport').setValue(parseFloat(paid.toFixed(2)));
+            }
+          }
+        });
+
+    this.subscriptions.push(paidImport$);
   }
 
   createForm(): void {
@@ -97,8 +192,12 @@ export class OrdersFormComponent implements OnInit {
       document: [null, [Validators.required, isObjectValidator]],
       documentSerial: [null, [Validators.required]],
       documentCorrelative: [null, [Validators.required]],
-      quantity: [null, [Validators.required]],
+      quantity: [1, [Validators.required]],
       deliveryDate: [null, [Validators.required]],
+      totalImport: [0, [Validators.required]],
+      paidImport: [0, [Validators.required]],
+      indebtImport: [0, [Validators.required]],
+      cash: [null, [Validators.required, isObjectValidator]],
       description: null
     })
   }
@@ -107,12 +206,16 @@ export class OrdersFormComponent implements OnInit {
     return document ? document.name : null;
   }
 
+  showCash(cash: Cash): string | null {
+    return cash ? cash.name : null;
+  }
+
   showQuotation(quote: Quotation): string | null {
     return quote ? 'COT' + quote.correlative : null
   }
 
   selectedQuotation(event): void {
-    if(event){
+    if (event) {
       const quote: Quotation = event.option.value;
 
       this.dataFormGroup.get('description').setValue(quote.description);
@@ -125,7 +228,7 @@ export class OrdersFormComponent implements OnInit {
       this.pdf2 = quote ? quote.file2 : null;
 
     }
-    
+
   }
 
   clean(): void {
@@ -141,7 +244,7 @@ export class OrdersFormComponent implements OnInit {
   save(): void {
     if (this.dataFormGroup.valid) {
 
-      if(typeof this.dataFormGroup.value['quotation'] === 'object'){
+      if (typeof this.dataFormGroup.value['quotation'] === 'object') {
         // 
       } else {
         this.dataFormGroup.get('quotation').setValue('');
