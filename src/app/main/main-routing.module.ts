@@ -12,6 +12,14 @@ const routes: Routes = [
         loadChildren: () => import('./dashboard/dashboard.module').then(mod => mod.DashboardModule)
       },
       {
+        path: 'dashboard',
+        loadChildren: () => import('./dashboard/dashboard.module').then(mod => mod.DashboardModule)
+      },
+      {
+        path: 'configurations/permits',
+        loadChildren: () => import('./configurations/configurations-permits/configurations-permits.module').then(mod => mod.ConfigurationsPermitsModule)
+      },
+      {
         path: 'sales/requirements',
         loadChildren: () => import('./sales/requirements/requirements.module').then(mod => mod.RequirementsModule)
       },
@@ -82,6 +90,46 @@ const routes: Routes = [
       {
         path: 'purchases/register-documents',
         loadChildren: () => import('./purchases/register-documents/register-documents.module').then(mod => mod.RegisterDocumentsModule)
+      },
+      {
+        path: 'third-parties/wholesale',
+        loadChildren: () => import('./third-parties/third-parties-wholesale/third-parties-wholesale.module').then(mod => mod.ThirdPartiesWholesaleModule)
+      },
+      {
+        path: 'third-parties/providers',
+        loadChildren: () => import('./third-parties/third-parties-providers/third-parties-providers.module').then(mod => mod.ThirdPartiesProvidersModule)
+      },
+      {
+        path: 'third-parties/customers',
+        loadChildren: () => import('./third-parties/third-parties-customers/third-parties-customers.module').then(mod => mod.ThirdPartiesCustomersModule)
+      },
+      {
+        path: 'reports/system-stats',
+        loadChildren: () => import('./reports/reports-system-stats/reports-system-stats.module').then(mod => mod.ReportsSystemStatsModule)
+      },
+      {
+        path: 'reports/system-activity',
+        loadChildren: () => import('./reports/reports-system-activity/reports-system-activity.module').then(mod => mod.ReportsSystemActivityModule)
+      },
+      {
+        path: 'reports/sales',
+        loadChildren: () => import('./reports/reports-sales/reports-sales.module').then(mod => mod.ReportsSalesModule)
+      },
+      {
+        path: 'reports/cash',
+        loadChildren: () => import('./reports/reports-cash/reports-cash.module').then(mod => mod.ReportsCashModule)
+      },
+      {
+        path: 'reports/production',
+        loadChildren: () => import('./reports/reports-production/reports-production.module').then(mod => mod.ReportsProductionModule)
+      },
+      {
+        path: 'configurations/accounts',
+        loadChildren: () => import('./configurations/configurations-accounts/configurations-accounts.module').then(mod => mod.ConfigurationsAccountsModule)
+      },
+      {
+        path: 'configurations/permits',
+        loadChildren: () => import('./configurations/configurations-permits/configurations-permits.module').then(mod => mod.ConfigurationsPermitsModule)
       },
     ]
   },

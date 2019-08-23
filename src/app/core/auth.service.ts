@@ -64,6 +64,19 @@ export class AuthService {
       purchasesVerifyAction: false,
       purchasesEditAction: false,
       purchasesDeleteAction: false,
+      thirdPartiesSection: false,
+      thirdPartiesWholesaleButton: false,
+      thirdPartiesProvidersButton: false,
+      thirdPartiesCustomersButton: false,
+      reportsSection: false,
+      reportsSystemStatsButton: false,
+      reportsSystemActivityButton: false,
+      reportsSalesButton: false,
+      reportsCashButton: false,
+      reportsProductionButton: false,
+      configurationsSection: false,
+      configurationAccountsButton: false,
+      configurationsPermitsButton: false,
       regDate: 0
     };
 
@@ -117,6 +130,19 @@ export class AuthService {
       purchasesVerifyAction: false,
       purchasesEditAction: false,
       purchasesDeleteAction: false,
+      thirdPartiesSection: false,
+      thirdPartiesWholesaleButton: false,
+      thirdPartiesProvidersButton: false,
+      thirdPartiesCustomersButton: false,
+      reportsSection: false,
+      reportsSystemStatsButton: false,
+      reportsSystemActivityButton: false,
+      reportsSalesButton: false,
+      reportsCashButton: false,
+      reportsProductionButton: false,
+      configurationsSection: false,
+      configurationAccountsButton: false,
+      configurationsPermitsButton: false,
       regDate: 0
     }
   );

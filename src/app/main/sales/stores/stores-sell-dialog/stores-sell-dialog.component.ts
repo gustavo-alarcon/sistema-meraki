@@ -172,7 +172,7 @@ export class StoresSellDialogComponent implements OnInit {
         description:  this.dataFormGroup.value['document']['name']
                       + ', Serie ' + this.dataFormGroup.value['documentSerial']
                       + ', Correlativo ' + this.dataFormGroup.value['documentCorrelative']
-                      + ', DNI ' + this.dataFormGroup.value['dni']
+                      + ', Producto ' + this.data.serial.name
                       + ', Celular ' + this.dataFormGroup.value['phone']
                       + ', Dsct.  ' + this.dataFormGroup.value['discount'] + '%',
         import: this.dataFormGroup.value['price'],

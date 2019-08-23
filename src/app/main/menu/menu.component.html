@@ -6,9 +6,9 @@
                 *ngIf="deviceFormat === 'mobile'">
                 <mat-icon>menu</mat-icon>
             </button>
-            <span class="ms-fill"*ngIf="deviceFormat === 'mobile'"></span>
+            <span class="ms-fill" *ngIf="deviceFormat === 'mobile'"></span>
             <img src="../../../assets/images/logo.png" alt="logo interiores" style="height:8vh">
-            <span class="ms-fill" ></span>
+            <span class="ms-fill"></span>
             <button mat-button class="mat-subheading-1" style="margin:0px; border:1px solid #321937; border-radius:10px"
                 [matMenuTriggerFor]="accountMenu" *ngIf="deviceFormat !== 'mobile'">
                 <mat-icon class="ms-icons-color" style="vertical-align:middle">account_circle</mat-icon>
@@ -24,9 +24,6 @@
                 <button mat-menu-item *ngIf="deviceFormat === 'mobile'" disabled>
                     <mat-icon>account_circle</mat-icon>
                     {{auth.userInteriores ? auth.userInteriores.displayName : '---'}}
-                </button>
-                <button mat-menu-item>
-                    <mat-icon>settings</mat-icon> Configuración
                 </button>
                 <button mat-menu-item>
                     <mat-icon>vpn_key</mat-icon> Cambiar clave
@@ -176,6 +173,86 @@
                                 routerLink="purchases/register-documents"
                                 [disabled]="!permits.purchasesRegisterDocumentsButton">
                                 <mat-icon class="ms-icons-color">receipt</mat-icon> Documentos
+                            </button><br>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Terceros" [disabled]="!permits.thirdPartiesSection">
+                <div class="w3-padding  w3-border-bottom w3-border-lightgray">
+                    <div style="display:flex">
+                        <div>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.thirdParties.wholesale}"
+                                routerLink="third-parties/wholesale" [disabled]="!permits.thirdPartiesWholesaleButton">
+                                <mat-icon class="ms-icons-color">work</mat-icon> Mayoristas
+                            </button><br>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.thirdParties.providers}"
+                                routerLink="third-parties/providers" [disabled]="!permits.thirdPartiesProvidersButton">
+                                <mat-icon class="ms-icons-color">local_convenience_store</mat-icon> Proveedores
+                            </button><br>
+                        </div>
+                        <div class="w3-margin-right">
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.thirdParties.customers}"
+                                routerLink="third-parties/customers" [disabled]="!permits.thirdPartiesCustomersButton">
+                                <mat-icon class="ms-icons-color">person_pin</mat-icon> Clientes
+                            </button><br>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Reportes" [disabled]="!permits.reportsSection">
+                <div class="w3-padding  w3-border-bottom w3-border-lightgray">
+                    <div style="display:flex">
+                        <div>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.reports.systemStats}"
+                                routerLink="reports/system-stats" [disabled]="!permits.reportsSystemStatsButton">
+                                <mat-icon class="ms-icons-color">assessment</mat-icon> Estadísticas del sistema
+                            </button><br>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.reports.systemActivity}"
+                                routerLink="reports/system-activity" [disabled]="!permits.reportsSystemActivityButton">
+                                <mat-icon class="ms-icons-color">touch_app</mat-icon> Actividad del sistema
+                            </button><br>
+                        </div>
+                        <div class="w3-border-left w3-border-lightgray w3-margin-right">
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.reports.sales}"
+                                routerLink="reports/sales" [disabled]="!permits.reportsSalesButton">
+                                <mat-icon class="ms-icons-color">attach_money</mat-icon> Reporte de ventas
+                            </button><br>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.reports.cash}" routerLink="reports/cash"
+                                [disabled]="!permits.reportsCashButton">
+                                <mat-icon class="ms-icons-color">local_atm</mat-icon> Reporte de cajas
+                            </button><br>
+                        </div>
+                        <div class="w3-margin-right">
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.reports.production}"
+                                routerLink="reports/production" [disabled]="!permits.reportsProductionButton">
+                                <mat-icon class="ms-icons-color">build</mat-icon> Reporte de producción
+                            </button><br>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Configuración" [disabled]="!permits.configurationsSection">
+                <div class="w3-padding  w3-border-bottom w3-border-lightgray">
+                    <div style="display:flex">
+                        <div>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.configurations.accounts}"
+                                routerLink="configurations/accounts" [disabled]="!permits.configurationsAccountsButton">
+                                <mat-icon class="ms-icons-color">account_circle</mat-icon> Cuentas
+                            </button><br>
+                            <button class="w3-small" mat-button
+                                [ngClass]="{'ms-button-selected': buttonOptions.configurations.permits}"
+                                routerLink="configurations/permits" [disabled]="!permits.configurationsPermitsButton">
+                                <mat-icon class="ms-icons-color">security</mat-icon> Permisos
                             </button><br>
                         </div>
                     </div>

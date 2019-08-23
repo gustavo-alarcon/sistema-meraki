@@ -88,6 +88,7 @@ export class CheckStockComponent implements OnInit {
                 if (res) {
                   res.forEach(serial => {
                     if (serial.code === this.product.value['code'] && !(serial.status === 'Vendido')) {
+                      serial['isInFacility'] = false;
                       this.results.push(serial);
                       this.dataSource.data = this.results;
                     }
@@ -105,6 +106,7 @@ export class CheckStockComponent implements OnInit {
           if (res) {
             res.forEach(serial => {
               if (serial.code === this.product.value['code'] && !(serial.status === 'Vendido')) {
+                serial['isInFacility'] = true;
                 this.results.push(serial);
                 this.dataSource.data = this.results;
               }

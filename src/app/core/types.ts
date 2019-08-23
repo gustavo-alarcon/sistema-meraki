@@ -61,6 +61,19 @@ export interface Permit {
     purchasesVerifyAction: boolean;
     purchasesEditAction: boolean;
     purchasesDeleteAction: boolean;
+    thirdPartiesSection: boolean;
+    thirdPartiesWholesaleButton: boolean;
+    thirdPartiesProvidersButton: boolean;
+    thirdPartiesCustomersButton: boolean;
+    reportsSection: boolean;
+    reportsSystemStatsButton: boolean;
+    reportsSystemActivityButton: boolean;
+    reportsSalesButton: boolean;
+    reportsCashButton: boolean;
+    reportsProductionButton: boolean;
+    configurationsSection: boolean;
+    configurationAccountsButton: boolean;
+    configurationsPermitsButton: boolean;
     regDate: number;
 }
 
@@ -525,7 +538,7 @@ export interface Purchase {
     provider: Provider;
     itemsList: Array<{
         index: number;
-        item: {name: string, code: string} | RawMaterial;
+        item: { name: string, code: string } | RawMaterial;
         quantity: number;
         import: number;
     }>;

@@ -60,6 +60,22 @@ export class MenuComponent implements OnInit, OnDestroy {
     },
     purchases: {
       registerDocuments: false,
+    },
+    thirdParties: {
+      wholesale: false,
+      providers: false,
+      customers: false
+    },
+    reports: {
+      systemStats: false,
+      systemActivity: false,
+      sales: false,
+      cash: false,
+      production: false
+    },
+    configurations: {
+      accounts: false,
+      permits: false
     }
 
   }
@@ -114,6 +130,19 @@ export class MenuComponent implements OnInit, OnDestroy {
       purchasesVerifyAction: false,
       purchasesEditAction: false,
       purchasesDeleteAction: false,
+      thirdPartiesSection: false,
+      thirdPartiesWholesaleButton: false,
+      thirdPartiesProvidersButton: false,
+      thirdPartiesCustomersButton: false,
+      reportsSection: false,
+      reportsSystemStatsButton: false,
+      reportsSystemActivityButton: false,
+      reportsSalesButton: false,
+      reportsCashButton: false,
+      reportsProductionButton: false,
+      configurationsSection: false,
+      configurationAccountsButton: false,
+      configurationsPermitsButton: false,
       regDate: 0
     };
 
@@ -226,6 +255,22 @@ export class MenuComponent implements OnInit, OnDestroy {
       },
       purchases: {
         registerDocuments: false
+      },
+      thirdParties: {
+        wholesale: false,
+        providers: false,
+        customers: false
+      },
+      reports: {
+        systemStats: false,
+        systemActivity: false,
+        sales: false,
+        cash: false,
+        production: false
+      },
+      configurations: {
+        accounts: false,
+        permits: false
       }
     }
   }
@@ -428,6 +473,81 @@ export class MenuComponent implements OnInit, OnDestroy {
           this.selectedTab.setValue(4);
           this.cleanButtons();
           this.buttonOptions.purchases.registerDocuments = true;
+          coincidence = true;
+          break;
+      }
+    }
+
+    if (this.permits.thirdPartiesSection) {
+      switch (route) {
+        case '/main/third-parties/wholesale':
+          this.selectedTab.setValue(5);
+          this.cleanButtons();
+          this.buttonOptions.thirdParties.wholesale = true;
+          coincidence = true;
+          break;
+        case '/main/third-parties/providers':
+          this.selectedTab.setValue(5);
+          this.cleanButtons();
+          this.buttonOptions.thirdParties.providers = true;
+          coincidence = true;
+          break;
+        case '/main/third-parties/customers':
+          this.selectedTab.setValue(5);
+          this.cleanButtons();
+          this.buttonOptions.thirdParties.customers = true;
+          coincidence = true;
+          break;
+      }
+    }
+
+    if (this.permits.reportsSection) {
+      switch (route) {
+        case '/main/reports/system-stats':
+          this.selectedTab.setValue(6);
+          this.cleanButtons();
+          this.buttonOptions.reports.systemStats = true;
+          coincidence = true;
+          break;
+        case '/main/reports/system-activity':
+          this.selectedTab.setValue(6);
+          this.cleanButtons();
+          this.buttonOptions.reports.systemActivity = true;
+          coincidence = true;
+          break;
+        case '/main/reports/sales':
+          this.selectedTab.setValue(6);
+          this.cleanButtons();
+          this.buttonOptions.reports.sales = true;
+          coincidence = true;
+          break;
+        case '/main/reports/cash':
+          this.selectedTab.setValue(6);
+          this.cleanButtons();
+          this.buttonOptions.reports.cash = true;
+          coincidence = true;
+          break;
+        case '/main/reports/production':
+          this.selectedTab.setValue(6);
+          this.cleanButtons();
+          this.buttonOptions.reports.production = true;
+          coincidence = true;
+          break;
+      }
+    }
+
+    if (this.permits.configurationsSection) {
+      switch (route) {
+        case '/main/configurations/accounts':
+          this.selectedTab.setValue(7);
+          this.cleanButtons();
+          this.buttonOptions.configurations.accounts = true;
+          coincidence = true;
+          break;
+        case '/main/configurations/permits':
+          this.selectedTab.setValue(7);
+          this.cleanButtons();
+          this.buttonOptions.configurations.permits = true;
           coincidence = true;
           break;
       }

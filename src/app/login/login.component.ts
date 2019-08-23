@@ -30,7 +30,12 @@ export class LoginComponent implements OnInit {
   }
 
   goToDashboard() {
-    this.router.navigateByUrl('/main');
+    if (this.auth.userInteriores.lastRoute) {
+      this.router.navigateByUrl(this.auth.userInteriores.lastRoute);
+    } else {
+      this.router.navigateByUrl('/main');
+    }
+
   }
 
 }
