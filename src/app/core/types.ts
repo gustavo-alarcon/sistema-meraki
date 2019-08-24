@@ -434,6 +434,46 @@ export interface Provider {
     createdByUid: string;
 }
 
+export interface WholesaleCustomer {
+    id: string;
+    type: string;
+    name?: string;
+    lastname?: string;
+    displayName?: string;
+    address?: string;
+    dni?: number;
+    phone?: string;
+    mail?: string;
+    businessName?: string;
+    businessAddress?: string;
+    ruc?: number;
+    businessPhone?: string;
+    contacts?: Array<{
+        contanctName?: string;
+        contactPhone?: string;
+        contactMail?: string;
+    }>;
+    regDate: number;
+    createdBy: User;
+    editedBy: User | null;
+    editedDate: number | null;
+}
+
+export interface Customer {
+    id: string;
+    name: string;
+    lastname: string;
+    displayName: string;
+    dni: number;
+    address?: string;
+    phone?: string;
+    mail?: string;
+    regDate: number;
+    createdBy: User;
+    editedBy: User | null;
+    editedDate: number | null;
+}
+
 export interface Cash {
     id: string;
     currentOwner: User | { displayName: string } | null;
