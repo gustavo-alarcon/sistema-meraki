@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { WholesaleCustomer } from 'src/app/core/types';
 import { FormControl } from '@angular/forms';
-import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { DatabaseService } from 'src/app/core/database.service';
 import { AuthService } from 'src/app/core/auth.service';
@@ -17,19 +17,9 @@ import { ThirdPartiesWholesaleDeleteConfirmComponent } from './third-parties-who
 })
 export class ThirdPartiesWholesaleComponent implements OnInit {
 
-  monthsKey: Array<string> = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-  monthIndex: number;
-  currentMonth: string;
-  currentYear: number;
-  year: number;
-
-  monthFormControl = new FormControl({ value: new Date(), disabled: true });
-
   disableTooltips = new FormControl(false);
 
   filteredCustomers: Array<WholesaleCustomer> = [];
-
-  currentDate = Date.now();
 
   displayedColumns: string[] = ['index', 'name', 'dni', 'phone', 'mail', 'contact', 'createdBy','editedBy', 'actions'];
 
@@ -44,14 +34,10 @@ export class ThirdPartiesWholesaleComponent implements OnInit {
   constructor(
     public dbs: DatabaseService,
     public auth: AuthService,
-    private dialog: MatDialog,
-    private snackbar: MatSnackBar
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
-    this.monthIndex = this.monthFormControl.value.getMonth();
-    this.currentMonth = this.monthsKey[this.monthIndex];
-    this.currentYear = this.monthFormControl.value.getFullYear();
 
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -75,27 +61,6 @@ export class ThirdPartiesWholesaleComponent implements OnInit {
       (option.dni ? option.dni.toString().includes(ref) : false) ||
       (option.ruc ? option.ruc.toString().includes(ref) : false));
     this.dataSource.data = this.filteredCustomers;
-  }
-
-  setMonthOfView(event, datepicker): void {
-    this.monthFormControl = new FormControl({ value: event, disabled: true });
-    this.monthIndex = this.monthFormControl.value.getMonth();
-    this.currentMonth = this.monthsKey[this.monthIndex];
-    this.currentYear = this.monthFormControl.value.getFullYear();
-    let fromDate: Date = new Date(this.currentYear, this.monthIndex, 1);
-
-    let toMonth = (fromDate.getMonth() + 1) % 12;
-    let toYear = this.currentYear;
-
-    if (toMonth + 1 >= 13) {
-      toYear++;
-    }
-
-    let toDate: Date = new Date(toYear, toMonth, 1);
-
-    this.dbs.getPurchases(fromDate.valueOf(), toDate.valueOf());
-
-    datepicker.close();
   }
 
   createWholesaleCustomer(): void {

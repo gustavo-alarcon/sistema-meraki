@@ -425,13 +425,25 @@ export interface TransferItem {
 export interface Provider {
     id: string;
     name: string;
-    shortName?: string;
     address: string;
     ruc: number;
     phone?: string;
+    detractionAccount?: string;
+    contacts?: Array<{
+        contactName: string;
+        contactPhone?: string;
+        contactMail?: string;
+    }>;
+    bankAccounts?: Array<{
+        bank: string;
+        type: string;
+        accountNumber: string;
+    }>;
     regDate: number;
     createdBy: string;
     createdByUid: string;
+    editedBy?: User;
+    editedDate?: number;
 }
 
 export interface WholesaleCustomer {

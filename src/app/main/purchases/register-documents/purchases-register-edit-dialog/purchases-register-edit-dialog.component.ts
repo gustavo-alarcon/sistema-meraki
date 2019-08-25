@@ -63,7 +63,6 @@ export class PurchasesRegisterEditDialogComponent implements OnInit {
   provider: Provider = {
     id: '',
     name: '',
-    shortName: '',
     ruc: 0,
     address: '',
     phone: '',

@@ -1,17 +1,17 @@
 <div class="ms-font-montserrat mat-title ms-color-11">
-    <mat-icon class="ms-icons-color" style="vertical-align:middle">delete</mat-icon> Borrar mayorista
+    <mat-icon class="ms-icons-color" style="vertical-align:middle">delete</mat-icon> Borrar proveedor
 </div>
 <mat-divider></mat-divider>
 <mat-progress-bar mode="indeterminate" style="margin-bottom:0.5em" *ngIf="uploading"></mat-progress-bar>
 
 <mat-dialog-content style="max-width:300px">
-    <p class="ms-font-montserrat ms-color-11">¿Está seguro de borrar al cliente mayorista
-        <b>{{data.wholesale.displayName ? data.wholesale.displayName : data.wholesale.businessName}}</b>?</p>
+    <p class="ms-font-montserrat ms-color-11">¿Está seguro de borrar al proveedor
+        <b>{{data.provider.name}}</b>?</p>
 
     <div style="display:flex; align-items:center" *ngIf="uploading">
         <mat-icon class="w3-margin-right" [ngStyle]="{'color': flags.deleted ? 'forestgreen' : 'gray'}">check_circle
         </mat-icon>
-        <span class="w3-margin-right ms-font-montserrat w3-small">Borrando cliente</span>
+        <span class="w3-margin-right ms-font-montserrat w3-small">Borrando proveedor</span>
     </div>
 </mat-dialog-content>
 

@@ -63,6 +63,9 @@ export class ThirdPartiesWholesaleCreateDialogComponent implements OnInit {
             this.dataFormGroup.get('dni').reset();
             this.dataFormGroup.get('name').reset();
             this.dataFormGroup.get('lastname').reset();
+            this.dataFormGroup.get('ruc').reset();
+            this.dataFormGroup.get('businessName').reset();
+            this.dataFormGroup.get('businessAddress').reset();
 
             this.duplicate.dni = false;
             this.duplicate.ruc = false;
@@ -77,13 +80,15 @@ export class ThirdPartiesWholesaleCreateDialogComponent implements OnInit {
             this.dataFormGroup.get('businessName').setValidators([Validators.required]);
             this.dataFormGroup.get('businessAddress').setValidators([Validators.required]);
 
+            this.dataFormGroup.get('dni').reset();
+            this.dataFormGroup.get('name').reset();
+            this.dataFormGroup.get('lastname').reset();
             this.dataFormGroup.get('ruc').reset();
             this.dataFormGroup.get('businessName').reset();
             this.dataFormGroup.get('businessAddress').reset();
 
             this.duplicate.dni = false;
             this.duplicate.ruc = false;
-
 
           }
         });
@@ -160,7 +165,6 @@ export class ThirdPartiesWholesaleCreateDialogComponent implements OnInit {
       contactName: null,
       contactPhone: null,
       contactMail: null
-
     })
   }
 
