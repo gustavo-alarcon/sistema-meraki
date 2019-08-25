@@ -370,8 +370,8 @@ export interface DepartureProduct {
     discount: number;
     paymentType: string;
     location?: string | Store;
-    dni: number;
-    phone: number;
+    customerType?: string;
+    customer?: WholesaleCustomer | Customer;
     source: string;
     regDate: number;
     createdBy: string;

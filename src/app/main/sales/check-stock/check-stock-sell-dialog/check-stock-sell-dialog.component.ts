@@ -2,11 +2,13 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DatabaseService } from 'src/app/core/database.service';
 import { AuthService } from 'src/app/core/auth.service';
-import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
-import { Product, Store, SerialNumber, DepartureProduct, Document, Cash } from 'src/app/core/types';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar, MatDialog } from '@angular/material';
+import { Product, SerialNumber, DepartureProduct, Document, Cash, WholesaleCustomer, Customer } from 'src/app/core/types';
 import { debounceTime, map, startWith } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { isObjectValidator } from 'src/app/core/is-object-validator';
+import { CheckStockCreateWholesaleDialogComponent } from '../check-stock-create-wholesale-dialog/check-stock-create-wholesale-dialog.component';
+import { CheckStockCreateCustomerDialogComponent } from '../check-stock-create-customer-dialog/check-stock-create-customer-dialog.component';
 
 @Component({
   selector: 'app-check-stock-sell-dialog',
@@ -27,13 +29,17 @@ export class CheckStockSellDialogComponent implements OnInit {
   ]
 
   filteredDocuments: Observable<Document[]>;
+  filteredCustomers: Observable<WholesaleCustomer[] | Customer[]>;
   filteredCash: Observable<Cash[]>;
   preFilteredCash: Array<Cash> = [];
+
+  subscriptions: Array<Subscription> = [];
 
   constructor(
     public dbs: DatabaseService,
     public auth: AuthService,
     public fb: FormBuilder,
+    private dialog: MatDialog,
     private dialogRef: MatDialogRef<CheckStockSellDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { serial: SerialNumber, product: Product },
     private snackbar: MatSnackBar
@@ -50,7 +56,6 @@ export class CheckStockSellDialogComponent implements OnInit {
         if (res) {
           let disc = 0;
           disc = 100 - (res * 100) / this.data.product.sale;
-          console.log(disc);
           this.dataFormGroup.get('discount').setValue(disc.toFixed(2));
         }
       });
@@ -72,6 +77,44 @@ export class CheckStockSellDialogComponent implements OnInit {
           map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
           map(name => name ? this.dbs.cashList.filter(option => option.name.toLowerCase().includes(name)) : this.dbs.cashList)
         )
+
+    const customerType$ =
+      this.dataFormGroup.get('customerType').valueChanges
+        .subscribe(res => {
+          if (res === 'MAYORISTA') {
+            this.dataFormGroup.get('customer').reset();
+            this.filteredCustomers =
+              this.dataFormGroup.get('customer').valueChanges
+                .pipe(
+                  startWith<any>(''),
+                  map(value => {
+                    if (value) {
+                      return typeof value === 'string' ? value.trim().toLowerCase() : (value.businessName ? value.businessName.toLowerCase() : value.name.toLowerCase())
+                    } else {
+                      return '';
+                    }
+                  }),
+                  map(name => name ? this.dbs.wholesale.filter(option => (option.businessName ? option.businessName.toLowerCase().includes(name) : false) || (option.name ? option.name.toLowerCase().includes(name) : false)) : this.dbs.wholesale)
+                )
+          } else if (res === 'GENERAL') {
+            this.dataFormGroup.get('customer').reset();
+            this.filteredCustomers =
+              this.dataFormGroup.get('customer').valueChanges
+                .pipe(
+                  startWith<any>(''),
+                  map(value => {
+                    if (value) {
+                      return typeof value === 'string' ? value.trim().toLowerCase() : value.name.toLowerCase()
+                    } else {
+                      return '';
+                    }
+                  }),
+                  map(name => name ? this.dbs.customers.filter(option => option.name.toLowerCase().includes(name)) : this.dbs.customers)
+                )
+          }
+        });
+
+    this.subscriptions.push(customerType$);
   }
 
   createForm(): void {
@@ -79,12 +122,12 @@ export class CheckStockSellDialogComponent implements OnInit {
       document: [null, [Validators.required, isObjectValidator]],
       documentSerial: [null, [Validators.required]],
       documentCorrelative: [null, [Validators.required]],
+      customerType: [null, [Validators.required]],
+      customer: [null, [Validators.required, isObjectValidator]],
       price: [null, [Validators.required]],
       discount: [0, [Validators.required]],
       paymentType: [null, [Validators.required]],
       cash: [null, [Validators.required, isObjectValidator]],
-      dni: [null, [Validators.required]],
-      phone: [null, [Validators.required]],
     });
   }
 
@@ -92,8 +135,39 @@ export class CheckStockSellDialogComponent implements OnInit {
     return document ? document.name : null;
   }
 
+  showCustomer(customer: any): string | null {
+    if (customer) {
+      if (customer.businessName) {
+        return customer.businessName;
+      } else if (customer.name) {
+        return customer.name + (customer.lastname ? (' ' + customer.lastname) : '');
+      }
+    } else {
+      return null;
+    }
+
+  }
+
   showCash(cash: Cash): string | null {
     return cash ? cash.name : null;
+  }
+
+  addWholesale(): void {
+    this.dialog.open(CheckStockCreateWholesaleDialogComponent)
+      .afterClosed().subscribe(res => {
+        if (res) {
+          this.dataFormGroup.get('customer').setValue(res);
+        }
+      });
+  }
+
+  addCustomer(): void {
+    this.dialog.open(CheckStockCreateCustomerDialogComponent)
+      .afterClosed().subscribe(res => {
+        if (res) {
+          this.dataFormGroup.get('customer').setValue(res);
+        }
+      });
   }
 
   save(): void {
@@ -111,9 +185,9 @@ export class CheckStockSellDialogComponent implements OnInit {
         price: this.dataFormGroup.value['price'],
         discount: (this.dataFormGroup.value['price'] / this.data.product.sale) * 100,
         paymentType: this.dataFormGroup.value['paymentType'],
-        dni: this.dataFormGroup.value['dni'],
-        phone: this.dataFormGroup.value['phone'],
-        source: 'store',
+        customerType: this.dataFormGroup.value['customerType'],
+        customer: this.dataFormGroup.value['customer'],
+        source: 'check stock',
         location: this.data.serial.location,
         regDate: Date.now(),
         createdBy: this.auth.userInteriores.displayName,
@@ -167,6 +241,14 @@ export class CheckStockSellDialogComponent implements OnInit {
           console.log(err);
         })
 
+      let customerName;
+
+      if (this.dataFormGroup.value['customer']['businessName']) {
+        customerName = this.dataFormGroup.value['customer']['businessName'];
+      } else {
+        customerName = this.dataFormGroup.value['customer']['name'] + (this.dataFormGroup.value['customer']['lastname'] ? (' ' + this.dataFormGroup.value['customer']['lastname']) : '');
+      }
+
       const transaction = {
         id: '',
         regDate: Date.now(),
@@ -174,8 +256,8 @@ export class CheckStockSellDialogComponent implements OnInit {
         description: this.dataFormGroup.value['document']['name']
           + ', Serie ' + this.dataFormGroup.value['documentSerial']
           + ', Correlativo ' + this.dataFormGroup.value['documentCorrelative']
-          + ', Producto ' + this.data.serial.name
-          + ', Celular ' + this.dataFormGroup.value['phone']
+          + ', Producto ' + this.data.serial.name + '#' + this.data.serial.serie
+          + ', Cliente ' + customerName
           + ', Dsct.  ' + this.dataFormGroup.value['discount'] + '%',
         import: this.dataFormGroup.value['price'],
         user: this.auth.userInteriores,
@@ -202,7 +284,7 @@ export class CheckStockSellDialogComponent implements OnInit {
         .collection('transactions')
         .add(transaction)
         .then(ref => {
-          ref.update({id : ref.id});
+          ref.update({ id: ref.id });
         })
         .catch(err => {
           console.log(err);

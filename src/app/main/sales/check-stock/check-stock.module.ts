@@ -4,15 +4,19 @@ import { CommonModule } from '@angular/common';
 import { CheckStockRoutingModule } from './check-stock-routing.module';
 import { CheckStockComponent } from './check-stock.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatAutocompleteModule, MatCheckboxModule, MatTooltipModule, MatDividerModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSnackBarModule, MatProgressSpinnerModule, MatProgressBarModule, MatMenuModule, MatSelectModule } from '@angular/material';
+import { MatFormFieldModule, MatIconModule, MatInputModule, MatButtonModule, MatAutocompleteModule, MatCheckboxModule, MatTooltipModule, MatDividerModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogModule, MatSnackBarModule, MatProgressSpinnerModule, MatProgressBarModule, MatMenuModule, MatSelectModule, MatRadioModule } from '@angular/material';
 import { CheckStockSellDialogComponent } from './check-stock-sell-dialog/check-stock-sell-dialog.component';
 import { CheckStockTransferDialogComponent } from './check-stock-transfer-dialog/check-stock-transfer-dialog.component';
+import { CheckStockCreateWholesaleDialogComponent } from './check-stock-create-wholesale-dialog/check-stock-create-wholesale-dialog.component';
+import { CheckStockCreateCustomerDialogComponent } from './check-stock-create-customer-dialog/check-stock-create-customer-dialog.component';
 
 @NgModule({
   declarations: [
     CheckStockComponent,
     CheckStockSellDialogComponent,
-    CheckStockTransferDialogComponent
+    CheckStockTransferDialogComponent,
+    CheckStockCreateWholesaleDialogComponent,
+    CheckStockCreateCustomerDialogComponent
   ],
   imports: [
     CommonModule,
@@ -35,11 +39,14 @@ import { CheckStockTransferDialogComponent } from './check-stock-transfer-dialog
     MatProgressSpinnerModule,
     MatProgressBarModule,
     MatMenuModule,
-    MatSelectModule
+    MatSelectModule,
+    MatRadioModule
   ],
   entryComponents: [
     CheckStockSellDialogComponent,
-    CheckStockTransferDialogComponent
+    CheckStockTransferDialogComponent,
+    CheckStockCreateWholesaleDialogComponent,
+    CheckStockCreateCustomerDialogComponent
   ]
 })
 export class CheckStockModule { }
