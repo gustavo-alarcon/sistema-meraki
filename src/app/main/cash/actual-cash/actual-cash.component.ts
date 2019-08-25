@@ -148,14 +148,15 @@ export class ActualCashComponent implements OnInit, OnDestroy {
   }
 
   filterData(ref): void {
-    ref = ref.toLowerCase();
+    ref = ref.trim().toLowerCase();
+    this.dataSource.filter = ref;
 
-    this.filteredTransactions = this.referenceTransactions.filter(option =>
-      option.paymentType.toLowerCase().includes(ref) ||
-      option.type.toLowerCase().includes(ref) ||
-      option.user.displayName.toLowerCase());
+    // this.filteredTransactions = this.referenceTransactions.filter(option =>
+    //   option.paymentType.toLowerCase().includes(ref) ||
+    //   option.type.toLowerCase().includes(ref) ||
+    //   option.user.displayName.toLowerCase());
 
-    this.dataSource.data = this.filteredTransactions;
+    // this.dataSource.data = this.filteredTransactions;
   }
 
   showTotal(): void {

@@ -1,12 +1,14 @@
-import { SerialNumber, Product, DepartureProduct, Store, Document, Cash } from './../../../../core/types';
+import { SerialNumber, Product, DepartureProduct, Store, Document, Cash, WholesaleCustomer, Customer } from './../../../../core/types';
 import { Component, OnInit, Inject } from '@angular/core';
 import { DatabaseService } from 'src/app/core/database.service';
 import { AuthService } from 'src/app/core/auth.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar, MatDialog } from '@angular/material';
 import { debounceTime, map, startWith } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { isObjectValidator } from 'src/app/core/is-object-validator';
+import { StoresCreateWholesaleDialogComponent } from '../stores-create-wholesale-dialog/stores-create-wholesale-dialog.component';
+import { StoresCreateCustomerDialogComponent } from '../stores-create-customer-dialog/stores-create-customer-dialog.component';
 
 @Component({
   selector: 'app-stores-sell-dialog',
@@ -27,13 +29,17 @@ export class StoresSellDialogComponent implements OnInit {
   ]
 
   filteredDocuments: Observable<Document[]>;
+  filteredCustomers: Observable<WholesaleCustomer[] | Customer[]>;
   filteredCash: Observable<Cash[]>;
   preFilteredCash: Array<Cash> = [];
+
+  subscriptions: Array<Subscription> = [];
 
   constructor(
     public dbs: DatabaseService,
     public auth: AuthService,
     public fb: FormBuilder,
+    private dialog: MatDialog,
     private dialogRef: MatDialogRef<StoresSellDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { product: Product, store: Store, serial: SerialNumber },
     private snackbar: MatSnackBar
@@ -71,6 +77,44 @@ export class StoresSellDialogComponent implements OnInit {
           map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
           map(name => name ? this.dbs.cashList.filter(option => option.name.toLowerCase().includes(name)) : this.dbs.cashList)
         )
+
+    const customerType$ =
+      this.dataFormGroup.get('customerType').valueChanges
+        .subscribe(res => {
+          if (res === 'MAYORISTA') {
+            this.dataFormGroup.get('customer').reset();
+            this.filteredCustomers =
+              this.dataFormGroup.get('customer').valueChanges
+                .pipe(
+                  startWith<any>(''),
+                  map(value => {
+                    if (value) {
+                      return typeof value === 'string' ? value.trim().toLowerCase() : (value.businessName ? value.businessName.toLowerCase() : value.name.toLowerCase())
+                    } else {
+                      return '';
+                    }
+                  }),
+                  map(name => name ? this.dbs.wholesale.filter(option => (option.businessName ? option.businessName.toLowerCase().includes(name) : false) || (option.name ? option.name.toLowerCase().includes(name) : false)) : this.dbs.wholesale)
+                )
+          } else if (res === 'GENERAL') {
+            this.dataFormGroup.get('customer').reset();
+            this.filteredCustomers =
+              this.dataFormGroup.get('customer').valueChanges
+                .pipe(
+                  startWith<any>(''),
+                  map(value => {
+                    if (value) {
+                      return typeof value === 'string' ? value.trim().toLowerCase() : value.name.toLowerCase()
+                    } else {
+                      return '';
+                    }
+                  }),
+                  map(name => name ? this.dbs.customers.filter(option => option.name.toLowerCase().includes(name)) : this.dbs.customers)
+                )
+          }
+        });
+
+    this.subscriptions.push(customerType$);
   }
 
   createForm(): void {
@@ -78,11 +122,11 @@ export class StoresSellDialogComponent implements OnInit {
       document: [null, [Validators.required, isObjectValidator]],
       documentSerial: [null, [Validators.required]],
       documentCorrelative: [null, [Validators.required]],
+      customerType: [null, [Validators.required]],
+      customer: [null, [Validators.required, isObjectValidator]],
       price: [null, [Validators.required]],
       discount: 0,
       paymentType: [null, [Validators.required]],
-      dni: [null, [Validators.required]],
-      phone: [null, [Validators.required]],
       cash: [null, [Validators.required, isObjectValidator]]
     });
   }
@@ -91,8 +135,39 @@ export class StoresSellDialogComponent implements OnInit {
     return document ? document.name : null;
   }
 
+  showCustomer(customer: any): string | null {
+    if (customer) {
+      if (customer.businessName) {
+        return customer.businessName;
+      } else if (customer.name) {
+        return customer.name  + (customer.lastname ? (' ' + customer.lastname) : '');
+      }
+    } else {
+      return null;
+    }
+
+  }
+
   showCash(cash: Cash): string | null {
     return cash ? cash.name : null;
+  }
+
+  addWholesale(): void {
+    this.dialog.open(StoresCreateWholesaleDialogComponent)
+      .afterClosed().subscribe(res => {
+        if (res) {
+          this.dataFormGroup.get('customer').setValue(res);
+        }
+      });
+  }
+
+  addCustomer(): void {
+    this.dialog.open(StoresCreateCustomerDialogComponent)
+      .afterClosed().subscribe(res => {
+        if (res) {
+          this.dataFormGroup.get('customer').setValue(res);
+        }
+      });
   }
 
   save(): void {
@@ -111,8 +186,8 @@ export class StoresSellDialogComponent implements OnInit {
         price: this.dataFormGroup.value['price'],
         discount: (this.dataFormGroup.value['price'] / this.data.product.sale) * 100,
         paymentType: this.dataFormGroup.value['paymentType'],
-        dni: this.dataFormGroup.value['dni'],
-        phone: this.dataFormGroup.value['phone'],
+        customerType: this.dataFormGroup.value['customerType'],
+        customer: this.dataFormGroup.value['customer'],
         source: 'store',
         regDate: Date.now(),
         createdBy: this.auth.userInteriores.displayName,
@@ -165,16 +240,24 @@ export class StoresSellDialogComponent implements OnInit {
           console.log(err);
         });
 
+      let customerName;
+
+      if (this.dataFormGroup.value['customer']['businessName']) {
+        customerName = this.dataFormGroup.value['customer']['businessName'];
+      } else {
+        customerName = this.dataFormGroup.value['customer']['name'] + (this.dataFormGroup.value['customer']['lastname'] ? (' ' + this.dataFormGroup.value['customer']['lastname']) : '');
+      }
+
       const transaction = {
         id: '',
         regDate: Date.now(),
         type: 'VENTA',
-        description:  this.dataFormGroup.value['document']['name']
-                      + ', Serie ' + this.dataFormGroup.value['documentSerial']
-                      + ', Correlativo ' + this.dataFormGroup.value['documentCorrelative']
-                      + ', DNI ' + this.dataFormGroup.value['dni']
-                      + ', Celular ' + this.dataFormGroup.value['phone']
-                      + ', Dsct.  ' + this.dataFormGroup.value['discount'] + '%',
+        description: this.dataFormGroup.value['document']['name']
+          + ', Serie ' + this.dataFormGroup.value['documentSerial']
+          + ', Correlativo ' + this.dataFormGroup.value['documentCorrelative']
+          + ', Producto ' + this.data.serial.name + '#' + this.data.serial.serie
+          + ', Cliente ' + customerName
+          + ', Dsct.  ' + this.dataFormGroup.value['discount'] + '%',
         import: this.dataFormGroup.value['price'],
         user: this.auth.userInteriores,
         verified: false,
@@ -200,7 +283,7 @@ export class StoresSellDialogComponent implements OnInit {
         .collection('transactions')
         .add(transaction)
         .then(ref => {
-          ref.update({id : ref.id});
+          ref.update({ id: ref.id });
         })
         .catch(err => {
           console.log(err);

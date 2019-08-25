@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from "@angular/fire/firestore";
-import { Requirement, Correlative, Product, Color, RawMaterial, Category, Unit, ProductionOrder, TicketRawMaterial, DepartureRawMaterial, Store, User, Transfer, DepartureProduct, Quotation, Document, Cash, Purchase, Provider } from './types';
+import { Requirement, Correlative, Product, Color, RawMaterial, Category, Unit, ProductionOrder, TicketRawMaterial, DepartureRawMaterial, Store, User, Transfer, DepartureProduct, Quotation, Document, Cash, Purchase, Provider, WholesaleCustomer, Customer } from './types';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
@@ -236,6 +236,24 @@ export class DatabaseService {
   public currentDataProviders = this.dataProviders.asObservable();
 
   /**
+   * WHOLESALE CUSTOMER
+   */
+  wholesaleCollection: AngularFirestoreCollection<WholesaleCustomer>;
+  wholesale: Array<WholesaleCustomer> = [];
+
+  public dataWholesale = new BehaviorSubject<WholesaleCustomer[]>([]);
+  public currentDataWholesale = this.dataWholesale.asObservable();
+
+  /**
+   * CUSTOMERS
+   */
+  customersCollection: AngularFirestoreCollection<Customer>;
+  customers: Array<Customer> = [];
+
+  public dataCustomers = new BehaviorSubject<Customer[]>([]);
+  public currentDataCustomers = this.dataCustomers.asObservable();
+
+  /**
    * RELEASE NOTES
    */
   releaseNotesDocument: AngularFirestoreDocument<any>;
@@ -243,32 +261,6 @@ export class DatabaseService {
 
   public dataReleaseNotes = new BehaviorSubject<any>('');
   public currentDataReleaseNotes = this.dataReleaseNotes.asObservable();
-
-  /**
-   * CURRENT CASH
-   */
-  // currentCashDocument: AngularFirestoreDocument<CurrentCash>;
-  // currentCash: CurrentCash;
-
-  // public dataCurrentCash = new BehaviorSubject<CurrentCash>({
-  //   id: '',
-  //   currentOwner: { displayName: '' },
-  //   currentOpening: '',
-  //   name: '',
-  //   location: { name: '' },
-  //   open: false,
-  //   password: '',
-  //   supervisor: { displayName: '' },
-  //   lastOpening: null,
-  //   lastClosure: null,
-  //   regDate: null,
-  //   createdBy: '',
-  //   createdByUid: '',
-  //   lastEditBy: '',
-  //   lastEditByUid: '',
-  //   lastEditDate: null
-  // });
-  // public currentDataCurrentCash = this.dataCurrentCash.asObservable();
 
 
 
@@ -321,6 +313,8 @@ export class DatabaseService {
         this.getDebtsToPay();
         this.getPurchases(from, to);
         this.getProviders();
+        this.getWholesaleCustomers();
+        this.getCustomers();
       }
     })
 
@@ -803,6 +797,8 @@ export class DatabaseService {
       })
   }
 
+
+  // ***************************** THIRD PARTIES *******************
   getProviders(): void {
     this.providersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/providers`);
     this.providersCollection
@@ -821,6 +817,48 @@ export class DatabaseService {
       .subscribe(res => {
         this.providers = res;
         this.dataProviders.next(res);
+      })
+  }
+
+  getWholesaleCustomers(): void {
+    this.wholesaleCollection = this.af.collection(`db/${this.auth.userInteriores.db}/wholesale`);
+    this.wholesaleCollection
+      .valueChanges()
+      .pipe(
+        map(res => {
+          return res.sort((a, b) => b['regDate'] - a['regDate']);
+        }),
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = res.length - index;
+          });
+          return res;
+        })
+      )
+      .subscribe(res => {
+        this.wholesale = res;
+        this.dataWholesale.next(res);
+      })
+  }
+
+  getCustomers(): void {
+    this.customersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/customers`);
+    this.customersCollection
+      .valueChanges()
+      .pipe(
+        map(res => {
+          return res.sort((a, b) => b['regDate'] - a['regDate']);
+        }),
+        map(res => {
+          res.forEach((element, index) => {
+            element['index'] = res.length - index;
+          });
+          return res;
+        })
+      )
+      .subscribe(res => {
+        this.customers = res;
+        this.dataCustomers.next(res);
       })
   }
 

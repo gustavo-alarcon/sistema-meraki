@@ -61,6 +61,19 @@ export interface Permit {
     purchasesVerifyAction: boolean;
     purchasesEditAction: boolean;
     purchasesDeleteAction: boolean;
+    thirdPartiesSection: boolean;
+    thirdPartiesWholesaleButton: boolean;
+    thirdPartiesProvidersButton: boolean;
+    thirdPartiesCustomersButton: boolean;
+    reportsSection: boolean;
+    reportsSystemStatsButton: boolean;
+    reportsSystemActivityButton: boolean;
+    reportsSalesButton: boolean;
+    reportsCashButton: boolean;
+    reportsProductionButton: boolean;
+    configurationsSection: boolean;
+    configurationsAccountsButton: boolean;
+    configurationsPermitsButton: boolean;
     regDate: number;
 }
 
@@ -357,8 +370,8 @@ export interface DepartureProduct {
     discount: number;
     paymentType: string;
     location?: string | Store;
-    dni: number;
-    phone: number;
+    customerType?: string;
+    customer?: WholesaleCustomer | Customer;
     source: string;
     regDate: number;
     createdBy: string;
@@ -412,13 +425,65 @@ export interface TransferItem {
 export interface Provider {
     id: string;
     name: string;
-    shortName?: string;
     address: string;
     ruc: number;
     phone?: string;
+    detractionAccount?: string;
+    contacts?: Array<{
+        contactName: string;
+        contactPhone?: string;
+        contactMail?: string;
+    }>;
+    bankAccounts?: Array<{
+        bank: string;
+        type: string;
+        accountNumber: string;
+    }>;
     regDate: number;
     createdBy: string;
     createdByUid: string;
+    editedBy?: User;
+    editedDate?: number;
+}
+
+export interface WholesaleCustomer {
+    id: string;
+    type: string;
+    name?: string;
+    lastname?: string;
+    displayName?: string;
+    address?: string;
+    dni?: number;
+    phone?: string;
+    mail?: string;
+    creditNote?: CreditNote;
+    businessName?: string;
+    businessAddress?: string;
+    ruc?: number;
+    businessPhone?: string;
+    contacts?: Array<{
+        contanctName?: string;
+        contactPhone?: string;
+        contactMail?: string;
+    }>;
+    regDate: number;
+    createdBy: User;
+    editedBy?: User | null;
+    editedDate?: number | null;
+}
+
+export interface Customer {
+    id: string;
+    name: string;
+    dni: number;
+    address?: string;
+    phone?: string;
+    mail?: string;
+    creditNote?: CreditNote;
+    regDate: number;
+    createdBy: User;
+    editedBy?: User | null;
+    editedDate?: number | null;
 }
 
 export interface Cash {
@@ -476,6 +541,17 @@ export interface CashOpening {
     }
 }
 
+export interface CreditNote {
+    id: string;
+    documentReference: Transaction,
+    customerReference: Customer | WholesaleCustomer;
+    expirationDate: number;
+    createdBy: User;
+    regDate: number;
+    editedBy: User;
+    editedDate: number;
+}
+
 export interface Transaction {
     id: string;
     regDate: number;
@@ -525,7 +601,7 @@ export interface Purchase {
     provider: Provider;
     itemsList: Array<{
         index: number;
-        item: {name: string, code: string} | RawMaterial;
+        item: { name: string, code: string } | RawMaterial;
         quantity: number;
         import: number;
     }>;

@@ -125,10 +125,10 @@
                                         <button mat-menu-item (click)="transferProduct(raw)">
                                             <mat-icon class="ms-icons-color">local_shipping</mat-icon> Trasladar
                                         </button>
-                                        <button mat-menu-item (click)="sellProduct(raw)">
+                                        <button mat-menu-item (click)="sellProduct(raw)" [disabled]="raw.isInFacility">
                                             <mat-icon class="ms-icons-color">shopping_cart</mat-icon> Vender
                                         </button>
-                                        <button mat-menu-item (click)="takeProduct(raw)">
+                                        <button mat-menu-item (click)="takeProduct(raw)" [disabled]="raw.isInFacility">
                                             <mat-icon class="ms-icons-color">loyalty</mat-icon> Separar
                                         </button>
                                     </mat-menu>

@@ -1,0 +1,52 @@
+<div class="ms-font-montserrat mat-title ms-color-11">
+    <mat-icon class="ms-icons-color" style="vertical-align:middle">edit</mat-icon> Editar cliente
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+<mat-dialog-content style="max-width:300px">
+    <form [formGroup]="dataFormGroup">
+        <span class="ms-color-11 mat-subheading-1 w3-margin-bottom"><b>Información</b></span>
+        <mat-divider class="w3-margin-bottom w3-block"></mat-divider>
+
+        <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
+            <mat-label>DNI</mat-label>
+            <input matInput type="number" step="1" formControlName="dni" autocomplete="off">
+            <mat-progress-bar mode="indeterminate" *ngIf="duplicate.dniLoading">
+            </mat-progress-bar>
+            <mat-hint *ngIf="!duplicate.dni">Requerido *</mat-hint>
+            <mat-error *ngIf="!dataFormGroup.valid">DNI requerido *</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
+            <mat-label>Nombres y Apellidos</mat-label>
+            <input matInput type="text" formControlName="name" autocomplete="off">
+            <mat-hint>Requerido *</mat-hint>
+            <mat-error *ngIf="!dataFormGroup.valid">Nombre requerida *</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
+            <mat-label>Dirección de entrega</mat-label>
+            <input matInput type="text" formControlName="address" autocomplete="off">
+            <mat-hint>Opcional *</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
+            <mat-label>Celular</mat-label>
+            <input matInput type="text" formControlName="phone" autocomplete="off">
+            <mat-hint>Opcional *</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" appearance="outline">
+            <mat-label>Correo</mat-label>
+            <input matInput type="text" formControlName="mail" autocomplete="off">
+            <mat-hint>Opcional *</mat-hint>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+<mat-dialog-actions align="end">
+    <button mat-stroked-button class="w3-margin-right" color="warn" mat-dialog-close>Cancelar</button>
+    <button mat-raised-button class="w3-margin-right" color="primary" (click)="edit()"
+        [disabled]="!dataFormGroup.valid || duplicate.dni || loading">Editar</button>
+</mat-dialog-actions>

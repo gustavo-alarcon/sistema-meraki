@@ -76,3 +76,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-table-sticky:last-child {
     border-left: 1px solid #e0e0e0;
 }
+
+.mat-tab-label {
+    min-width: 120px !important;
+}

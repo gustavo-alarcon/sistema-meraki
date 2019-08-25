@@ -71,17 +71,18 @@ export class RegisterDocumentsComponent implements OnInit {
   }
 
   filterData(ref: string): void {
-    ref = ref.toLowerCase();
-    this.filteredPurchases = this.dbs.purchases.filter(option =>
-      option.documentType.toLowerCase().includes(ref) ||
-      option.provider.name.toLowerCase().includes(ref) ||
-      option.provider.ruc.toString().includes(ref) ||
-      option.documentCorrelative.toString().includes(ref) ||
-      option.createdBy.toLowerCase().includes(ref) ||
-      (option.editedBy ? option.editedBy.toLowerCase().includes(ref) : false) ||
-      (option.approvedBy ? option.approvedBy.toLowerCase().includes(ref) : false) ||
-      option.status.toLowerCase().includes(ref));
-    this.dataSource.data = this.filteredPurchases;
+    ref = ref.trim().toLowerCase();
+    this.dataSource.filter = ref;
+    // this.filteredPurchases = this.dbs.purchases.filter(option =>
+    //   option.documentType.toLowerCase().includes(ref) ||
+    //   option.provider.name.toLowerCase().includes(ref) ||
+    //   option.provider.ruc.toString().includes(ref) ||
+    //   option.documentCorrelative.toString().includes(ref) ||
+    //   option.createdBy.toLowerCase().includes(ref) ||
+    //   (option.editedBy ? option.editedBy.toLowerCase().includes(ref) : false) ||
+    //   (option.approvedBy ? option.approvedBy.toLowerCase().includes(ref) : false) ||
+    //   option.status.toLowerCase().includes(ref));
+    // this.dataSource.data = this.filteredPurchases;
   }
 
   setMonthOfView(event, datepicker): void {

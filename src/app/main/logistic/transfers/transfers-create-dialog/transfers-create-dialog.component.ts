@@ -53,6 +53,9 @@ export class TransfersCreateDialogComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+
     this.createForm();
 
     this.filteredOriginStores =
