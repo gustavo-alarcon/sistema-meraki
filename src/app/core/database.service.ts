@@ -245,13 +245,13 @@ export class DatabaseService {
   public currentDataWholesale = this.dataWholesale.asObservable();
 
   /**
-   * CUSTOMER
+   * CUSTOMERS
    */
-  customerCollection: AngularFirestoreCollection<Customer>;
-  customer: Array<Customer> = [];
+  customersCollection: AngularFirestoreCollection<Customer>;
+  customers: Array<Customer> = [];
 
-  public dataCustomer = new BehaviorSubject<Customer[]>([]);
-  public currentDataCustomer = this.dataCustomer.asObservable();
+  public dataCustomers = new BehaviorSubject<Customer[]>([]);
+  public currentDataCustomers = this.dataCustomers.asObservable();
 
   /**
    * RELEASE NOTES
@@ -842,8 +842,8 @@ export class DatabaseService {
   }
 
   getCustomers(): void {
-    this.customerCollection = this.af.collection(`db/${this.auth.userInteriores.db}/customer`);
-    this.customerCollection
+    this.customersCollection = this.af.collection(`db/${this.auth.userInteriores.db}/customers`);
+    this.customersCollection
       .valueChanges()
       .pipe(
         map(res => {
@@ -857,8 +857,8 @@ export class DatabaseService {
         })
       )
       .subscribe(res => {
-        this.customer = res;
-        this.dataCustomer.next(res);
+        this.customers = res;
+        this.dataCustomers.next(res);
       })
   }
 

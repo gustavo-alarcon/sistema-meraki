@@ -456,6 +456,7 @@ export interface WholesaleCustomer {
     dni?: number;
     phone?: string;
     mail?: string;
+    creditNote?: CreditNote;
     businessName?: string;
     businessAddress?: string;
     ruc?: number;
@@ -467,23 +468,22 @@ export interface WholesaleCustomer {
     }>;
     regDate: number;
     createdBy: User;
-    editedBy: User | null;
-    editedDate: number | null;
+    editedBy?: User | null;
+    editedDate?: number | null;
 }
 
 export interface Customer {
     id: string;
     name: string;
-    lastname: string;
-    displayName: string;
     dni: number;
     address?: string;
     phone?: string;
     mail?: string;
+    creditNote?: CreditNote;
     regDate: number;
     createdBy: User;
-    editedBy: User | null;
-    editedDate: number | null;
+    editedBy?: User | null;
+    editedDate?: number | null;
 }
 
 export interface Cash {
@@ -539,6 +539,17 @@ export interface CashOpening {
         'TRANSFERENCIA': number;
         'EFECTIVO': number;
     }
+}
+
+export interface CreditNote {
+    id: string;
+    documentReference: Transaction,
+    customerReference: Customer | WholesaleCustomer;
+    expirationDate: number;
+    createdBy: User;
+    regDate: number;
+    editedBy: User;
+    editedDate: number;
 }
 
 export interface Transaction {

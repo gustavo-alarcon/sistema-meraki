@@ -7,7 +7,8 @@
             <div class="w3-col s12 m10 l10">
                 <div>
                     <span class="mat-title ms-font-montserrat ms-color-11" style="font-weight: 900">
-                        <mat-icon class="ms-icons-color" style="vertical-align:middle">local_convenience_store</mat-icon>
+                        <mat-icon class="ms-icons-color" style="vertical-align:middle">local_convenience_store
+                        </mat-icon>
                         Terceros <mat-icon style="vertical-align:middle">keyboard_arrow_right</mat-icon> Proveedores
                     </span>
                 </div>
@@ -58,7 +59,8 @@
                                 <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Nombre/Empresa</th>
                                 <td mat-cell style="padding:0px 8px; min-width: 250px" *matCellDef="let raw">
                                     <button mat-button disabled class="ms-color-11">
-                                        <mat-icon style="vertical-align: middle; margin-right: 8px">local_convenience_store</mat-icon>
+                                        <mat-icon style="vertical-align: middle; margin-right: 8px">
+                                            local_convenience_store</mat-icon>
                                         {{raw.name ? raw.name : '---'}}
                                     </button>
                                 </td>
@@ -86,7 +88,8 @@
                             </ng-container>
 
                             <ng-container matColumnDef="detractionAccount">
-                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Cuenta de detracciones</th>
+                                <th mat-header-cell style="padding:0px 8px" *matHeaderCellDef>Cuenta de detracciones
+                                </th>
                                 <td mat-cell style="padding:0px 8px" *matCellDef="let raw">
                                     {{raw.detractionAccount ? raw.detractionAccount : '---'}}
                                 </td>
