@@ -75,7 +75,7 @@ export class AuthService {
       reportsCashButton: false,
       reportsProductionButton: false,
       configurationsSection: false,
-      configurationAccountsButton: false,
+      configurationsAccountsButton: false,
       configurationsPermitsButton: false,
       regDate: 0
     };
@@ -141,7 +141,7 @@ export class AuthService {
       reportsCashButton: false,
       reportsProductionButton: false,
       configurationsSection: false,
-      configurationAccountsButton: false,
+      configurationsAccountsButton: false,
       configurationsPermitsButton: false,
       regDate: 0
     }

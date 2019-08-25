@@ -72,7 +72,7 @@ export interface Permit {
     reportsCashButton: boolean;
     reportsProductionButton: boolean;
     configurationsSection: boolean;
-    configurationAccountsButton: boolean;
+    configurationsAccountsButton: boolean;
     configurationsPermitsButton: boolean;
     regDate: number;
 }

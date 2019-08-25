@@ -25,6 +25,9 @@ export class MenuComponent implements OnInit, OnDestroy {
   productionOpenedFlag: boolean = false;
   logisticOpenedFlag: boolean = false;
   cashOpenedFlag: boolean = false;
+  thirdPartiesOpenedFlag: boolean = false;
+  reportsOpenedFlag: boolean = false;
+  configurationsOpenedFlag: boolean = false;
 
 
   loadingRouteConfig: boolean;
@@ -141,7 +144,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       reportsCashButton: false,
       reportsProductionButton: false,
       configurationsSection: false,
-      configurationAccountsButton: false,
+      configurationsAccountsButton: false,
       configurationsPermitsButton: false,
       regDate: 0
     };
@@ -313,6 +316,30 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   cashClosed(): void {
     this.cashOpenedFlag = false;
+  }
+
+  thirdPartiesOpened(): void {
+    this.thirdPartiesOpenedFlag = true;
+  }
+
+  thirdPartiesClosed(): void {
+    this.thirdPartiesOpenedFlag = false;
+  }
+
+  reportsOpened(): void {
+    this.reportsOpenedFlag = true;
+  }
+
+  reportsClosed(): void {
+    this.reportsOpenedFlag = false;
+  }
+
+  configurationsOpened(): void {
+    this.configurationsOpenedFlag = true;
+  }
+
+  configurationsClosed(): void {
+    this.configurationsOpenedFlag = false;
   }
 
   checkRoute(route: string): void {

@@ -424,20 +424,11 @@
 
                     <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
                         [ngClass]="{'ms-button-selected': buttonOptions.cash.mange}" routerLink="cash/manage"
-                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
-                        (click)="toggleSideMenu()" *ngIf="permits.cashManageButton">
+                        style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
+                        *ngIf="permits.cashManageButton">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
                             account_balance_wallet
                         </mat-icon> Administrar cajas
-                    </button>
-
-                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
-                        [ngClass]="{'ms-button-selected': buttonOptions.cash.debtsToPay}" routerLink="cash/debts-to-pay"
-                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
-                        (click)="toggleSideMenu()" *ngIf="permits.cashDebtsToPayButton">
-                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
-                            date_range
-                        </mat-icon> Cuentas por pagar
                     </button>
 
                     <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
@@ -449,14 +440,147 @@
                         </mat-icon> Caja actual
                     </button>
 
-                    <!-- <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
-                        [ngClass]="{'ms-button-selected': buttonOptions.cash.previous}" routerLink="cash/previous"
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.cash.debtsToPay}" routerLink="cash/debts-to-pay"
                         style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
-                        (click)="toggleSideMenu()" *ngIf="permits.cashPreviousButton">
+                        (click)="toggleSideMenu()" *ngIf="permits.cashDebtsToPayButton">
                         <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
-                            account_balance_wallet
-                        </mat-icon> Caja anterior
-                    </button> -->
+                            date_range
+                        </mat-icon> Cuentas por pagar
+                    </button>
+
+                    <p class="w3-margin-bottom"></p>
+
+                </mat-expansion-panel>
+                <mat-expansion-panel style="width:15em; box-shadow:none; border-radius:0px 0px 0px 0px"
+                    class="w3-border-top w3-border-light-grey" [ngClass]="{'ms-expansion-panel-menu':thirdPartiesOpenedFlag}"
+                    (opened)="thirdPartiesOpened()" (closed)="thirdPartiesClosed()">
+                    <mat-expansion-panel-header *ngIf="permits.thirdPartiesSection">
+                        <mat-panel-title style="font-weight:500"
+                            [ngClass]="{'ms-expansion-panel-title':thirdPartiesOpenedFlag}">
+                            <mat-icon style="vertical-align:middle; margin-right:0.3em">supervised_user_circle</mat-icon>
+                            Terceros
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.thirdParties.wholesale}" routerLink="third-parties/wholesale"
+                        style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
+                        *ngIf="permits.thirdPartiesWholesaleButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            work
+                        </mat-icon> Mayoristas
+                    </button>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.thirdParties.providers}" routerLink="third-parties/providers"
+                        style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
+                        *ngIf="permits.thirdPartiesProvidersButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            local_convenience_store
+                        </mat-icon> Proveedores
+                    </button>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.thirdParties.customers}" routerLink="third-parties/customers"
+                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
+                        (click)="toggleSideMenu()" *ngIf="permits.thirdPartiesCustomersButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            person_pin
+                        </mat-icon> Clientes
+                    </button>
+
+                    <p class="w3-margin-bottom"></p>
+
+                </mat-expansion-panel>
+                <mat-expansion-panel style="width:15em; box-shadow:none; border-radius:0px 0px 0px 0px"
+                    class="w3-border-top w3-border-light-grey" [ngClass]="{'ms-expansion-panel-menu':reportsOpenedFlag}"
+                    (opened)="reportsOpened()" (closed)="reportsClosed()">
+                    <mat-expansion-panel-header *ngIf="permits.reportsSection">
+                        <mat-panel-title style="font-weight:500"
+                            [ngClass]="{'ms-expansion-panel-title':reportsOpenedFlag}">
+                            <mat-icon style="vertical-align:middle; margin-right:0.3em">assessment</mat-icon>
+                            Reportes
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.reports.systemStats}" routerLink="reports/system-stats"
+                        style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
+                        *ngIf="permits.reportsSystemStatsButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            assessment
+                        </mat-icon> Estadísticas Sis.
+                    </button>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.reports.systemActivity}" routerLink="reports/system-activity"
+                        style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
+                        *ngIf="permits.reportsSystemActivityButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            touch_app
+                        </mat-icon> Actividad del Sis.
+                    </button>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.reports.sales}" routerLink="reports/sales"
+                        style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
+                        *ngIf="permits.reportsSalesButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            attach_money
+                        </mat-icon> Reporte ventas
+                    </button>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.reports.cash}" routerLink="reports/cash"
+                        style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
+                        *ngIf="permits.reportsCashButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            local_atm
+                        </mat-icon> Reporte cajas
+                    </button>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.reports.production}" routerLink="reports/production"
+                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
+                        (click)="toggleSideMenu()" *ngIf="permits.reportsProductionButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            build
+                        </mat-icon> Reporte producción
+                    </button>
+
+                    <p class="w3-margin-bottom"></p>
+
+                </mat-expansion-panel>
+                <mat-expansion-panel style="width:15em; box-shadow:none; border-radius:0px 0px 0px 0px"
+                    class="w3-border-top w3-border-light-grey" [ngClass]="{'ms-expansion-panel-menu':configurationsOpenedFlag}"
+                    (opened)="configurationsOpened()" (closed)="configurationsClosed()">
+                    <mat-expansion-panel-header *ngIf="permits.configurationsSection">
+                        <mat-panel-title style="font-weight:500"
+                            [ngClass]="{'ms-expansion-panel-title':configurationsOpenedFlag}">
+                            <mat-icon style="vertical-align:middle; margin-right:0.3em">settings</mat-icon>
+                            Configuración
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.configurations.accounts}" routerLink="configurations/accounts"
+                        style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()"
+                        *ngIf="permits.configurationsAccountsButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            account_circle
+                        </mat-icon> Cuentas
+                    </button>
+
+                    <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-purple"
+                        [ngClass]="{'ms-button-selected': buttonOptions.configurations.permits}" routerLink="configurations/permits"
+                        style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"
+                        (click)="toggleSideMenu()" *ngIf="permits.configurationsPermitsButton">
+                        <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">
+                            security
+                        </mat-icon> Permisos
+                    </button>
+
                     <p class="w3-margin-bottom"></p>
 
                 </mat-expansion-panel>
